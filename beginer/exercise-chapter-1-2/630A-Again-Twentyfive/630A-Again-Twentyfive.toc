@@ -1,0 +1,5 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Tiếp nhận \& Phẫu thuật đề bài}{3}{0}{1}
+\beamer@sectionintoc {2}{Chunk 1: Truy tìm quy luật}{4}{0}{2}
+\beamer@sectionintoc {3}{Chunk 2: Đối mặt với Input}{7}{0}{3}
+\beamer@sectionintoc {4}{Bước cuối: Tổng kết chiến thuật}{10}{0}{4}

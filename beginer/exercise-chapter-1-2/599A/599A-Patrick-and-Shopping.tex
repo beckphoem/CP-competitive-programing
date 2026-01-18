@@ -1,0 +1,252 @@
+\documentclass[10pt]{beamer}
+
+% --- Cấu hình Tiếng Việt và Font ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{lmodern} % Font chữ sắc nét hơn
+
+% --- Cấu hình Giao diện Beamer ---
+\usetheme{Madrid}
+\usecolortheme{whale}
+\usefonttheme{professionalfonts}
+
+% --- Cấu hình hiển thị Code ---
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% --- Metadata ---
+\title[Codeforces 599A]{Giải thuật toán: Patrick and Shopping}
+\subtitle{Tư duy thuật toán theo triết lý "Learning How to Learn"}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+% --- Bắt đầu Slide ---
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% --- BƯỚC 1 ---
+\begin{frame}{1. Phẫu thuật đề bài (Deconstruct)}
+    \begin{block}{Góc nhìn hình học}
+    Quên cốt truyện đi, hãy nhìn bài toán dưới dạng hình học:
+    \begin{itemize}
+        \item \textbf{3 Điểm:} Nhà (Xuất phát/Đích), Shop 1, Shop 2.
+        \item \textbf{Các cạnh (Quãng đường):}
+            \begin{itemize}
+                \item $d_1$: Nhà $\leftrightarrow$ Shop 1
+                \item $d_2$: Nhà $\leftrightarrow$ Shop 2
+                \item $d_3$: Shop 1 $\leftrightarrow$ Shop 2
+            \end{itemize}
+    \end{itemize}
+    \end{block}
+
+    \begin{alertblock}{Nhiệm vụ}
+    Xuất phát từ \textbf{Nhà} $\to$ Ghé thăm \textbf{cả 2 shop} $\to$ Quay về \textbf{Nhà}. \\
+    \textbf{Mục tiêu:} Tìm tổng quãng đường nhỏ nhất ($\min$).
+    \end{alertblock}
+\end{frame}
+
+% --- BƯỚC 2: CHUNK 1 ---
+\begin{frame}{2. Vòng lặp tư duy - Chunk 1: Kịch bản di chuyển}
+    \textbf{Logic (Ẩn dụ):} Vẽ đường nét liền đi qua 3 điểm.
+    \vspace{0.5em}
+    
+    Có 3 kịch bản sơ khai:
+    \begin{enumerate}
+        \item \textbf{Đi vòng tròn:} 
+        $$ \text{Nhà} \to \text{Shop 1} \to \text{Shop 2} \to \text{Nhà} $$
+        
+        \item \textbf{Đi kiểu "Con thoi" (Về nhà đổi hướng):}
+        $$ \text{Nhà} \to \text{Shop 1} \to \text{Nhà} \dots \text{rồi} \dots \text{Nhà} \to \text{Shop 2} \to \text{Nhà} $$
+        
+        \item \textbf{Đi kiểu "Kẹp nách" (Đi ké):}
+        $$ \text{Nhà} \to \text{Shop 1} \to \text{Shop 2} \to \text{Shop 1} \to \text{Nhà} $$
+    \end{enumerate}
+
+    \begin{alertblock}{Bẫy (Trap)}
+    Đừng mặc định đi vòng tròn ($d_1+d_2+d_3$) là nhanh nhất. Nếu $d_3$ quá lớn, đi về nhà rồi sang shop kia còn lợi hơn.
+    \end{alertblock}
+\end{frame}
+
+% --- THỬ THÁCH 1 ---
+\begin{frame}{Thử thách tư duy 1 (Mental Check)}
+    \textbf{Dữ liệu:} $d_1 = 10, d_2 = 20, d_3 = 100$ (Đường nối 2 shop siêu xa).
+    
+    \vspace{1em}
+    \textbf{Tính toán các phương án:}
+    \begin{itemize}
+        \item \textbf{Cách A (Vòng tròn):} $d_1 + d_3 + d_2 = 10 + 100 + 20 = 130$
+        \item \textbf{Cách B (Con thoi):} $2(d_1) + 2(d_2) = 20 + 40 = \textbf{60}$
+        \item \textbf{Cách C (Đi ké):} $2(d_1) + 2(d_3) = 20 + 200 = 220$
+    \end{itemize}
+    
+    \vspace{1em}
+    \begin{exampleblock}{Kết luận}
+    \textbf{Chọn Cách B (60).} \\
+    Chứng minh: Đôi khi đường thẳng nối 2 điểm ($d_3$) là một cái "bẫy" chi phí cao.
+    \end{exampleblock}
+\end{frame}
+
+% --- BƯỚC 2: CHUNK 2 ---
+\begin{frame}{3. Vòng lặp tư duy - Chunk 2: Bức tranh toàn cảnh}
+    Chúng ta đã bỏ sót một khả năng ở Chunk 1.
+    
+    Khi đi kiểu "Kẹp nách", tại sao lại chỉ ưu ái Shop 1?
+    \begin{itemize}
+        \item Thay vì: Nhà $\to$ Shop 1 $\to$ Shop 2 $\dots$
+        \item Ta có thể: Nhà $\to$ Shop 2 $\to$ Shop 1 $\dots$
+    \end{itemize}
+    
+    \textbf{Tổng kết 4 Chiến thuật di chuyển:}
+    \begin{enumerate}
+        \item \textbf{Vòng tròn:} $Cost = d_1 + d_2 + d_3$
+        \item \textbf{Con thoi (Đi riêng):} $Cost = 2(d_1 + d_2)$
+        \item \textbf{Ké qua Shop 1:} $Cost = 2(d_1 + d_3)$
+        \item \textbf{Ké qua Shop 2:} $Cost = 2(d_2 + d_3)$
+    \end{enumerate}
+\end{frame}
+
+% --- THỬ THÁCH 2 ---
+\begin{frame}{Thử thách tư duy 2 (Mental Check)}
+    \textbf{Dữ liệu:} $d_1 = 10, d_2 = 100$ (Xa tít), $d_3 = 5$ (Hai shop cạnh nhau).
+    
+    \vspace{1em}
+    \textbf{Phân tích:}
+    \begin{itemize}
+        \item Nếu đi theo thói quen (Vòng tròn): $10 + 100 + 5 = 115$.
+        \item Nếu dùng chiến thuật \textbf{Ké qua Shop 1}:
+        $$ 2 \times (d_1 + d_3) = 2 \times (10 + 5) = \textbf{30} $$
+    \end{itemize}
+    
+    \begin{exampleblock}{Kết luận}
+    Đáp án là \textbf{30}. \\
+    Con đường trực tiếp $d_2$ (100) giống như trạm thu phí giá cắt cổ. Đi vòng qua $d_1$ và $d_3$ rẻ hơn nhiều.
+    \end{exampleblock}
+\end{frame}
+
+% --- CHỐT HẠ THUẬT TOÁN ---
+\begin{frame}{4. Chốt hạ thuật toán (The Solution)}
+    Không có một công thức duy nhất đúng cho mọi trường hợp.
+    \vspace{0.5em}
+    
+    \textbf{Giải pháp:} Brute-force (Vét cạn).
+    Tính tất cả 4 trường hợp và chọn Min.
+    
+    \begin{block}{Công thức tổng quát}
+    Gọi $ans$ là kết quả cần tìm:
+    $$
+    ans = \min \begin{cases} 
+    d_1 + d_2 + d_3 & (\text{Vòng tròn}) \\
+    2(d_1 + d_2) & (\text{Con thoi}) \\
+    2(d_1 + d_3) & (\text{Qua Shop 1}) \\
+    2(d_2 + d_3) & (\text{Qua Shop 2})
+    \end{cases}
+    $$
+    \end{block}
+
+    \textbf{Thử thách cuối cùng (Mã giả):}
+    \begin{itemize}
+        \item Bước 1: Nhập $d_1, d_2, d_3$.
+        \item Bước 2: Tính 4 biến $a, b, c, d$ theo công thức trên.
+        \item Bước 3: Output $\to$ Dùng hàm \textbf{min(a, b, c, d)}.
+    \end{itemize}
+\end{frame}
+
+% --- IMPLEMENTATION PYTHON ---
+\begin{frame}[fragile]{Hiện thực hóa: Python Code}
+Python hỗ trợ hàm \texttt{min()} với nhiều tham số rất tiện lợi.
+
+\begin{lstlisting}[language=Python]
+# Bước 1: Nhập dữ liệu
+d1, d2, d3 = map(int, input().split())
+
+# Bước 2 & 3: Tính toán và in ra min ngay lập tức
+ans = min(
+    d1 + d2 + d3,       # Cach 1: Vong tron
+    2 * (d1 + d2),      # Cach 2: Di le tung cai
+    2 * (d1 + d3),      # Cach 3: Ke qua shop 1
+    2 * (d2 + d3)       # Cach 4: Ke qua shop 2
+)
+
+print(ans)
+\end{lstlisting}
+\end{frame}
+
+% --- IMPLEMENTATION C++ ---
+\begin{frame}[fragile]{Hiện thực hóa: C++ Code}
+Với C++11 trở lên, dùng \texttt{min(\{...\})} để so sánh danh sách.
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <algorithm> // Thu vien chua ham min
+using namespace std;
+
+int main() {
+    long long d1, d2, d3; 
+    // Dung long long phong khi tong > 2 ty
+    cin >> d1 >> d2 >> d3;
+
+    long long opt1 = d1 + d2 + d3;
+    long long opt2 = 2 * (d1 + d2);
+    long long opt3 = 2 * (d1 + d3);
+    long long opt4 = 2 * (d2 + d3);
+
+    // Tim min trong danh sach khoi tao
+    cout << min({opt1, opt2, opt3, opt4}); 
+    
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+% --- BÀI HỌC ---
+\begin{frame}{Bài học rút ra (Key Takeaway)}
+    \begin{enumerate}
+        \item \textbf{Đừng tin vào trực giác hình học trên giấy:} 
+        \begin{itemize}
+            \item Toán học: $a+b > c$ (Bất đẳng thức tam giác).
+            \item Thực tế (Giao thông/Đồ thị): Đường thẳng nối 2 điểm ($d_3$) có thể xa vô lý (tắc đường, đường xấu).
+        \end{itemize}
+        
+        \vspace{1em}
+        \item \textbf{Sức mạnh của Vét cạn (Brute-force):}
+        \begin{itemize}
+            \item Khi số lượng trường hợp ít (chỉ 4 cách), đừng cố tìm công thức toán học phức tạp để loại trừ.
+            \item Hãy để máy tính tính hết và chọn cái tốt nhất.
+        \end{itemize}
+    \end{enumerate}
+    
+    \vspace{1em}
+    \centerline{\textbf{Chúc mừng bạn đã chinh phục bài 599A!}}
+\end{frame}
+
+\end{document}

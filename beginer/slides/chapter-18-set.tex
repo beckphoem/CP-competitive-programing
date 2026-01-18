@@ -1,0 +1,278 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Chương 18: Set (Tập hợp) trong C++}
+\subtitle{Chinh phục tri thức cùng Learning How to Learn}
+\author{Slide Learning C++}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào dẫn nhập}
+    \begin{block}{Người đồng hành}
+        Chào bạn! Tôi là người đồng hành cùng bạn trên con đường chinh phục tri thức. Chúng ta sẽ cùng khám phá công cụ thông minh mang tên \textbf{Set (Tập hợp)}.
+    \end{block}
+    
+    \begin{exampleblock}{Triết lý học tập}
+        Chúng ta sẽ không học vẹt code. Chúng ta xây dựng các \textbf{mô hình tâm trí (mental models)} để thực sự nhìn thấy cách dữ liệu vận hành.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bản đồ hành trình}
+    \begin{enumerate}
+        \item \textbf{Chương 1:} Set là gì? – Chiếc túi thần kỳ của sự độc nhất.
+        \item \textbf{Chương 2:} Khai báo và Khởi tạo – Chuẩn bị túi.
+        \item \textbf{Chương 3:} Thêm và Xóa – Quy tắc gác cửa.
+        \item \textbf{Chương 4:} Tìm kiếm (C++20) – Kỹ năng thám tử.
+        \item \textbf{Chương 5:} Duyệt Set – Cuộc diễu hành các con số.
+        \item \textbf{Chương 6:} Iterator – Ngón tay chỉ đường.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chương 1: Set là gì?}
+    Hãy tưởng tượng một chiếc túi thần kỳ có hai khả năng:
+    \begin{itemize}
+        \item \textbf{Chống trùng lặp:} Bạn bỏ 2 viên bi giống hệt nhau, túi sẽ tự động nhổ viên thứ hai ra. Chỉ giữ lại duy nhất một bản sao.
+        \item \textbf{Tự động sắp xếp:} Bỏ số 5, 1, 9 vào túi, khi mở ra chúng sẽ đứng theo hàng: 1, 5, 9.
+    \end{itemize}
+    
+    \begin{alertblock}{Bức tranh toàn cảnh}
+        Trong Set, mỗi thành viên là \textbf{duy nhất} và luôn được \textbf{sắp xếp} ngay ngắn từ nhỏ đến lớn.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Kiểm tra tư duy 1}
+    \textbf{Câu hỏi:} Nếu tôi có một Set $\{2, 4, 8\}$ và thêm số 4 vào một lần nữa. Kết quả sẽ là gì?
+    \begin{itemize}
+        \item A. $\{2, 4, 4, 8\}$
+        \item B. $\{2, 4, 8\}$
+        \item C. $\{4, 2, 8\}$
+    \end{itemize}
+    \pause
+    \begin{block}{Đáp án: B}
+        Chính xác! Vì quy luật gác cửa, Set từ chối nhận thêm số 4 đã tồn tại.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 2: Khai báo và Khởi tạo}
+    Để dùng Set, bạn cần \texttt{\#include <set>}.
+    
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <set> 
+
+using namespace std;
+
+int main() {
+    // Cach 1: Khai bao mot chiec tui rong
+    set<int> tui_so_nguyen;
+
+    // Cach 2: (C++17) Khoi tao co san phan tu
+    set tui_than_ky = {1, 5, 2, 5, 1}; 
+    // Ket qua thuc te: {1, 2, 5}
+
+    return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Kiểm tra tư duy 2}
+    \textbf{Câu hỏi:} Với dòng code \texttt{set danh\_sach = \{10, 20, 10, 30\};}
+    \begin{enumerate}
+        \item Kiểu dữ liệu máy tính tự hiểu là gì?
+        \item Các phần tử thực tế trong túi là gì?
+    \end{enumerate}
+    \pause
+    \begin{exampleblock}{Giải đáp}
+        1. Kiểu \texttt{int}. \\
+        2. Kết quả: $\{10, 20, 30\}$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chương 3: Thêm và Xóa}
+    \begin{block}{Lệnh .insert() - Thêm vào}
+        Người gác cổng kiểm tra: Nếu đã có thì từ chối, nếu chưa có thì cho vào và \textbf{xếp đúng vị trí thứ tự}.
+    \end{block}
+    
+    \begin{block}{Lệnh .erase() - Đuổi ra}
+        Tìm đúng giá trị và mời ra khỏi hàng. Hàng ngũ tự động khép kín lại.
+    \end{block}
+    
+    \begin{exampleblock}{Tốc độ}
+        Thêm/Xóa trong Set rất nhanh nhờ cấu trúc \textbf{Cây (Tree)} bên dưới.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Thực hành Thêm và Xóa}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <set>
+using namespace std;
+
+int main() {
+    set<int> tap_hop;
+    tap_hop.insert(40);
+    tap_hop.insert(10);
+    tap_hop.insert(20);
+    tap_hop.insert(10); // Bi tu choi
+
+    // XOA PHAN TU
+    tap_hop.erase(20); 
+
+    // Ket qua con lai: {10, 40}
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Chương 4: Tìm kiếm (C++20)}
+        \begin{block}{Ẩn dụ Từ điển}
+        Tìm chữ "M" không lật từng trang. Bạn mở đôi sách, thấy "K", biết "M" ở nửa sau. Cách "chặt đôi" này giúp Set tìm kiếm cực nhanh.
+    \end{block}
+    
+    \begin{exampleblock}{Lệnh .contains() mới}
+        Từ C++20, thay vì dùng các lệnh phức tạp, ta chỉ cần: \\
+        \texttt{if (tui\_do\_choi.contains(30)) \{ ... \}}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Code Tìm kiếm hiện đại}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <set>
+using namespace std;
+
+int main() {
+    set tui_do_choi = {10, 20, 30, 40, 50};
+
+    if (tui_do_choi.contains(30)) {
+        cout << "Tim thay so 30!";
+    } else {
+        cout << "Khong co 30.";
+    }
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Chương 5: Duyệt Set}
+    Duyệt (Iteration) là đi qua từng phần tử để in ra hoặc tính toán.
+    
+    \begin{alertblock}{Lưu ý quan trọng}
+        Set không dùng chỉ số \texttt{[i]} như Vector. Vì nó không lưu kiểu ngăn kéo đánh số mà lưu theo kiểu \textbf{Cây}. Bạn phải đi từ gốc đến ngọn.
+    \end{alertblock}
+    
+    \begin{block}{Cách hiện đại (For-each)}
+        \texttt{for (const auto\& ten : biet\_doi) \{ ... \}}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Thực hành Duyệt Set}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <set>
+#include <string>
+using namespace std;
+
+int main() {
+    set<string> biet_doi = {"Ironman", "Thor", "Hulk", "Thor"};
+
+    for (const auto& ten : biet_doi) {
+        cout << "- " << ten << endl;
+    }
+    return 0;
+}
+// Ket qua: Hulk, Ironman, Thor (Sap xep chu cai)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Chương 6: Iterator - Ngón tay chỉ đường}
+    \begin{itemize}
+        \item \texttt{s.begin()}: Ngón tay chỉ vào \textbf{người đầu tiên}.
+        \item \texttt{s.end()}: Ngón tay chỉ vào \textbf{vị trí sau người cuối cùng}.
+        \item \texttt{++it}: Dịch ngón tay sang người kế tiếp.
+        \item \texttt{*it}: Lấy giá trị tại nơi ngón tay đang chỉ.
+    \end{itemize}
+    
+    \pause
+    \begin{alertblock}{Nguy hiểm: Vòng lặp vô tận}
+        Nếu dùng \texttt{while} mà quên \texttt{++it}, ngón tay sẽ đứng yên một chỗ mãi mãi!
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Nhiệm vụ: Chiếc máy lọc thông minh}
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+int main() {
+    // 1. Danh sach loi trung lap
+    vector<int> diem_loi = {8, 5, 9, 8, 7, 5, 10, 7};
+
+    // 2. Do vao Set de loc
+    set<int> diem_sach(diem_loi.begin(), diem_loi.end());
+
+    // 3. In ket qua: 5 7 8 9 10
+    for (int x : diem_sach) cout << x << " ";
+    
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng kết và Bài tập tốt nghiệp}
+    \begin{block}{Tóm tắt}
+        1. Duy nhất và Tự sắp xếp. \\
+        2. \texttt{.insert()}, \texttt{.erase()}. \\
+        3. \texttt{.contains()} (C++20). \\
+        4. Duyệt bằng For-each hoặc Iterator.
+    \end{block}
+    
+    \begin{exampleblock}{Câu hỏi tốt nghiệp}
+        Nếu bạn có danh sách điểm $\{8, 5, 9, 8, 7, 5\}$, kết quả sau khi qua Set là gì?
+        \pause \\
+        \textbf{Đáp án:} $\{5, 7, 8, 9\}$.
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

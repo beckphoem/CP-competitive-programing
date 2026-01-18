@@ -1,0 +1,282 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Hành trình chinh phục C++: Queue và Deque}
+\author{Slide Learning C++}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào}
+    \begin{block}{Chào bạn!}
+        Tôi là người đồng hành của bạn trong hành trình chinh phục tri thức. Chúng ta sẽ cùng nhau khám phá thế giới lập trình C++, cụ thể là về \textbf{Queue (Hàng đợi)}.
+    \end{block}
+
+\end{frame}
+
+\section{1. Bức tranh toàn cảnh}
+\begin{frame}{1. BỨC TRANH TOÀN CẢNH (THE BIG PICTURE)}
+    Hãy tưởng tượng bạn đang đứng trong một hàng đợi mua trà sữa:
+    \begin{itemize}
+        \item Người nào đến trước thì được mua trước và rời đi trước.
+        \item Người nào đến sau thì phải đứng vào cuối hàng và đợi đến lượt.
+    \end{itemize}
+    \begin{exampleblock}{Định nghĩa}
+        Trong lập trình, Queue là một cấu trúc dữ liệu hoạt động theo nguyên tắc \textbf{FIFO (First In, First Out - Vào trước, Ra trước)}.
+    \end{exampleblock}
+    \begin{alertblock}{Lưu ý}
+        Trong bài học này, chúng ta sẽ sử dụng \texttt{std::deque} để tận dụng sự linh hoạt và các công cụ hiện đại như \texttt{iterator}.
+    \end{alertblock}
+\end{frame}
+
+\section{2. Lộ trình khám phá}
+\begin{frame}{2. LỘ TRÌNH KHÁM PHÁ (THE MAP)}
+    \begin{enumerate}
+        \item \textbf{Chương 1:} Khởi tạo Hàng Đợi.
+        \item \textbf{Chương 2:} Duyệt bằng \texttt{while}.
+        \item \textbf{Chương 3:} Vòng lặp \texttt{for} bán tự động.
+        \item \textbf{Chương 4:} \texttt{auto} Iterator.
+        \item \textbf{Chương 5:} Thư viện \texttt{<algorithm>}.
+    \end{enumerate}
+    \begin{block}{Sẵn sàng chưa?}
+        Chúng ta sẽ bắt đầu ngay với Chương 1!
+    \end{block}
+\end{frame}
+
+\section{Chương 1: Khởi tạo}
+\begin{frame}{CHƯƠNG 1: KHỞI TẠO HÀNG ĐỢI}
+    \begin{itemize}
+        \item \textbf{\texttt{std::queue}:} Giống ống nghiệm hẹp, chỉ thấy đầu và cuối.
+        \item \textbf{\texttt{std::deque}:} Giống dãy hành lang kính, có thể nhìn thấy mọi vị trí.
+    \end{itemize}
+    \begin{block}{Tại sao chọn \texttt{deque}?}
+        Vì nó cho phép sử dụng \texttt{iterator} và \texttt{algorithms} một cách linh hoạt nhất.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 1: Code mẫu}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <deque> 
+using namespace std;
+
+int main() {
+    // 1. Khoi tao hang doi rong
+    deque<int> hang_doi;
+
+    // 2. Them phan tu vao cuoi (Push Back)
+    hang_doi.push_back(10); // Nguoi so 10 den truoc
+    hang_doi.push_back(20);
+    hang_doi.push_back(30);
+
+    // 3. Xem nguoi dung dau (Front)
+    cout << "Nguoi dung dau: " << hang_doi.front() << endl; 
+
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Kiểm tra nhanh (Check-point)}
+    \begin{alertblock}{Câu hỏi}
+        Nếu thực hiện lệnh:
+        \begin{enumerate}
+            \item \texttt{push\_back(5)}
+            \item \texttt{push\_back(15)}
+            \item \texttt{push\_back(25)}
+        \end{enumerate}
+        Lệnh \texttt{hang\_doi.front()} sẽ trả về kết quả bao nhiêu? Tại sao?
+    \end{alertblock}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Con số \textbf{5} vì nó là người xếp hàng sớm nhất (FIFO).
+    \end{exampleblock}
+\end{frame}
+
+\section{Chương 2: Duyệt bằng while}
+\begin{frame}{CHƯƠNG 2: DUYỆT BẰNG WHILE}
+    \begin{itemize}
+        \item \textbf{Quy trình:} Kiểm tra còn khách không $\rightarrow$ Phục vụ người đầu $\rightarrow$ Người đó rời đi.
+        \item \textbf{Hành động:} Sử dụng \texttt{front()} và \texttt{pop\_front()}.
+    \end{itemize}
+    \begin{alertblock}{Cảnh báo}
+        Duyệt bằng \texttt{while} kết hợp \texttt{pop\_front()} sẽ làm hàng đợi \textbf{trống rỗng} sau khi kết thúc.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 2: Code mẫu}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <deque>
+using namespace std;
+
+int main() {
+    deque<int> hang_doi = {5, 15, 25};
+    while (!hang_doi.empty()) {
+        int nguoi_dang_cho = hang_doi.front();
+        cout << "Dang phuc vu: " << nguoi_dang_cho << endl;
+        hang_doi.pop_front(); // Xoa khoi dau hang
+    }
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Kiểm tra sự hiểu biết}
+    \begin{alertblock}{Câu hỏi}
+        Nếu bạn quên dòng \texttt{hang\_doi.pop\_front();} trong vòng lặp \texttt{while}, chuyện gì sẽ xảy ra?
+    \end{alertblock}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Lỗi \textbf{vòng lặp vô tận (infinite loop)}. Chương trình sẽ bị treo vì hàng đợi không bao giờ rỗng.
+    \end{exampleblock}
+\end{frame}
+
+\section{Chương 3: Range-based for}
+\begin{frame}{CHƯƠNG 3: VÒNG LẶP FOR BÁN TỰ ĐỘNG}
+    \begin{itemize}
+        \item \textbf{Phép ẩn dụ:} Người quản lý đi điểm danh bằng mắt (Clipboard).
+        \item \textbf{Đặc điểm:} Xem dữ liệu mà không làm mất dữ liệu.
+        \item \textbf{Từ khóa \texttt{auto}:} Trợ lý thông minh tự nhận diện kiểu dữ liệu.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 3: Code mẫu}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <deque>
+#include <string>
+using namespace std;
+
+int main() {
+    deque<string> hang_cho = {"An", "Binh", "Chi"};
+    
+    for (auto nguoi : hang_cho) {
+        cout << "- " << nguoi << endl;
+    }
+    
+    cout << "So nguoi van con: " << hang_cho.size() << endl;
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Chương 4: Iterator}
+\begin{frame}{CHƯƠNG 4: AUTO ITERATOR - CHIẾC KÍNH HIỂN VI}
+    \begin{itemize}
+        \item \textbf{Iterator:} Giống như một con trỏ Laser.
+        \item \texttt{begin()}: Trỏ vào người đầu tiên.
+        \item \texttt{end()}: Trỏ vào vị trí \textbf{sau} người cuối cùng.
+        \item \texttt{*it}: "Soi" giá trị tại vị trí laser đang trỏ.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4: Code mẫu}
+\begin{lstlisting}[language=C++]
+    // Duyet bang Iterator
+    for (auto it = hang_cho.begin(); it != hang_cho.end(); ++it) {
+        cout << "Vi tri nay la: " << *it << endl;
+    }
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tư duy lập trình}
+    \begin{alertblock}{Câu hỏi}
+        Nếu muốn thay đổi tên tất cả khách hàng thành "Khách hàng thân thiết" tại chỗ, dùng \texttt{while} hay \texttt{iterator} hiệu quả hơn?
+    \end{alertblock}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Dùng \textbf{Iterator} hoặc \textbf{Range-based for (by reference)}. Nó cho phép sửa trực tiếp mà không cần xóa rồi thêm lại.
+    \end{exampleblock}
+\end{frame}
+
+\section{Chương 5: Algorithm}
+\begin{frame}{CHƯƠNG 5: THƯ VIỆN <ALGORITHM>}
+    \begin{itemize}
+        \item \textbf{\texttt{sort}:} Sắp xếp hàng ngũ.
+        \item \textbf{\texttt{reverse}:} Đảo ngược vị trí 180 độ.
+        \item \textbf{\texttt{find}:} Tìm kiếm vị trí một người cụ thể.
+    \end{itemize}
+    \begin{block}{Lưu ý}
+        Các hàm này hoạt động dựa trên \texttt{iterator} (\texttt{begin} và \texttt{end}).
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 5: Code mẫu}
+\begin{lstlisting}[language=C++]
+#include <algorithm>
+#include <deque>
+#include <iostream>
+using namespace std;
+
+int main() {
+    deque<int> diem = {8, 2, 9};
+    sort(diem.begin(), diem.end()); // {2, 8, 9}
+    reverse(diem.begin(), diem.end()); // {9, 8, 2}
+    
+    auto it = find(diem.begin(), diem.end(), 8);
+    if (it != diem.end()) cout << "Tim thay 8!";
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Tổng kết}
+\begin{frame}{BÀI KIỂM TRA CUỐI KHÓA}
+    \begin{alertblock}{Thử thách cuối cùng}
+        Giả sử bạn có hàng đợi \texttt{deque<int> q = \{1, 2, 3, 4, 5\};}.\\
+        Nếu thực hiện lệnh: \texttt{reverse(q.begin(), q.end());}\\
+        Sau đó gọi lệnh: \texttt{cout << q.front();}\\
+        Con số nào sẽ hiện ra?
+    \end{alertblock}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Con số \textbf{5}. (Hàng bị đảo ngược thành \{5, 4, 3, 2, 1\}).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \Huge \textbf{Chúc mừng bạn đã tốt nghiệp khóa học!}
+    \end{center}
+\end{frame}
+
+\end{document}

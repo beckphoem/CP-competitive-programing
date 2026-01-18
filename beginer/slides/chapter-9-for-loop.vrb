@@ -1,0 +1,22 @@
+\frametitle{Bài tập tốt nghiệp For Loop}
+Cho mảng: \texttt{int diemSo[] = \{5, 8, 10\};}
+
+    Đoạn code sau thực hiện:
+\begin{lstlisting}[language=C++]
+for (int d : diemSo) {
+  cout << d + 1 << "\n";
+}
+\end{lstlisting}
+
+    \begin{alertblock}{Câu hỏi: Biến \texttt{d} đại diện cho cái gì?}
+        \begin{itemize}
+            \item[A.] \textbf{Vị trí} của điểm số (0, 1, 2).
+            \item[B.] \textbf{Giá trị} thực sự của điểm số (5, 8, 10).
+            \item[C.] Tổng số lượng điểm số (3).
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+    \begin{exampleblock}{Đáp án: B (Giá trị)}
+        Foreach lấy trực tiếp giá trị (Value). Kết quả in ra sẽ là: 6, 9, 11.
+    \end{exampleblock}

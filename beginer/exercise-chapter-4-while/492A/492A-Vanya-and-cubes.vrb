@@ -1,0 +1,31 @@
+\frametitle{Mẫu Code (Skeleton)}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+
+    int height = 0;
+    int current_level_cost = 0;
+
+    // Bat dau xay dung
+    while (true) {
+        // 1. Tinh so gach can cho tang tiep theo
+        int next_level = height + 1;
+        int cost_for_next = current_level_cost + next_level;
+
+        // 2. Kiem tra xem co du gach khong?
+        if (n >= cost_for_next) {
+            // ??? (Dien code vao day: Tru gach, tang chieu cao)
+            // Cap nhat current_level_cost
+        } else {
+            // ??? (Dien code vao day: Dung lai)
+        }
+    }
+
+    cout << height << endl;
+    return 0;
+}
+    \end{lstlisting}

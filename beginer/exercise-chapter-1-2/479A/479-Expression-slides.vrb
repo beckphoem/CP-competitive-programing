@@ -1,0 +1,25 @@
+\frametitle{5. Lời Giải Tham Khảo}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <algorithm> // De dung ham max
+using namespace std;
+
+int main() {
+    int a, b, c;
+    cin >> a >> b >> c;
+
+    int ans1 = a + b + c;
+    int ans2 = a * b * c;
+    int ans3 = (a + b) * c;
+    int ans4 = a * (b + c);
+
+    // Tim so lon nhat trong 4 so
+    int result = max({ans1, ans2, ans3, ans4});
+
+    cout << result;
+    return 0;
+}
+\end{lstlisting}
+\begin{itemize}
+    \item Lưu ý: Hàm \texttt{max} với danh sách khởi tạo \texttt{\{...\}} có trong C++11 trở lên.
+\end{itemize}

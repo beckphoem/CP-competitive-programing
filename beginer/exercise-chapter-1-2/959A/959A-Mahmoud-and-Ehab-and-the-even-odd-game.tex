@@ -1,0 +1,225 @@
+\documentclass{beamer}
+
+% Cấu hình gói ngôn ngữ và font chữ
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% Chọn theme giao diện (có thể thay đổi tùy thích)
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+
+% Thông tin bài thuyết trình
+\title[CF 959A - Mahmoud and Ehab]{Codeforces 959A: Mahmoud and Ehab and the even-odd game}
+\subtitle{Phân tích tư duy thuật toán (LHTL Edition)}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+% Cấu hình hiển thị code giả
+\usepackage{alltt}
+
+\begin{document}
+
+% --- SLIDE TIÊU ĐỀ ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- GIỚI THIỆU ---
+\begin{frame}{Lời mở đầu}
+    \begin{itemize}
+        \item Chào bạn! Tôi đã nhận được tín hiệu. Chúng ta sẽ cùng nhau "mổ xẻ" bài toán \textbf{Codeforces 959A - Mahmoud and Ehab and the even-odd game}.
+        \item Đừng lo lắng về cái tên dài dòng của nó. Bản chất bài này là một trò chơi logic cực kỳ cơ bản, giống như trò chơi dân gian vậy.
+        \item Bạn đã sẵn sàng chưa? Chúng ta bắt đầu quy trình \textbf{Bước 1: Tiếp nhận \& Phẫu thuật} ngay bây giờ.
+    \end{itemize}
+\end{frame}
+
+% --- BƯỚC 1: PHẪU THUẬT ---
+\section{Bước 1: Phẫu thuật đề bài}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    Hãy quên cốt truyện về hai cậu bạn Mahmoud và Ehab đi. Đây là luật chơi trần trụi:
+    
+    \begin{enumerate}
+        \item \textbf{Sân chơi:} Có một số nguyên $n$ (hãy tưởng tượng là một đống sỏi có $n$ viên).
+        \item \textbf{Lượt chơi:}
+            \begin{itemize}
+                \item \textbf{Mahmoud (đi trước):} Bắt buộc phải chọn một số \textbf{CHẴN} ($a$) để trừ đi ($1 \le a \le n$).
+                \item \textbf{Ehab (đi sau):} Bắt buộc phải chọn một số \textbf{LẺ} ($b$) để trừ đi ($1 \le b \le n$).
+            \end{itemize}
+        \item \textbf{Điều kiện thua:} Đến lượt ai mà không tìm được số nào hợp lệ để trừ (tức là không thể đi tiếp), người đó \textbf{THUA}.
+        \item \textbf{Giả định:} Cả hai đều cực kỳ thông minh (chơi tối ưu - optimal), nếu có cơ hội thắng ngay lập tức, họ sẽ làm ngay.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    \textbf{Lộ trình tư duy của chúng ta:}
+    \begin{itemize}
+        \item \textbf{Chunk 1:} Sức mạnh của người đi trước (Mahmoud) với số Chẵn.
+        \item \textbf{Chunk 2:} Tình thế của người đi trước với số Lẻ.
+        \item \textbf{Chunk 3:} Tổng kết quy luật thắng thua.
+    \end{itemize}
+\end{frame}
+
+% --- CHUNK 1 ---
+\section{Bước 2: Chunk 1 - Cú đánh của Mahmoud}
+
+\begin{frame}{Bước 2: Vòng lặp tư duy (Chunk 1)}
+    \framesubtitle{Cú đánh của Mahmoud}
+    
+    \textbf{1. Logic (Ẩn dụ):}
+    \begin{itemize}
+        \item Mahmoud là người cầm quyền trượng đi trước. Vũ khí của anh ta là \textbf{Số Chẵn} (2, 4, 6, 8...).
+        \item Mục tiêu: Làm sao để sau khi bốc sỏi xong, đống sỏi còn lại bằng \textbf{0} (hết sạch). 
+        \item Vì nếu sỏi hết sạch $\rightarrow$ Ehab không còn gì để bốc $\rightarrow$ Ehab thua $\rightarrow$ Mahmoud thắng.
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    
+    \begin{alertblock}{2. Bẫy tư duy (Trap)}
+        Nhiều bạn nghĩ: "Chắc là trừ dần dần, mỗi người trừ một ít".
+        \textbf{Không!} Đề bài bảo "chơi tối ưu". Nếu Mahmoud có thể "One-hit K.O", anh ta sẽ làm ngay.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check - Chunk 1)}
+    \textbf{3. Thử thách tư duy:}
+    
+    Giả sử đống sỏi ban đầu có \textbf{10 viên} ($n = 10$).
+    Mahmoud cần chọn một số \textbf{CHẴN} ($a$) sao cho $1 \le a \le 10$.
+    
+    \vspace{0.3cm}
+    Theo bạn, để thắng ngay lập tức, Mahmoud sẽ chọn $a$ bằng bao nhiêu?
+    \begin{itemize}
+        \item A. Chọn $a = 2$ (Còn lại 8 viên cho Ehab).
+        \item B. Chọn $a = 10$ (Còn lại 0 viên).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chốt lại Chunk 1}
+    \begin{block}{Đáp án: Chọn a = 10}
+        Tuyệt vời! Bạn đã nắm bắt được bản chất cốt lõi.
+    \end{block}
+    
+    \vspace{0.5cm}
+    \textbf{Kết luận Chunk 1:}
+    \begin{itemize}
+        \item Nếu $n$ là số \textbf{CHẴN}, Mahmoud chỉ cần chọn $a = n$ (vì $n$ chẵn).
+        \item $\rightarrow$ Đống sỏi còn lại bằng $0$.
+        \item $\rightarrow$ Ehab không còn lượt đi.
+        \item $\rightarrow$ \textbf{Mahmoud Thắng.}
+    \end{itemize}
+\end{frame}
+
+% --- CHUNK 2 ---
+\section{Bước 2: Chunk 2 - Cơn ác mộng số Lẻ}
+
+\begin{frame}{Bước 2: Vòng lặp tư duy (Chunk 2)}
+    \framesubtitle{Cơn ác mộng số Lẻ}
+    
+    Bây giờ đổi tình huống. Tưởng tượng đống sỏi là số \textbf{LẺ} (Ví dụ: 1, 3, 5, 7...).
+    
+    \vspace{0.3cm}
+    \textbf{1. Logic (Khắc tinh):}
+    Luật chơi ép Mahmoud \textbf{bắt buộc} phải chọn số \textbf{CHẴN}.
+    
+    \vspace{0.3cm}
+    \textbf{2. Bẫy tư duy (Trap):}
+    Nhiều bạn nghĩ: "Mahmoud vẫn có thể chọn một số chẵn nhỏ hơn n để chơi cầm chừng".
+    Nhưng liệu chơi cầm chừng có giúp Mahmoud sống sót không, hay là "chết từ trong trứng nước"?
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check - Chunk 2)}
+    \textbf{3. Thử thách tư duy:}
+    
+    Giả sử đống sỏi chỉ có vỏn vẹn \textbf{1 viên} ($n = 1$).
+    Lượt của Mahmoud (đi trước, phải chọn số chẵn $a$ sao cho $1 \le a \le 1$).
+    
+    \vspace{0.5cm}
+    \textbf{Hỏi:}
+    \begin{enumerate}
+        \item Mahmoud có tìm được số chẵn nào để chọn không?
+        \item Kết quả ván đấu này ai thắng?
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chốt lại Chunk 2}
+    \begin{block}{Đáp án: Không tìm được $\rightarrow$ Ehab thắng}
+        Chuẩn không cần chỉnh!
+    \end{block}
+    
+    \vspace{0.3cm}
+    \textbf{Giải thích:}
+    Vì luật bắt Mahmoud phải chọn số \textbf{CHẴN}, mà $1$ lại là số lẻ và nhỏ hơn mọi số chẵn dương ($2, 4, 6...$). 
+    
+    $\rightarrow$ Mahmoud "đứng hình" không đi được nước nào.
+    $\rightarrow$ \textbf{Ehab Thắng}.
+\end{frame}
+
+% --- CHUNK 3 ---
+\section{Bước 2: Chunk 3 - Quy luật tổng quát}
+
+\begin{frame}{Bước 2: Vòng lặp tư duy (Chunk 3)}
+    \framesubtitle{Quy luật tổng quát}
+    
+    Chúng ta đã có 2 mảnh ghép quan trọng:
+    \begin{enumerate}
+        \item Nếu $n$ = \textbf{Chẵn} (VD: 10) $\rightarrow$ Mahmoud "One-hit" trừ sạch $\rightarrow$ \textbf{Mahmoud Thắng}.
+        \item Nếu $n$ = \textbf{Lẻ} (VD: 1) $\rightarrow$ Mahmoud bó tay $\rightarrow$ \textbf{Ehab Thắng}.
+    \end{enumerate}
+    
+    \vspace{0.3cm}
+    \textbf{Mở rộng cho số Lẻ bất kỳ (3, 5, 7...):}
+    Dù Mahmoud có cố vùng vẫy trừ đi một số chẵn nào đó, thì theo toán học: 
+    \[ \text{Lẻ} - \text{Chẵn} = \text{Lẻ} \]
+    Anh ta luôn phải chuyền lại một cục nợ "Số Lẻ" cho Ehab. Ehab chỉ cần trừ sạch cục đó là xong phim.
+\end{frame}
+
+\begin{frame}{Chốt hạ thuật toán}
+    \textbf{Bây giờ, hãy tổng hợp lại thành quy tắc lập trình:}
+    
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item[1.] Nếu \texttt{n \% 2 == 0} (Số chẵn) $\rightarrow$ In ra: \textbf{Mahmoud}
+        \item[2.] Ngược lại (Số lẻ) $\rightarrow$ In ra: \textbf{Ehab}
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    Hóa ra, bài toán nghe có vẻ phức tạp về "chiến thuật tối ưu" thực chất chỉ là một bài toán kiểm tra tính chẵn lẻ cơ bản.
+\end{frame}
+
+% --- BƯỚC CUỐI ---
+\section{Bước 3: Tổng kết \& Mã hóa}
+
+\begin{frame}[fragile]{Bước 3: Tổng kết \& Mã hóa (Wrap Up)}
+    Đây là bản thiết kế cuối cùng cho chương trình của bạn (Pseudocode):
+    
+    \begin{enumerate}
+        \item \textbf{Input:} Nhập vào số nguyên $n$.
+        \item \textbf{Process (Xử lý):} Kiểm tra xem $n$ là chẵn hay lẻ.
+        \item \textbf{Output:}
+            \begin{itemize}
+                \item Nếu Chẵn (\texttt{n \% 2 == 0}): In ra \texttt{Mahmoud}
+                \item Nếu Lẻ (\texttt{else}): In ra \texttt{Ehab}
+            \end{itemize}
+    \end{enumerate}
+    
+    \vspace{0.3cm}
+    \textbf{Lưu ý nhỏ khi code (C++/Python):}
+    \begin{itemize}
+        \item Input $n$ có thể lên tới $10^9$, nhưng vì chỉ dùng phép chia lấy dư (\texttt{\%}) và so sánh nên kiểu \texttt{int} (C++) hoặc số nguyên thường (Python) đều xử lý tốt.
+        \item Độ phức tạp: $O(1)$ - siêu nhanh.
+        \item Đừng quên in hoa chữ cái đầu \texttt{Mahmoud} và \texttt{Ehab}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lời kết}
+    \begin{center}
+        \Huge \textbf{Bạn đã sẵn sàng để viết code và Submit chưa?}
+        
+        \vspace{1cm}
+        \large Chúc bạn "Accept" xanh rờn! \textcolor{green}{\textbf{🟢}}
+    \end{center}
+\end{frame}
+
+\end{document}

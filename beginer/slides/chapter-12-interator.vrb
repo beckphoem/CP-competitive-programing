@@ -1,0 +1,16 @@
+\frametitle{Giải pháp: Điều khiển thủ công}
+Đưa \texttt{it++} vào trong thân vòng lặp để kiểm soát.
+
+\begin{lstlisting}
+    // CHUAN: Bo it++ o tieu de
+    for (auto it = v.begin(); it != v.end(); /* Trong */ ) {
+
+        if (*it % 2 == 0) {
+            // Truong hop XOA: erase tu day it sang ke tiep
+            it = v.erase(it);
+        } else {
+            // Truong hop KHONG XOA: Tu buoc di
+            it++;
+        }
+    }
+\end{lstlisting}

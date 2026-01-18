@@ -1,0 +1,217 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Cấu hình hiển thị code/giả mã
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{green!60!black},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    frame=single,
+    tabsize=2,
+    breaklines=true
+}
+
+\title{Codeforces 110A - Nearly Lucky Number}
+\subtitle{Rèn luyện kỹ năng đọc hiểu và cài đặt (Implementation)}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Giới thiệu
+\begin{frame}{Giới thiệu}
+    \begin{block}{Mục tiêu bài học}
+        Hôm nay chúng ta sẽ cùng "mổ xẻ" bài toán \textbf{Codeforces 110A - Nearly Lucky Number}.
+        Đây là bài toán tuyệt vời để:
+        \begin{itemize}
+            \item Rèn luyện kỹ năng đọc hiểu định nghĩa.
+            \item Tránh các bẫy tư duy lối mòn khi xử lý số học.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Bước 1: Tiếp nhận
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    Hãy nhìn vào lõi vấn đề dưới ngôn ngữ "người thường":
+
+    \begin{exampleblock}{Định nghĩa 1: Số May Mắn (Lucky Number)}
+        Là số dương mà trong biểu diễn thập phân \textbf{CHỈ} chứa các chữ số \textbf{4} và \textbf{7}.
+        \begin{itemize}
+            \item \textbf{Đúng:} 4, 7, 47, 744, 477...
+            \item \textbf{Sai:} 5, 17, 467...
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{alertblock}{Định nghĩa 2: Số Gần May Mắn (Nearly Lucky Number)}
+        Là số nguyên $n$ bất kỳ, sao cho \textbf{số lượng} các chữ số may mắn có trong $n$ phải là một \textbf{Số May Mắn}.
+    \end{alertblock}
+\end{frame}
+
+% Lộ trình tư duy
+\begin{frame}{Lộ trình tư duy (Chunks)}
+    Chúng ta chia bài toán thành 2 mảnh ghép:
+
+    \begin{enumerate}
+        \item \textbf{Chunk 1: Sàng lọc và Đếm.}
+        \begin{itemize}
+            \item Tìm xem trong $n$ có bao nhiêu chữ số 4 và 7.
+        \end{itemize}
+        
+        \item \textbf{Chunk 2: Thẩm định kết quả.}
+        \begin{itemize}
+            \item Kiểm tra xem con số vừa đếm được có phải là số may mắn hay không.
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+% Chunk 1: Logic
+\begin{frame}{Chunk 1: Sàng lọc và Đếm}
+    \begin{exampleblock}{Logic (Tư duy ẩn dụ)}
+        Tưởng tượng số nguyên $n$ là một \textbf{đoàn tàu dài}. Mỗi toa là một chữ số.
+        Bạn là người soát vé chỉ quan tâm đến \textbf{"Khách VIP"}:
+        \begin{itemize}
+            \item Khách VIP: Số \textbf{4} và Số \textbf{7}.
+            \item Các số khác (0, 1, 2, 3, 5...): Lờ đi.
+        \end{itemize}
+        \textbf{Hành động:} Cầm một cái bấm đếm số. Cứ gặp 1 khách VIP $\rightarrow$ Bấm "Tạch" (cộng thêm 1).
+    \end{exampleblock}
+\end{frame}
+
+% Cảnh báo quan trọng (Trap)
+\begin{frame}{Cảnh báo quan trọng!}
+    \begin{alertblock}{Bẫy (Trap)}
+        Đề bài cho $n$ có thể lên tới $10^{18}$ (18 chữ số).
+        \begin{itemize}
+            \item Dùng toán học (chia lấy dư, chia nguyên) vẫn được nhưng phức tạp.
+            \item \textbf{Tư duy đơn giản hơn:} Đoàn tàu bản chất là một \textbf{Chuỗi ký tự (String)}.
+        \end{itemize}
+    \end{alertblock}
+    
+    Việc duyệt qua một chuỗi ký tự dễ hình dung hơn nhiều so với xử lý số nguyên lớn.
+\end{frame}
+
+% Thử thách tư duy
+\begin{frame}[fragile]{Thử thách tư duy (Mental Check)}
+    Giả sử đoàn tàu có nội dung: \texttt{n = 10047704}
+    
+    \textbf{Câu hỏi:}
+    \begin{enumerate}
+        \item Bạn tìm thấy những "khách VIP" nào?
+        \item Kết thúc chuyến tàu, biến đếm hiển thị số mấy?
+    \end{enumerate}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{block}{Phân tích sai lầm thường gặp}
+        \begin{enumerate}
+            \item \textbf{Nhầm lẫn "Khách VIP":} Số 1 không phải là số may mắn. Chỉ đếm 4 và 7.
+            \item \textbf{Nhầm lẫn ĐẾM và CỘNG:} Chúng ta đếm \textbf{số lượng} (tăng 1 đơn vị), không cộng giá trị của các con số lại.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% Làm lại Chunk 1
+\begin{frame}{Làm lại Chunk 1 (Sửa sai)}
+    Xét lại: \texttt{n = 10047704}
+    
+    \begin{enumerate}
+        \item \texttt{1} $\rightarrow$ Bỏ qua.
+        \item \texttt{0} $\rightarrow$ Bỏ qua.
+        \item \texttt{0} $\rightarrow$ Bỏ qua.
+        \item \texttt{4} $\rightarrow$ VIP! $\rightarrow$ Bấm đếm: \textbf{1}.
+        \item \texttt{7} $\rightarrow$ VIP! $\rightarrow$ Bấm đếm: \textbf{2}.
+        \item \texttt{7} $\rightarrow$ VIP! $\rightarrow$ Bấm đếm: \textbf{3}.
+        \item \texttt{0} $\rightarrow$ Bỏ qua.
+        \item \texttt{4} $\rightarrow$ VIP! $\rightarrow$ Bấm đếm: \textbf{4}.
+    \end{enumerate}
+    
+    \textbf{Kết quả cuối cùng trên máy đếm là: 4.}
+\end{frame}
+
+% Thử thách lại (Re-Test)
+\begin{frame}{Thử thách lại (Re-Test)}
+    Để chắc chắn bạn đã nắm được việc \textbf{ĐẾM}, hãy xem xét các trường hợp sau:
+
+    \begin{block}{Trường hợp 1: Input $n = 47$}
+        \begin{itemize}
+            \item Số lượng chữ số may mắn là bao nhiêu?
+            \item \pause \textbf{Đáp án: 2}. (Số 2 không phải là số may mắn $\rightarrow$ \textbf{NO}).
+        \end{itemize}
+    \end{block}
+    \pause
+    
+    \begin{block}{Trường hợp 2: Input $n$ toàn số 7 (10 chữ số 7)}
+        \begin{itemize}
+            \item Số lượng chữ số may mắn là bao nhiêu?
+            \item \pause \textbf{Đáp án: 10}. (Số 10 chứa số 1 và 0 $\rightarrow$ \textbf{NO}).
+        \end{itemize}
+    \end{block}
+    
+    \pause
+    Logic đã hoàn thiện: Chỉ khi số lượng là \textbf{4} hoặc \textbf{7} thì mới in \textbf{YES}.
+\end{frame}
+
+% Chunk 3: Blueprint
+\begin{frame}[fragile]{Chunk 3: Tổng kết \& Mã giả (Blueprint)}
+    Chúng ta xử lý $n$ dưới dạng \textbf{Chuỗi ký tự (String)}.
+
+    \begin{exampleblock}{Kịch bản chương trình}
+        \begin{enumerate}
+            \item \textbf{Nhập liệu:} Đọc cả dòng vào biến chuỗi \texttt{s}.
+            \item \textbf{Chuẩn bị:} Tạo biến đếm \texttt{dem = 0}.
+            \item \textbf{Duyệt (Loop):} 
+            \begin{lstlisting}[language=C++, basicstyle=\ttfamily\footnotesize]
+FOR mỗi ky_tu trong s:
+    IF ky_tu == '4' OR ky_tu == '7':
+        dem = dem + 1
+            \end{lstlisting}
+            \item \textbf{Phán quyết:}
+            \begin{lstlisting}[language=C++, basicstyle=\ttfamily\footnotesize]
+IF dem == 4 OR dem == 7:
+    PRINT "YES"
+ELSE:
+    PRINT "NO"
+            \end{lstlisting}
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+% Bước cuối: Hiện thực hóa
+\begin{frame}{Bước cuối: Hiện thực hóa}
+    \begin{block}{Nhiệm vụ của bạn}
+        Hãy viết code hoàn chỉnh dựa trên kịch bản trên bằng ngôn ngữ sở trường (C++, Python, Java...).
+    \end{block}
+
+    \begin{alertblock}{Lưu ý nhỏ}
+        \begin{itemize}
+            \item Input là chuỗi (String), không phải số nguyên.
+            \item In hoa \textbf{YES} và \textbf{NO} đúng yêu cầu.
+        \end{itemize}
+    \end{alertblock}
+    
+    \centering
+    \vspace{1cm}
+    \textbf{Chúc các bạn thành công!}
+\end{frame}
+
+\end{document}

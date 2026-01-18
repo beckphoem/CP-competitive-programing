@@ -1,0 +1,19 @@
+\frametitle{Code thực tế: Vòng lặp}
+\begin{lstlisting}[language=C++]
+// ... (Da khai bao vector va push_back)
+
+  // 1. In ra kich thuoc tui
+  cout << "Tong so xe la: " << xe_hoi.size() << "\n";
+
+  // 2. Diem danh kieu Truyen thong (Dung i)
+  cout << "--- Cach 1: Dung i ---\n";
+  for (int i = 0; i < xe_hoi.size(); i++) {
+    cout << xe_hoi[i] << "\n";
+  }
+
+  // 3. Diem danh kieu Hien dai (For-each) -> Khuyen khich!
+  cout << "--- Cach 2: Quet tung cai ---\n";
+  for (string x : xe_hoi) {
+    cout << x << "\n";
+  }
+    \end{lstlisting}

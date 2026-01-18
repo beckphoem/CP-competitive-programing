@@ -1,0 +1,390 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Định nghĩa màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình hiển thị code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin slide
+\title{Chinh phục C++ Vector}
+\subtitle{Hành trình khám phá chiếc balô thần kỳ}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Giới thiệu Lộ trình ---
+\begin{frame}{Lộ trình: Chiếc Balô Thần Kỳ}
+    Chào em! Hãy tưởng tượng chúng ta đang chuẩn bị cho một chuyến đi dã ngoại thú vị. Để hiểu về Vector, chúng ta sẽ đi qua 4 trạm dừng chân chính:
+
+    \begin{block}{Các trạm dừng chân}
+    \begin{enumerate}
+        \item \textbf{Trạm 1: Vector là gì?} \\ Tại sao Mảng (Array) giống như cái khay trứng cố định, còn Vector lại là "Chiếc túi thần kỳ"?
+        \item \textbf{Trạm 2: Sắm túi và Xếp đồ (Create \& Add)} \\ Cách khai báo và nhét từng món đồ vào đáy túi (\texttt{push\_back}).
+        \item \textbf{Trạm 3: Lục lọi và Tráo đổi (Access \& Change)} \\ Cách lấy đúng món đồ mình cần hoặc đổi món này lấy món kia.
+        \item \textbf{Trạm 4: Kiểm kê và Soi độ rộng (Loop \& Size)} \\ Cách rà soát lại toàn bộ đồ đạc và xem túi nặng bao nhiêu.
+    \end{enumerate}
+    \end{block}
+\end{frame}
+
+% --- TRẠM 1: VECTOR LÀ GÌ ---
+\begin{frame}{Trạm 1: Vector là gì? - Tạm biệt "Khay trứng"}
+    
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{alertblock}{Mảng (Array) - Khay trứng}
+            \begin{itemize}
+                \item Kích thước cố định.
+                \item 10 lỗ chỉ đựng được 10 quả.
+                \item Quả thứ 11? Không vừa!
+                \item Chỉ có 2 quả? Lãng phí chỗ.
+            \end{itemize}
+        \end{alertblock}
+
+        \column{0.5\textwidth}
+        \begin{exampleblock}{Vector - Túi thần kỳ}
+            \begin{itemize}
+                \item Co giãn linh hoạt (Mảng động).
+                \item Lúc đầu xẹp lép.
+                \item Nhét đồ vào $\to$ Phồng lên.
+                \item Lấy đồ ra $\to$ Co lại gọn gàng.
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+
+    \vspace{0.5cm}
+    \textbf{Chốt lại:} Vector chính là một \textbf{Mảng động (Dynamic Array)}.
+\end{frame}
+
+% --- Slide Code Include ---
+\begin{frame}[fragile]{Khởi động Chiếc Balô (Cú pháp)}
+    Để sử dụng được chiếc túi thần kỳ này, chúng ta phải "gọi" nó ra từ thư viện C++.
+    
+    \begin{lstlisting}[language=C++, caption={Khai báo thư viện}]
+#include <iostream>
+#include <vector>  // <--- Day la lenh goi thu vien Vector
+
+using namespace std;
+
+int main() {
+  // Chung ta se tao chiec tui o day
+  return 0;
+}
+    \end{lstlisting}
+    
+    \textbf{Lưu ý:} Dòng \texttt{\#include <vector>} giống như việc hô to: \textit{"Doremon ơi, cho tớ mượn cái túi thần kỳ!"}.
+\end{frame}
+
+% --- Checkpoint 1 ---
+\begin{frame}{Kiểm tra nhanh (Checkpoint)}
+    \begin{block}{Câu hỏi}
+        Nếu em muốn lập trình một danh sách \textbf{các bạn đăng ký đi tham quan}, nhưng em \textbf{không biết trước} sẽ có bao nhiêu bạn tham gia (có thể 5 bạn, có thể 50 bạn).
+        
+        Em nên dùng \textbf{Mảng (Array)} hay \textbf{Vector}? Tại sao?
+    \end{block}
+
+    \pause
+    \vspace{1cm}
+    
+    \begin{exampleblock}{Đáp án}
+        \textbf{Vector!} \\
+        Vì số lượng người tham gia thay đổi liên tục, Vector có thể co giãn để chứa vừa đủ số người, không lo thiếu chỗ hay thừa chỗ như Mảng.
+    \end{exampleblock}
+\end{frame}
+
+% --- TRẠM 2: SẮM TÚI VÀ XẾP ĐỒ ---
+\begin{frame}[fragile]{Trạm 2: Sắm túi (Khai báo)}
+    Em phải nói rõ cho máy tính biết túi đựng cái gì (Số nguyên hay Chữ).
+
+    \begin{block}{Cú pháp}
+        \texttt{vector<Kiểu dữ liệu> Tên\_túi;}
+    \end{block}
+
+    \textbf{Ví dụ:}
+    \begin{itemize}
+        \item \texttt{vector<string> xe\_hoi;} $\to$ Túi tên \texttt{xe\_hoi}, đựng chữ.
+        \item \texttt{vector<int> diem\_so;} $\to$ Túi tên \texttt{diem\_so}, đựng số.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Nhét đồ vào túi (push\_back)}
+    Câu thần chú: \textbf{\texttt{.push\_back()}}.
+    
+    Hãy hình dung hành động \textbf{xếp hàng}:
+    \begin{itemize}
+        \item Người vào sau phải đứng sau lưng người trước ("Back").
+    \end{itemize}
+
+    \begin{exampleblock}{Ví dụ minh họa với túi \texttt{xe\_hoi}}
+        \begin{enumerate}
+            \item \texttt{xe\_hoi.push\_back("Vinfast");} \\ $\to$ Túi: [Vinfast]
+            \item \texttt{xe\_hoi.push\_back("Toyota");} \\ $\to$ Túi: [Vinfast, Toyota]
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Code thực tế: Mua túi và Xếp xe}
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <vector> // Nho goi thu vien
+
+using namespace std;
+
+int main() {
+  // 1. Mua cai tui ten la "xe_hoi" chi dung chuoi ky tu
+  vector<string> xe_hoi;
+
+  // 2. Nhet chiec xe dau tien vao
+  xe_hoi.push_back("Vinfast");
+
+  // 3. Nhet tiep chiec xe thu hai
+  xe_hoi.push_back("BMW");
+
+  // 4. Nhet chiec xe thu ba
+  xe_hoi.push_back("Ford");
+  
+  // Luc nay trong tui dang la: Vinfast, BMW, Ford
+  return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+% --- Checkpoint 2 ---
+\begin{frame}{Kiểm tra nhanh (Checkpoint)}
+    \begin{block}{Tình huống xếp hàng trà sữa}
+        \begin{enumerate}
+            \item Bạn \textbf{Nam} đứng vào hàng đầu tiên.
+            \item Bạn \textbf{Lan} dùng lệnh \texttt{.push\_back()}.
+            \item Bạn \textbf{Hùng} dùng lệnh \texttt{.push\_back()}.
+        \end{enumerate}
+        \textbf{Hỏi:} Ai đứng \textbf{đầu hàng} và ai đứng \textbf{cuối hàng}?
+    \end{block}
+
+    \pause
+    \vspace{0.5cm}
+
+    \begin{exampleblock}{Đáp án}
+        \begin{itemize}
+            \item Đầu hàng (vị trí 0): \textbf{Nam}.
+            \item Cuối hàng: \textbf{Hùng}.
+        \end{itemize}
+        Nguyên tắc: "Vào sau đứng sau".
+    \end{exampleblock}
+\end{frame}
+
+% --- TRẠM 3: LỤC LỌI VÀ TRÁO ĐỔI ---
+\begin{frame}{Trạm 3: Lục lọi và Tráo đổi}
+    Túi đang có: \textbf{Vinfast, BMW, Ford}.
+    
+    \begin{alertblock}{Quy tắc vàng: Máy tính đếm từ 0!}
+        Vector giống như dãy tủ gửi đồ có đánh số (Index):
+        \begin{itemize}
+            \item Ô đầu tiên: \textbf{Số 0}.
+            \item Ô thứ hai: \textbf{Số 1}.
+            \item Ô thứ ba: \textbf{Số 2}.
+        \end{itemize}
+    \end{alertblock}
+
+    \begin{itemize}
+        \item \texttt{xe\_hoi[0]} $\to$ Vinfast
+        \item \texttt{xe\_hoi[1]} $\to$ BMW
+        \item \texttt{xe\_hoi[2]} $\to$ Ford
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Cách lấy đồ và Đổi đồ}
+    \textbf{1. Lấy đồ ra (Access)}
+    \begin{itemize}
+        \item Dùng ngoặc vuông: \texttt{cout << xe\_hoi[0];}
+        \item Dùng lệnh \texttt{.at()}: \texttt{cout << xe\_hoi.at(0);}
+    \end{itemize}
+
+    \vspace{0.5cm}
+
+    \textbf{2. Tráo đổi đồ (Change)}
+    \begin{itemize}
+        \item Chỉ đúng cái tủ và gán giá trị mới.
+        \item \texttt{xe\_hoi[0] = "Tesla";}
+        \item \textbf{Kết quả:} Túi trở thành [Tesla, BMW, Ford].
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Code thực tế: Truy cập và Thay đổi}
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+  vector<string> xe_hoi;
+  xe_hoi.push_back("Vinfast"); // Vi tri 0
+  xe_hoi.push_back("BMW");     // Vi tri 1
+  xe_hoi.push_back("Ford");    // Vi tri 2
+
+  // 1. Lay do ra xem: In xe o vi tri 1 (chiec thu 2)
+  cout << "Xe o vi tri 1 la: " << xe_hoi[1] << "\n"; 
+
+  // 2. Trao doi do: Doi xe vi tri 0 thanh Opel
+  xe_hoi[0] = "Opel";
+
+  // In lai de kiem tra
+  cout << "Xe o vi tri 0 bay gio la: " << xe_hoi[0] << "\n";
+  return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+% --- Checkpoint 3 ---
+\begin{frame}{Kiểm tra nhanh (Checkpoint)}
+    \begin{block}{Câu hỏi mẹo}
+        Túi có 3 món: \texttt{["Opel", "BMW", "Ford"]}. \\
+        Nếu em viết lệnh: \texttt{cout << xe\_hoi[3];} chuyện gì sẽ xảy ra?
+        
+        A. In ra "Ford". \\
+        B. In ra ô trống. \\
+        C. Báo lỗi hoặc in ra linh tinh.
+    \end{block}
+
+    \pause
+    \vspace{0.5cm}
+
+    \begin{alertblock}{Đáp án: C}
+        Vì đếm từ 0, nên 3 món đồ nằm ở tủ số \textbf{0, 1, 2}. \\
+        Tủ số \textbf{3} là "tủ ma" (chưa được tạo), chọc vào sẽ bị lỗi!
+    \end{alertblock}
+\end{frame}
+
+% --- TRẠM 4: KIỂM KÊ VÀ SOI ĐỘ RỘNG ---
+\begin{frame}[fragile]{Trạm 4: Kiểm kê và Soi độ rộng}
+    \textbf{1. Soi độ rộng (Size) - Túi nặng bao nhiêu?}
+    \begin{itemize}
+        \item Lệnh: \texttt{.size()}
+        \item Ví dụ: \texttt{cout << xe\_hoi.size();} $\to$ Ra số 3.
+    \end{itemize}
+
+    \vspace{0.3cm}
+    
+    \textbf{2. Kiểm kê hàng loạt (Loop)}
+    
+    \textit{Cách 1: Truyền thống (Dùng chỉ số i)}
+    \begin{lstlisting}[language=C++, basicstyle=\ttfamily\tiny]
+for (int i = 0; i < xe_hoi.size(); i++) {
+    cout << xe_hoi[i] << "\n";
+}
+    \end{lstlisting}
+
+    \textit{Cách 2: Hiện đại (For-each) - "Quét mã vạch"}
+    \begin{lstlisting}[language=C++, basicstyle=\ttfamily\tiny]
+for (string xe : xe_hoi) {
+    cout << xe << "\n";
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Code thực tế: Vòng lặp}
+    \begin{lstlisting}[language=C++]
+// ... (Da khai bao vector va push_back)
+
+  // 1. In ra kich thuoc tui
+  cout << "Tong so xe la: " << xe_hoi.size() << "\n";
+
+  // 2. Diem danh kieu Truyen thong (Dung i)
+  cout << "--- Cach 1: Dung i ---\n";
+  for (int i = 0; i < xe_hoi.size(); i++) {
+    cout << xe_hoi[i] << "\n";
+  }
+
+  // 3. Diem danh kieu Hien dai (For-each) -> Khuyen khich!
+  cout << "--- Cach 2: Quet tung cai ---\n";
+  for (string x : xe_hoi) {
+    cout << x << "\n";
+  }
+    \end{lstlisting}
+\end{frame}
+
+% --- FINAL EXAM ---
+\begin{frame}{Kiểm tra tốt nghiệp (Final Exam)}
+    \begin{block}{Câu hỏi cuối cùng}
+        Giả sử túi \texttt{xe\_hoi} có \textbf{5} chiếc xe. \\
+        Anh dùng vòng lặp: \texttt{for (int i = 0; i < xe\_hoi.size(); i++)}
+        
+        \begin{enumerate}
+            \item Biến \texttt{i} sẽ bắt đầu từ số mấy?
+            \item Biến \texttt{i} sẽ kết thúc ở số mấy (số lớn nhất để lấy xe)?
+        \end{enumerate}
+    \end{block}
+
+    \pause
+    \vspace{0.5cm}
+
+    \begin{exampleblock}{Đáp án}
+        \begin{enumerate}
+            \item Bắt đầu từ \textbf{0}.
+            \item Kết thúc ở \textbf{4}.
+        \end{enumerate}
+        (Vì kích thước là 5, các chỉ số hợp lệ là 0, 1, 2, 3, 4).
+    \end{exampleblock}
+\end{frame}
+
+% --- TỔNG KẾT ---
+\begin{frame}{Tổng kết hành trình: Bùa hộ mệnh}
+    \begin{table}
+        \centering
+        \begin{tabular}{l l l}
+            \toprule
+            \textbf{Hành động} & \textbf{Code} & \textbf{Ví dụ đời thường} \\
+            \midrule
+            Mua túi & \texttt{vector<string> t;} & Mua balô rỗng. \\
+            Nhét đồ & \texttt{t.push\_back("A");} & Nhét táo vào đáy. \\
+            Lấy đồ & \texttt{t[0]} / \texttt{t.at(0)} & Lấy món đầu tiên. \\
+            Đổi đồ & \texttt{t[0] = "B";} & Tráo táo thành lê. \\
+            Đếm đồ & \texttt{t.size()} & Xem túi nặng bao nhiêu. \\
+            Kiểm kê & \texttt{for (string x : t)} & Quét từng món. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \begin{block}{Bước tiếp theo}
+        Em đã tốt nghiệp khóa "Vector Cấp Tốc"! Em có muốn thử sức với bài tập thực hành nhỏ để test trình độ coding không?
+    \end{block}
+\end{frame}
+
+\end{document}

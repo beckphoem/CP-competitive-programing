@@ -1,0 +1,236 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Luyện tập C++: Set và Unordered Set}
+\subtitle{Danh sách bài tập Codeforces Elo 800 - 1000}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu}
+    \begin{block}{Mục tiêu}
+        Việc luyện tập theo nhóm chủ đề giúp tạo ra các "chunk" kiến thức vững chắc. Danh sách này tập trung vào \texttt{set} và \texttt{unordered\_set}.
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{\texttt{std::set}}: Tự động sắp xếp, phần tử duy nhất.
+        \item \textbf{\texttt{std::unordered\_set}}: Không sắp xếp, phần tử duy nhất, tốc độ nhanh hơn.
+    \end{itemize}
+\end{frame}
+
+% Bài 1
+\begin{frame}{1. Boy or Girl (236A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/236/A}{Codeforces 236A}
+    \begin{block}{Tóm tắt đề bài}
+        Đếm số ký tự khác nhau trong tên người dùng.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Đưa các ký tự của chuỗi vào một \texttt{set<char>}. Sau đó kiểm tra \texttt{set.size()} là số chẵn hay số lẻ để đưa ra kết luận.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 2
+\begin{frame}{2. Is your horseshoe on the other hoof? (228A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/228/A}{Codeforces 228A}
+    \begin{block}{Tóm tắt đề bài}
+        Cho 4 màu móng ngựa, cần mua thêm ít nhất bao nhiêu móng để có đủ 4 màu khác nhau?
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Đưa 4 giá trị màu vào \texttt{set}. Số lượng móng cần mua thêm sẽ bằng $4 - \texttt{set.size()}$.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 3
+\begin{frame}{3. Pangram (520A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/520/A}{Codeforces 520A}
+    \begin{block}{Tóm tắt đề bài}
+        Kiểm tra một chuỗi có chứa đủ 26 chữ cái tiếng Anh (không phân biệt hoa thường) hay không.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Chuyển tất cả ký tự về chữ thường (lowercase), bỏ vào một \texttt{set<char>}. Kiểm tra xem \texttt{set.size()} có bằng 26 hay không.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 4
+\begin{frame}{4. Registration System (4C)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/4/C}{Codeforces 4C}
+    \begin{block}{Tóm tắt đề bài}
+        Quản lý tên người dùng. Nếu tên đã tồn tại, thêm số thứ tự tăng dần vào sau tên.
+    \end{block}
+    \begin{alertblock}{Chiến lược giải quyết}
+        Sử dụng \texttt{map<string, int>} để lưu trữ và đếm số lần xuất hiện của mỗi tên người dùng. Đây là bài tập chuyển tiếp từ \texttt{set} sang \texttt{map}.
+    \end{alertblock}
+\end{frame}
+
+% Bài 5
+\begin{frame}{5. Anton and Letters (443A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/443/A}{Codeforces 443A}
+    \begin{block}{Tóm tắt đề bài}
+        Đếm các chữ cái khác nhau xuất hiện trong một tập hợp có định dạng \texttt{\{a, b, c\}}.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Xử lý chuỗi đầu vào để lọc lấy các ký tự chữ cái, bỏ chúng vào \texttt{set} rồi in ra \texttt{set.size()}.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 6
+\begin{frame}{6. I Wanna Be the Guy (469A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/469/A}{Codeforces 469A}
+    \begin{block}{Tóm tắt đề bài}
+        Hai người chơi có các danh sách màn chơi họ có thể vượt qua. Liệu cả hai có thể cùng nhau vượt qua tất cả $n$ màn chơi không?
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Thực hiện phép hợp (Union) bằng cách bỏ tất cả các màn chơi của cả hai người vào một \texttt{set}. Kiểm tra \texttt{set.size() == n}.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 7
+\begin{frame}{7. Arrival of the General (144A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/144/A}{Codeforces 144A}
+    \begin{block}{Tóm tắt đề bài}
+        Tìm số bước hoán đổi ít nhất để đưa phần tử lớn nhất về đầu và phần tử nhỏ nhất về cuối.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Luyện tập tìm vị trí Max/Min. \texttt{set} có thể dùng để lưu các giá trị duy nhất nếu bài toán yêu cầu mở rộng về sau.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 8
+\begin{frame}{8. Gamer Hemose (1592A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/1592/A}{Codeforces 1592A}
+    \begin{block}{Tóm tắt đề bài}
+        Chọn 2 vũ khí mạnh nhất để tiêu diệt quái vật sao cho không dùng một vũ khí 2 lần liên tiếp.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Dùng \texttt{set} (để tự động sắp xếp) hoặc \texttt{sort} để lấy ra 2 giá trị sát thương lớn nhất.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 9
+\begin{frame}{9. Double Strings (1703D)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/1703/D}{Codeforces 1703D}
+    \begin{block}{Tóm tắt đề bài}
+        Kiểm tra một chuỗi có bằng tổng (ghép) của 2 chuỗi khác có trong danh sách không.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Bỏ tất cả các chuỗi vào \texttt{unordered\_set}. Với mỗi chuỗi, dùng vòng lặp cắt làm đôi tại mọi vị trí khả thi và dùng \texttt{count()} để kiểm tra sự tồn tại của cả hai nửa trong \texttt{set}.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 10
+\begin{frame}{10. Favorite Sequence (1462A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/1462/A}{Codeforces 1462A}
+    \begin{block}{Tóm tắt đề bài}
+        Khôi phục dãy số gốc từ một dãy bị xáo trộn theo quy tắc lấy luân phiên từ hai đầu.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Sử dụng cấu trúc dữ liệu mảng hoặc \texttt{deque}. Có thể dùng \texttt{set} để đánh dấu các phần tử đã xử lý nếu cần.
+    \end{exampleblock}
+\end{frame}
+
+% Thêm các slide cho các bài từ 11-20 tương tự...
+\begin{frame}{11. Two-gram (977B)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/977/B}{Codeforces 977B}
+    \begin{block}{Tóm tắt đề bài}
+        Tìm cặp 2 ký tự (substring độ dài 2) xuất hiện nhiều nhất trong chuỗi.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Dùng \texttt{map<string, int>} để đếm số lần xuất hiện của tất cả các cặp con độ dài 2.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{12. Polycarp and Letters (864B)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/864/B}{Codeforces 864B}
+    \begin{block}{Tóm tắt đề bài}
+        Tìm đoạn con dài nhất chỉ chứa các chữ cái thường khác nhau.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Duyệt chuỗi: nếu gặp chữ hoa thì \texttt{clear()} \texttt{set}, nếu gặp chữ thường thì \texttt{insert()} vào \texttt{set}. Cập nhật kết quả cực đại từ \texttt{set.size()}.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{16. Distinct Digits (1228A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/1228/A}{Codeforces 1228A}
+    \begin{block}{Tóm tắt đề bài}
+        Tìm một số trong đoạn $[l, r]$ mà tất cả các chữ số của nó đều khác nhau.
+    \end{block}
+    \begin{exampleblock}{Chiến lược giải quyết}
+        Duyệt từng số, chuyển số thành \texttt{string}, bỏ từng ký tự số vào \texttt{set<char>}. Nếu \texttt{set.size() == string.length()} thì đó là số cần tìm.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Lời khuyên khi giải bài}
+    \begin{itemize}
+        \item \textbf{Tại sao lại có Map?} \texttt{set} để kiểm tra "có tồn tại hay không", còn \texttt{map} để biết "tồn tại bao nhiêu lần".
+        \item \textbf{Khi nào dùng Unordered?} Với Elo 800-1000 ($n \le 10^5$), \texttt{std::set} vẫn chạy rất tốt. Hãy tập dùng \texttt{std::set} trước để làm quen với tính chất sắp xếp.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ví dụ: Boy or Girl (236A)}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <set>
+#include <string>
+
+int main() {
+    std::string s;
+    std::cin >> s;
+    std::set<char> distinct_chars;
+    for(char c : s) {
+        distinct_chars.insert(c);
+    }
+    
+    if(distinct_chars.size() % 2 == 0) 
+        std::cout << "CHAT WITH HER!";
+    else 
+        std::cout << "IGNORE HIM!";
+    return 0;
+}
+\end{lstlisting}
+\pause
+\begin{block}{Kết quả}
+    Chương trình sẽ đếm số ký tự duy nhất và đưa ra quyết định.
+\end{block}
+\end{frame}
+
+\end{document}

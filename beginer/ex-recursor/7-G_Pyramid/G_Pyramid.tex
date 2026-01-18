@@ -1,0 +1,212 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Huấn luyện Tư duy Thuật toán}
+\subtitle{Bài toán G. Pyramid}
+\author{Slide Learning C++}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Chào mừng bạn!}
+    \begin{block}{Giới thiệu}
+        Tôi đã sẵn sàng nhập vai \textbf{Huấn luyện viên Tư duy Thuật toán} của bạn. Chúng ta sẽ cùng nhau "mổ xẻ" bài toán \textbf{G. Pyramid}.
+    \end{block}
+    
+    \begin{exampleblock}{Mục tiêu}
+        Luyện tập tư duy \textbf{Đệ quy (Recursion)} và khả năng quan sát quy luật hình học.
+    \end{exampleblock}
+\end{frame}
+
+% --- Bước 1 ---
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \textbf{Tóm tắt đề bài:} Vẽ hình kim tự tháp bằng các dấu sao \texttt{*} có độ cao đúng bằng $N$ dòng.
+    
+    \begin{alertblock}{Ràng buộc đặc biệt}
+        Đề bài yêu cầu bắt buộc phải sử dụng \textbf{Đệ quy}.
+    \end{alertblock}
+
+    \textbf{Lộ trình tư duy:}
+    \begin{enumerate}
+        \item Giải mã cấu trúc mỗi dòng (Khoảng trống và Dấu sao).
+        \item Tìm công thức liên hệ giữa số dòng và số lượng ký tự.
+        \item Xây dựng cơ chế đệ quy (Điểm dừng và Bước nhảy).
+    \end{enumerate}
+\end{frame}
+
+% --- Bước 2 ---
+\begin{frame}[fragile]{Bước 2: Giải mã cấu trúc Kim tự tháp}
+    Hãy nhìn kỹ vào ví dụ với $N = 3$:
+\begin{verbatim}
+  * (Dòng 1)
+ *** (Dòng 2)
+***** (Dòng 3)
+\end{verbatim}
+
+    \begin{block}{Ẩn dụ hóa}
+        Hãy tưởng tượng mỗi dòng là một hàng gạch. Để hàng trên cùng nằm ở đỉnh, bạn phải đặt những "viên gạch tàng hình" (khoảng trống) ở phía trước.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy: Quy luật khoảng trống}
+    Nhìn vào ví dụ $N = 3$:
+    \begin{itemize}
+        \item Dòng 1: Có bao nhiêu dấu cách?
+        \item Dòng 2: Có bao nhiêu dấu cách?
+        \item Dòng 3: Có bao nhiêu dấu cách?
+    \end{itemize}
+    
+    \pause
+    \begin{exampleblock}{Quy luật}
+        Số lượng dấu cách sẽ \textbf{giảm dần} từ trên xuống dưới.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bảng phân tích (Với $N = 3$)}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}ccc@{}}
+            \toprule
+            Dòng ($i$) & Số dấu cách & Số dấu sao (\texttt{*}) \\ \midrule
+            1          & 2           & 1                      \\
+            2          & 1           & 3                      \\
+            3          & 0           & 5                      \\ \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \textbf{Quan sát:}
+    \begin{itemize}
+        \item Dấu cách giảm dần ($2 \to 1 \to 0$).
+        \item Dấu sao tăng dần theo số lẻ ($1 \to 3 \to 5$).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Thử thách: Khi $N = 4$}
+    Nếu tổng độ cao $N = 4$:
+    \begin{enumerate}
+        \item Ở \textbf{Dòng 1}, cần bao nhiêu dấu cách?
+        \item Ở \textbf{Dòng 4}, có bao nhiêu dấu sao (theo quy luật số lẻ)?
+    \end{enumerate}
+    
+    \pause
+    \begin{exampleblock}{Đáp án}
+        \begin{itemize}
+            \item Dòng 1: 3 dấu cách.
+            \item Dòng 4: $2 \times 4 - 1 = 7$ dấu sao.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Công thức tổng quát cho Khoảng trống}
+    \begin{block}{Công thức}
+        Nếu tổng độ cao là $N$, thì ở dòng thứ $i$, số \textbf{khoảng trống} là:
+        $$\text{Spaces} = N - i$$
+    \end{block}
+
+    \textbf{Kiểm tra với $N = 3$:}
+    \begin{itemize}
+        \item Dòng $i=1$: $3 - 1 = 2$ (Đúng!)
+        \item Dòng $i=3$: $3 - 3 = 0$ (Đúng!)
+    \end{itemize}
+\end{frame}
+
+% --- Bước 3 ---
+\begin{frame}{Bước 3: Công thức tính số dấu sao}
+    Dãy số lẻ của chúng ta: $1, 3, 5, 7, \dots$
+    
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}ccc@{}}
+            \toprule
+            Dòng ($i$) & Số dấu sao & Phân tích          \\ \midrule
+            1          & 1          & $2 \times 1 - 1$   \\
+            2          & 3          & $2 \times 2 - 1$   \\
+            3          & 5          & $2 \times 3 - 1$   \\ \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \begin{exampleblock}{Kết luận}
+        Công thức tính \textbf{số dấu sao} ở dòng thứ $i$ là:
+        $$\text{Stars} = 2 \times i - 1$$
+    \end{exampleblock}
+\end{frame}
+
+% --- Bước 4 ---
+\begin{frame}{Bước 4: Xây dựng cơ chế Đệ quy}
+    Chúng ta cần xác định:
+    \begin{enumerate}
+        \item \textbf{Điểm dừng (Base Case):} Khi nào hàm ngừng gọi chính nó?
+        \item \textbf{Bước nhảy (Recursive Step):} Gọi lại chính nó với giá trị nào tiếp theo?
+    \end{enumerate}
+
+    \begin{block}{Hàm mẫu}
+        \texttt{void solve(int current\_row, int total\_rows)}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Tư duy Đệ quy "Ngược"}
+    Để vẽ kim tự tháp cao $N$ tầng:
+    \begin{enumerate}
+        \item "Vẽ giúp tôi kim tự tháp cao $N-1$ tầng trước."
+        \item "Sau đó, tôi sẽ tự vẽ dòng cuối cùng (dòng thứ $N$)."
+    \end{enumerate}
+
+    \begin{alertblock}{Trường hợp cơ sở}
+        Khi $N=1$, chỉ cần in ra 1 dấu sao và dừng lại.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách cuối: Điều kiện dừng}
+    Nếu dùng \textbf{Đệ quy Tiến} từ \texttt{i = 1} đến \texttt{n}:
+    \begin{itemize}
+        \item Công việc: In $N-i$ cách và $2i-1$ sao.
+        \item Bước nhảy: \texttt{solve(i + 1, n)}.
+    \end{itemize}
+
+    \textbf{Câu hỏi:} Khi nào chúng ta nên \textbf{ngừng lại} để không gọi \texttt{solve(i + 1, n)} nữa?
+    
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Khi \texttt{i > n}.
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,188 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Lập trình C++: Quy hoạch động (Dynamic Programming)}
+\subtitle{Chiến thuật "Chia để trị và Ghi nhớ"}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lộ trình khám phá}
+    \begin{block}{4 Trạm dừng chân quan trọng}
+        \begin{itemize}
+            \item \textbf{Chương 1:} Khái niệm "Ghi nhớ để không lãng phí".
+            \item \textbf{Chương 2:} Chiếc túi chứa kiến thức (Vector 1D).
+            \item \textbf{Chương 3:} Bản đồ tọa độ (Vector 2D).
+            \item \textbf{Chương 4:} Thực hành giải bài toán kinh điển.
+        \end{itemize}
+    \end{block}
+    
+    \begin{exampleblock}{Tư duy cốt lõi}
+        Thay vì mỗi ngày đều đo đạc lại từ đầu, bạn chỉ cần nhìn vào bản vẽ đã lưu lại để tiếp tục xây cao hơn.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chương 1: Ghi nhớ để không lãng phí}
+    \begin{block}{Phép toán đơn giản}
+        Tính: $1+1+1+1+1$. Kết quả = 5. \\
+        Thêm một số "+1" vào cuối hàng. Kết quả = 6.
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Tại sao nhanh?}: Bạn không đếm lại từ đầu mà sử dụng kết quả 5 đã nhớ.
+        \item \textbf{Ẩn dụ "Hố cát"}: Mỗi khi giải xong bài toán nhỏ, hãy đào một cái hố (ô nhớ) và đặt kết quả vào đó.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 1: Công cụ "Đào hố" trong C++}
+    Để lưu trữ trong C++, chúng ta sử dụng \texttt{vector}.
+    
+    \begin{itemize}
+        \item \textbf{Vector 1D}: Dãy các hộp xếp hàng ngang.
+        \item \textbf{Vector 2D}: Tủ nhiều ngăn kéo (hàng và cột).
+    \end{itemize}
+
+\begin{lstlisting}[language=C++]
+// Khai bao vector 1 chieu co 10 phan tu, ban dau deu bang 0
+vector<int> f(10, 0);
+
+// Khai bao vector 2 chieu (10 dong, 10 cot), ban dau bang 0
+vector<vector<int>> dp(10, vector<int>(10, 0));
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Chương 2: Chiếc túi kiến thức (Vector 1D)}
+    \begin{block}{Ẩn dụ: Chiếc thắt lưng thợ sửa chữa}
+        \texttt{vector<int> f(n)} là thắt lưng có $n$ chiếc túi đánh số từ 0 đến $n-1$.
+    \end{block}
+    
+    \begin{alertblock}{2 Bước vận hành DP}
+        \begin{enumerate}
+            \item \textbf{Khởi tạo (Base case)}: Đặt những giá trị cơ bản đầu tiên vào túi.
+            \item \textbf{Công thức truy hồi (State transition)}: Cách dùng các túi cũ để tính túi mới.
+        \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 2: Ví dụ dãy Fibonacci}
+    Công thức: $f[i] = f[i-1] + f[i-2]$
+    
+\begin{lstlisting}[language=C++]
+int n = 10;
+vector<int> f(n + 1);
+
+// Buoc 1: Khoi tao
+f[0] = 0;
+f[1] = 1;
+
+// Buoc 2: Truy hoi
+for (int i = 2; i <= n; i++) {
+    f[i] = f[i-1] + f[i-2];
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Chương 3: Bản đồ tọa độ (Vector 2D)}
+    \begin{block}{Ẩn dụ: Tòa nhà nhiều tầng}
+        \texttt{vector<vector<int>> dp(hang, vector<int>(cot))}
+        \begin{itemize}
+            \item \texttt{dp[i]}: Tầng thứ $i$ của tòa nhà.
+            \item \texttt{dp[i][j]}: Căn phòng số $j$ tại tầng thứ $i$.
+        \end{itemize}
+    \end{block}
+    
+    \begin{exampleblock}{Tư duy lưới}
+        Để tính giá trị \texttt{dp[i][j]}, ta có thể nhìn vào phòng bên cạnh \texttt{dp[i][j-1]} hoặc phòng ở tầng trên \texttt{dp[i-1][j]}.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy}
+    \begin{block}{Câu hỏi}
+        Nếu bạn chỉ được phép \textbf{đi sang phải} hoặc \textbf{đi xuống dưới} trên một lưới ô vuông. Để biết số cách đi đến ô \texttt{dp[i][j]}, bạn cần cộng số cách từ những ô nào?
+    \end{block}
+    
+    \pause
+    
+    \begin{itemize}
+        \item \textbf{Đáp án}: Ô bên trái \texttt{dp[i][j-1]} và ô phía trên \texttt{dp[i-1][j]}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4: Bài toán Con đường kiến đi}
+    \begin{exampleblock}{Đề bài}
+        Đếm số cách đi từ (0,0) đến (M,N) nếu chỉ được đi sang phải hoặc xuống dưới.
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++]
+// Khoi tao o dau tien
+dp[0][0] = 1;
+
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+        if (i == 0 && j == 0) continue;
+        
+        int tu_phia_tren = (i > 0) ? dp[i-1][j] : 0;
+        int tu_ben_trai = (j > 0) ? dp[i][j-1] : 0;
+        
+        dp[i][j] = tu_phia_tren + tu_ben_trai;
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng kết}
+    \begin{block}{Ghi nhớ}
+        Quy hoạch động giống như việc **xây cầu**. Bạn không thể xây nhịp thứ 10 nếu chưa xây nhịp thứ 9.
+    \end{block}
+    
+    \begin{itemize}
+        \item Lưu trữ kết quả bài toán nhỏ.
+        \item Tái sử dụng để giải bài toán lớn hơn.
+        \item Tiết kiệm thời gian tính toán.
+    \end{itemize}
+    
+    \begin{center}
+        \textbf{Chúc các bạn chinh phục thành công DP!}
+    \end{center}
+\end{frame}
+
+\end{document}

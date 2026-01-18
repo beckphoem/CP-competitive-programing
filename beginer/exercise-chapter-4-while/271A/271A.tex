@@ -1,0 +1,265 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\usetheme{Madrid}
+
+% Cấu hình màu sắc cho code/pseudocode
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Thông tin tiêu đề
+\title{Giải bài toán Codeforces 271A}
+\subtitle{Beautiful Year - Tư duy Vét cạn \& Tách số}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+% Slide 1: Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 2: Giới thiệu
+\begin{frame}{Giới thiệu}
+    Chào bạn! Hôm nay chúng ta sẽ cùng "mổ xẻ" bài toán \textbf{Codeforces 271A - Beautiful Year}.
+    
+    \vspace{0.5cm}
+    Đây là một bài toán kinh điển để rèn luyện tư duy \textbf{Brute Force (Vét cạn)} cơ bản.
+    
+    \begin{block}{Mục tiêu bài học}
+        Hiểu bản chất thuật toán tìm kiếm và kỹ thuật xử lý các chữ số của một số nguyên.
+    \end{block}
+\end{frame}
+
+% Slide 3: Bước 1 - Phẫu thuật đề bài
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    Lõi của bài toán này gồm 2 quy tắc vàng:
+
+    \begin{enumerate}
+        \item \textbf{Input:} Một con số biểu thị năm (gọi là $y$).
+        \item \textbf{Mục tiêu:} Tìm một con số \textbf{năm X} sao cho:
+        \begin{itemize}
+            \item $X$ phải \textbf{lớn hơn hẳn} $y$ (Strictly larger).
+            \item $X$ là số \textbf{nhỏ nhất} thỏa mãn điều kiện.
+            \item \textbf{Quan trọng nhất:} Tất cả các chữ số trong $X$ phải \textbf{khác nhau} (Distinct digits).
+        \end{itemize}
+    \end{enumerate}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{itemize}
+            \item \textbf{Chunk 1:} Hiểu thế nào là "Năm đẹp".
+            \item \textbf{Chunk 2:} Chiến thuật tìm kiếm (Brute Force).
+            \item \textbf{Chunk 3:} Kỹ thuật tách số (Machine Logic).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Slide 4: Chunk 1 - Định nghĩa
+\begin{frame}{Chunk 1: Định nghĩa "Năm đẹp"}
+    Một năm được gọi là "đẹp" nếu như không có bất kỳ chữ số nào xuất hiện lặp lại.
+
+    \begin{alertblock}{Ẩn dụ: Mã PIN hỏng bàn phím}
+        Hãy nghĩ đến một mã PIN 4 số. Nếu bàn phím dính mực, bạn chỉ được phép ấn mỗi phím số \textbf{đúng 1 lần duy nhất}.
+        \begin{itemize}
+            \item Ấn \textbf{1998}: Số 9 bị ấn 2 lần $\to$ \textbf{Thua}.
+            \item Ấn \textbf{2013}: Các số 2, 0, 1, 3 đều khác nhau $\to$ \textbf{Thắng}.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% Slide 5: Thử thách tư duy 1
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    \textbf{Đề bài:} Giả sử năm đầu vào là $y = 1000$.
+    \vspace{0.2cm}
+    
+    Tôi có 3 ứng cử viên cho "Năm đẹp tiếp theo". Hãy chọn đáp án đúng nhất:
+    
+    \begin{itemize}
+        \item \textbf{A.} $1020$
+        \item \textbf{B.} $1998$
+        \item \textbf{C.} $1023$
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \pause
+    
+    \begin{block}{Đáp án: C (1023)}
+        \begin{itemize}
+            \item \textbf{A (1020):} Loại vì lặp số $0$.
+            \item \textbf{B (1998):} Loại vì lặp số $9$, hơn nữa số này quá lớn (không phải nhỏ nhất).
+            \item \textbf{C (1023):} Các số $1, 0, 2, 3$ hoàn toàn riêng biệt $\to$ \textbf{Đúng!}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 6: Chunk 2 - Chiến thuật tìm kiếm
+\begin{frame}{Chunk 2: Chiến thuật Brute Force}
+    Đừng cố dùng công thức toán học phức tạp. Hãy dùng chiến thuật \textbf{"Gõ cửa từng nhà"}.
+
+    \begin{exampleblock}{Tư duy chiến thuật}
+        Tưởng tượng bạn đang đứng ở năm $y$. Để tìm năm đẹp nhỏ nhất lớn hơn $y$:
+        \begin{enumerate}
+            \item Bước lên 1 năm ($y = y + 1$).
+            \item Kiểm tra xem năm mới này có "đẹp" không?
+            \item \textbf{Nếu ĐẸP:} Dừng lại và Hét lên "Tìm thấy rồi!" (Print).
+            \item \textbf{Nếu XẤU (trùng số):} Quay lại bước 1.
+        \end{enumerate}
+    \end{exampleblock}
+    Vòng lặp này sẽ chạy mãi (Loop) cho đến khi tìm thấy đích đến.
+\end{frame}
+
+% Slide 7: Thử thách tư duy 2
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    Chạy thử bằng "cơm" (chạy bằng não). Giả sử input là \textbf{198}.
+    
+    \vspace{0.3cm}
+    \textbf{Quy trình "Gõ cửa từng nhà":}
+    \begin{itemize}
+        \item \textbf{Bước 1:} Tăng lên $199$. Đẹp hay xấu?
+        \item \textbf{Bước 2:} Tăng lên $200$. Đẹp hay xấu?
+        \item \textbf{Bước 3:} Tăng lên $201$. Đẹp hay xấu?
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{block}{Kết quả phân tích}
+        \begin{itemize}
+            \item $199$ $\to$ Trùng 9 $\to$ \textbf{Loại}.
+            \item $200$ $\to$ Trùng 0 $\to$ \textbf{Loại}.
+            \item $201$ $\to$ 2, 0, 1 khác nhau $\to$ \textbf{Chọn!}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% Slide 8: Chunk 3 - Kỹ thuật Mổ xẻ con số
+\begin{frame}{Chunk 3: Kỹ thuật tách số (Digit Extraction)}
+    Máy tính lưu số $2013$ là một khối nguyên vẹn. Để kiểm tra trùng lặp, ta phải "chặt" số ra làm 4 phần: $a, b, c, d$.
+    
+    \vspace{0.3cm}
+    \textbf{Công cụ toán học:}
+    \begin{enumerate}
+        \item \textbf{Chia lấy nguyên (/):} Loại bỏ số phía sau.
+        \item \textbf{Chia lấy dư (\%):} Lấy số cuối cùng.
+    \end{enumerate}
+
+    \begin{exampleblock}{Ví dụ: Năm 1987 (abcd)}
+        \begin{itemize}
+            \item $a = 1987 / 1000 \to \mathbf{1}$
+            \item $b = (1987 / 100) \% 10 \to 19 \% 10 \to \mathbf{9}$
+            \item $c = (1987 / 10) \% 10 \to 198 \% 10 \to \mathbf{8}$
+            \item $d = 1987 \% 10 \to \mathbf{7}$
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Slide 9: Bẫy logic
+\begin{frame}{Cảnh báo: Bẫy Logic (The Trap)}
+    Khi so sánh các chữ số $a, b, c, d$, một sai lầm chết người là chỉ so sánh "hàng xóm" (ví dụ so $a$ với $b$, $b$ với $c$...).
+
+    \begin{alertblock}{Ví dụ sai lầm: Số 1213}
+        \begin{itemize}
+            \item $1 \neq 2$ (OK)
+            \item $2 \neq 1$ (OK)
+            \item $1 \neq 3$ (OK)
+            \item \textbf{Nhưng:} Số đầu ($1$) trùng với số thứ ba ($1$).
+        \end{itemize}
+    \end{alertblock}
+    
+    \textbf{Quy tắc đúng:} Mỗi chữ số phải đi "so găng" với \textbf{TẤT CẢ} các chữ số còn lại.
+\end{frame}
+
+% Slide 10: Thử thách tư duy 3
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    Với 4 biến $a, b, c, d$. Để đảm bảo \textbf{không có bất kỳ cặp nào trùng nhau}, cần bao nhiêu phép so sánh ($!=$)?
+
+    \begin{itemize}
+        \item \textbf{A.} 3 phép so sánh
+        \item \textbf{B.} 4 phép so sánh
+        \item \textbf{C.} 6 phép so sánh
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{block}{Đáp án: C (6 phép so sánh)}
+        Logic tổ hợp (Chọn 2 trong 4):
+        \begin{enumerate}
+            \item $a \neq b$, $a \neq c$, $a \neq d$
+            \item $b \neq c$, $b \neq d$
+            \item $c \neq d$
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% Slide 11: Pseudocode
+\begin{frame}[fragile]{Bản thiết kế thuật toán (Pseudocode)}
+\begin{lstlisting}[language=C++, basicstyle=\small\ttfamily]
+NHAP y;
+
+LAP VO TAN (while true):
+    y = y + 1; // Tang nam len 1
+    
+    // Tach so
+    a = y / 1000;
+    b = (y / 100) % 10;
+    c = (y / 10) % 10;
+    d = y % 10;
+    
+    // Kiem tra tat ca cac cap
+    NEU (a!=b VA a!=c VA a!=d VA 
+         b!=c VA b!=d VA 
+         c!=d):
+        IN ra y;
+        DUNG vong lap (break);
+    KET THUC NEU
+KET THUC LAP
+\end{lstlisting}
+\end{frame}
+
+% Slide 12: Tổng kết
+\begin{frame}{Tổng kết}
+    Chúng ta đã hoàn thành "Bản thiết kế" cho bài toán Beautiful Year:
+    
+    \begin{enumerate}
+        \item \textbf{Vòng lặp:} Tăng dần năm lên ($y++$).
+        \item \textbf{Tách số:} Dùng toán tử $/$ và $\%$ để lấy $a, b, c, d$.
+        \item \textbf{Điều kiện:} So sánh 6 cặp để đảm bảo khác nhau hoàn toàn.
+    \end{enumerate}
+
+    \vspace{1cm}
+    \begin{center}
+        \textbf{Bạn đã sẵn sàng để viết Code chưa?}
+        \\ \small (Hãy thử code bằng C++ hoặc Python dựa trên Pseudocode vừa rồi nhé!)
+    \end{center}
+\end{frame}
+
+\end{document}

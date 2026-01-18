@@ -1,0 +1,208 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Theatre Square]{Bài Tập Codeforces 1A: Theatre Square \\ "Lát Sân Quảng Trường"}
+\subtitle{C++ Competitive Programming Series - Elo 800}
+\author{Học Cùng C++}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% 1. Hình Dung
+\begin{frame}{1. Hình Dung Bài Toán}
+  \begin{block}{Đề bài}
+      Bạn có sân kích thước $n \times m$. Cần lát kín bằng các viên gạch vuông $a \times a$.
+      \begin{itemize}
+          \item Không được cắt gạch.
+          \item Được phép lát thừa ra ngoài.
+          \item Gạch phải đặt thẳng hàng.
+      \end{itemize}
+  \end{block}
+
+  \begin{alertblock}{Mục tiêu}
+      Tìm số lượng viên gạch ÍT NHẤT cần dùng.
+  \end{alertblock}
+\end{frame}
+
+% 2. Sai Lầm
+\begin{frame}{2. Sai Lầm Thường Gặp: Tính Diện Tích}
+  Nhiều bạn nghĩ:
+  \[ \text{Số gạch} = \frac{\text{Diện tích sân}}{\text{Diện tích gạch}} = \frac{n \times m}{a \times a} \]
+  
+  \textbf{Tại sao sai?}
+  \begin{itemize}
+      \item Ví dụ: Sân $1 \times 5$, Gạch $2 \times 2$.
+      \item Diện tích sân = 5. Diện tích gạch = 4.
+      \item Phép chia: $5 / 4 = 1.25$.
+      \item Thực tế: Chiều rộng 1 (cần 1 gạch 2m). Chiều dài 5 (cần 3 gạch 2m).
+      \item Tổng cần: $1 \times 3 = 3$ viên. (Khác xa so với 1.25).
+  \end{itemize}
+\end{frame}
+
+% 3. Tư Duy Đúng
+\begin{frame}{3. Tư Duy Đúng: Chia Theo Cạnh}
+  Chúng ta phải tính riêng cho từng chiều:
+  \begin{enumerate}
+      \item Chiều dài $n$ cần bao nhiêu viên gạch cạnh $a$?
+      \item Chiều rộng $m$ cần bao nhiêu viên gạch cạnh $a$?
+  \end{enumerate}
+
+  Gọi số gạch dọc là $doc$, số gạch ngang là $ngang$.
+  \[ \text{Tổng số gạch} = doc \times ngang \]
+
+  \begin{block}{Vấn đề phép chia}
+      Nếu $n = 6, a = 4$. $6 / 4 = 1$ (dư 2).
+      Vì không được cắt gạch, phần dư 2 mét này \textbf{bắt buộc} phải dùng thêm 1 viên nguyên nữa.
+      $\rightarrow$ Phải làm tròn lên (Ceiling).
+  \end{block}
+\end{frame}
+
+% NEW SECTION: Bus Metaphor
+\begin{frame}{4. Ẩn Dụ: Đi Xe Buýt}
+  Hãy tưởng tượng bài toán Lát gạch giống hệt bài toán \textbf{Thuê Xe Buýt}:
+  \begin{itemize}
+      \item $n$ người cần đi, mỗi xe chở được $a$ người.
+      \item Hỏi cần thuê ít nhất bao nhiêu xe? (Không bỏ lại ai).
+  \end{itemize}
+
+  \begin{columns}
+      \column{0.5\textwidth}
+      \begin{block}{Trường hợp 1: Chia hết}
+          $n=10, a=5$.
+          \begin{itemize}
+              \item $10/5 = 2$ dư $0$.
+              \item $\rightarrow$ Cần đúng 2 xe.
+          \end{itemize}
+      \end{block}
+
+      \column{0.5\textwidth}
+      \begin{block}{Trường hợp 2: Có dư}
+          $n=13, a=5$.
+          \begin{itemize}
+              \item $13/5 = 2$ dư $3$.
+              \item 3 người này cần thêm 1 xe nữa.
+              \item $\rightarrow$ Cần $2 + 1 = 3$ xe.
+          \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% NEW SECTION: Thinking with IF-ELSE
+\begin{frame}[fragile]{5. Tư Duy Lập Trình: If-Else}
+  Với máy tính, ta biểu diễn logic "Đi Xe Buýt" như sau:
+
+\begin{lstlisting}[language=C++]
+long long soGach;
+
+if (n % a == 0) {
+    // @Trường hợp chia hết: Vừa đủ@
+    soGach = n / a;
+} else {
+    // @Trường hợp có dư: Phải thêm 1 viên@
+    soGach = n / a + 1;
+}
+\end{lstlisting}
+
+  $\rightarrow$ Cách này \textbf{dễ hiểu} và \textbf{an toàn} nhất cho người mới bắt đầu.
+\end{frame}
+
+% 4. Cong Thuc (Moved to Advanced)
+\begin{frame}[fragile]{6. Cách Viết Tắt (Nâng Cao)}
+  Dân "Chuyên Tin" thường gộp logic \texttt{if-else} trên thành 1 dòng duy nhất để code nhanh hơn:
+  
+  \begin{tcolorbox}[colback=yellow!10,colframe=orange!70!black,title=Công thức Ceiling]
+      \[ \text{Kết quả} = (n + a - 1) / a \]
+  \end{tcolorbox}
+
+  \textbf{Tại sao nó đúng?}
+  \begin{itemize}
+      \item Logic: "Đổ thêm $a-1$ đơn vị vào để làm tràn ly".
+      \item Nếu chia hết: Cộng $a-1$ không đủ tràn.
+      \item Nếu dư: Cộng $a-1$ sẽ đẩy thương số lên +1.
+  \end{itemize}
+\end{frame}
+
+% 5. Cạm Bẫy Data Type
+\begin{frame}[fragile]{7. Cạm Bẫy Lớn Nhất: Tràn Số}
+  \begin{itemize}
+      \item Đề bài cho $n, m$ lên tới $10^9$.
+      \item Nếu dùng \texttt{int}, tích $n \times m$ có thể lên tới $10^{18}$.
+      \item \texttt{int} chỉ chứa được $\approx 2 \times 10^9$.
+      \item $\rightarrow$ Bị \textbf{Tràn số (Overflow)} $\rightarrow$ Kết quả sai hoặc âm.
+  \end{itemize}
+
+  \begin{alertblock}{Giải pháp}
+      Bắt buộc dùng \textbf{\texttt{long long}} trong C++.
+  \end{alertblock}
+\end{frame}
+
+% 6. Code
+\begin{frame}[fragile]{8. Lời Giải Tham Khảo}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    // @1. Dùng long long để tránh tràn số@
+    long long n, m, a;
+    cin >> n >> m >> a;
+
+    // @2. Tính số gạch cho chiều Dọc (n)@
+    long long doc;
+    if (n % a == 0) doc = n / a;
+    else doc = n / a + 1;
+
+    // @3. Tính số gạch cho chiều Ngang (m)@
+    long long ngang;
+    if (m % a == 0) ngang = m / a;
+    else ngang = m / a + 1;
+
+    // @3. Kết quả là tích của hai chiều@
+    cout << doc * ngang;
+
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\end{document}

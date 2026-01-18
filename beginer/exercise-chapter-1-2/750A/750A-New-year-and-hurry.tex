@@ -1,0 +1,321 @@
+\documentclass{beamer}
+
+% --- CẤU HÌNH TIẾNG VIỆT (QUAN TRỌNG) ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc phải là T5 cho tiếng Việt
+\usepackage[vietnam]{babel}
+\usepackage{lmodern}     % Dùng font Latin Modern để không bị lỗi font
+
+% --- CẤU HÌNH THEME ---
+\usetheme{Madrid}
+\usecolortheme{beaver} 
+\setbeamertemplate{navigation symbols}{}
+
+% --- CẤU HÌNH CODE BLOCK ---
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C++
+}
+\lstset{style=mystyle}
+
+% --- THÔNG TIN SLIDE ---
+\title[750A - New Year and Hurry]{Phân tích Tư duy Thuật toán\\Codeforces 750A - New Year and Hurry}
+\subtitle{Learning How to Learn Edition}
+\author{Coach Tư duy Thuật toán}
+\date{\today}
+
+\begin{document}
+
+% ---------------------------------------------------------
+% SLIDE TITLE
+% ---------------------------------------------------------
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% ---------------------------------------------------------
+% SLIDE MỤC LỤC
+% ---------------------------------------------------------
+\begin{frame}{Mục lục}
+    \tableofcontents
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 1: GIỚI THIỆU
+% ---------------------------------------------------------
+\section{Giới thiệu chung}
+\begin{frame}{Giới thiệu bài toán}
+    Chào mừng bạn đến với thử thách chạy đua với thời gian mang tên \textbf{750A - New Year and Hurry}.
+    
+    \vspace{0.5cm}
+    Đây là một bài toán kinh điển về tư duy:
+    \begin{itemize}
+        \item \textbf{Mô phỏng (Simulation)}
+        \item \textbf{Toán học cơ bản}
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textit{Hãy cùng tôi phẫu thuật nó!}
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 2: PHẪU THUẬT ĐỀ BÀI
+% ---------------------------------------------------------
+\section{Bước 1: Phẫu thuật đề bài}
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    Hãy quên anh chàng Limak đi. Chúng ta hãy nhìn bài toán dưới dạng \textbf{Quản lý ngân sách}.
+
+    \begin{enumerate}
+        \item \textbf{Tài nguyên tổng:} Thời gian từ 20:00 đến 24:00 (nửa đêm).
+        \item \textbf{Chi phí cố định:} Thời gian $k$ phút để đi từ nhà đến bữa tiệc. (Phải dành ra khoản này trước tiên).
+        \item \textbf{Chi phí biến đổi:}
+            \begin{itemize}
+                \item Bài toán 1 tốn: $5 \times 1 = 5$ phút.
+                \item Bài toán 2 tốn: $5 \times 2 = 10$ phút.
+                \item Bài toán $i$ tốn: $5 \times i$ phút.
+            \end{itemize}
+        \item \textbf{Mục tiêu:} Giải được \textbf{nhiều bài nhất có thể} (số $n$ lớn nhất) mà không bị "âm" thời gian.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    \begin{block}{Các mảnh ghép cần giải quyết (Micro-Chunks)}
+        \begin{itemize}
+            \item \textbf{Chunk 1:} Tính "Túi tiền thời gian" thực tế (Còn lại bao nhiêu phút để làm bài?).
+            \item \textbf{Chunk 2:} Cơ chế "Cộng dồn" (Chi phí tăng dần như thế nào?).
+            \item \textbf{Chunk 3:} Tìm điểm dừng (Khi nào thì hết tiền?).
+        \end{itemize}
+    \end{block}
+    \vspace{0.5cm}
+    \centerline{\textit{Bạn đã sẵn sàng chưa? Chúng ta vào miếng ghép đầu tiên nhé.}}
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 3: CHUNK 1
+% ---------------------------------------------------------
+\section{Chunk 1: Tính "Túi tiền thời gian"}
+\begin{frame}{Chunk 1: Tính "Túi tiền thời gian" (Time Budget)}
+    \begin{block}{Logic (Explain)}
+        Trước khi biết mua được bao nhiêu món hàng, bạn phải biết trong túi mình còn chính xác bao nhiêu tiền.
+        \begin{itemize}
+            \item Khung thời gian: 20:00 đến 24:00.
+            \item Không được dùng hết, phải chừa lại $k$ phút đi đường.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Ẩn dụ}
+        Hãy tưởng tượng bạn có một bình xăng. Dung tích bình là khoảng thời gian từ 8h tối đến 12h đêm. Nhưng để lái xe đến đích, bạn mất $k$ lít xăng. Vậy bạn còn bao nhiêu lít xăng để chạy loanh quanh (giải bài)?
+    \end{exampleblock}
+
+    \begin{alertblock}{Bẫy (Trap)}
+        Nhiều bạn quên đổi đơn vị! Đề bài cho $k$ là \textbf{phút}, nhưng khung giờ là \textbf{tiếng}. Phải quy đổi về cùng một đơn vị (phút) trước khi trừ.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check 1)}
+    \textbf{Giả sử:} Đề bài cho $k = 10$ (mất 10 phút đi đường).
+    
+    \vspace{0.2cm}
+    \textbf{Hỏi:} Bạn còn lại tối đa bao nhiêu phút dành \textbf{riêng cho việc giải bài}?
+    \begin{itemize}
+        \item[A.] 3 giờ 50 phút.
+        \item[B.] 230 phút.
+        \item[C.] 240 phút.
+        \item[D.] 190 phút.
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án: B (230 phút)}
+    \begin{itemize}
+        \item Tổng thời gian: 4 tiếng $= 4 \times 60 = 240$ phút.
+        \item Trừ đi đường: $240 - 10 = 230$ phút.
+    \end{itemize}
+    \textit{Đây chính là "Vốn" (Budget) của bạn.}
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 4: CHUNK 2
+% ---------------------------------------------------------
+\section{Chunk 2: Cơ chế "Cộng dồn"}
+\begin{frame}{Chunk 2: Cơ chế "Cộng dồn" (Cumulative Cost)}
+    \begin{block}{Logic (Explain)}
+        Các bài toán không có giá bằng nhau. Bài sau đắt hơn bài trước.
+        \begin{itemize}
+            \item Bài 1 giá: $5 \times 1 = 5$ phút.
+            \item Bài 2 giá: $5 \times 2 = 10$ phút.
+            \item Bài 3 giá: $5 \times 3 = 15$ phút.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Ẩn dụ: Xếp gạch}
+        Để xây xong hàng 2, bạn không chỉ cần 10 viên, mà tổng cộng bạn đã dùng: $5$ (hàng 1) + $10$ (hàng 2) = \textbf{15 viên}.
+    \end{exampleblock}
+
+    \begin{alertblock}{Bẫy (Trap)}
+        Rất nhiều bạn nhầm lẫn: "Giải bài thứ 3 tốn 15 phút, vậy nếu có 20 phút thì giải được bài 3". \\
+        \textbf{Sai!} Vì để giải được bài 3, bạn \textbf{phải giải xong} bài 1 và bài 2 trước đã.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check 2)}
+    Vẫn với túi tiền \textbf{230 phút}. Nếu bạn muốn giải \textbf{3 bài đầu tiên}.
+
+    \begin{enumerate}
+        \item Bạn tốn tổng cộng bao nhiêu phút?
+        \item Sau khi giải xong 3 bài, "Vốn" của bạn còn dư bao nhiêu?
+    \end{enumerate}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án:}
+    \begin{itemize}
+        \item Tổng chi phí: $5 + 10 + 15 = 30$ phút.
+        \item Thời gian còn lại: $230 - 30 = 200$ phút.
+    \end{itemize}
+    \textit{Chuẩn không cần chỉnh!}
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 5: CHUNK 3
+% ---------------------------------------------------------
+\section{Chunk 3: Điểm dừng}
+\begin{frame}{Chunk 3: Điểm dừng (The Limit)}
+    \begin{block}{Logic (Explain)}
+        Máy tính sẽ làm việc như một đứa trẻ đi siêu thị. Nhặt lần lượt từng món (Bài 1, Bài 2...) bỏ vào giỏ cho đến khi xảy ra 1 trong 2 trường hợp:
+        \begin{enumerate}
+            \item \textbf{Hết tiền:} Tổng thời gian vượt quá Budget.
+            \item \textbf{Hết hàng:} Đã giải hết tất cả $n$ bài.
+        \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Bẫy (Trap)}
+        Sai lầm "chí mạng": Quên kiểm tra số lượng bài $n$.
+        Nếu Budget siêu to nhưng đề chỉ có 3 bài ($n=3$), đáp án tối đa chỉ là 3.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check 3)}
+    Chạy thử "bộ não máy tính" với trường hợp:
+    \begin{itemize}
+        \item Đề thi có: \textbf{$n = 4$ bài}.
+        \item Thời gian đi lại: \textbf{$k = 222$ phút}.
+    \end{itemize}
+
+    \vspace{0.2cm}
+    \textbf{Câu hỏi:}
+    \begin{enumerate}
+        \item "Túi tiền thời gian" còn lại bao nhiêu phút?
+        \item Giải được tối đa bao nhiêu bài? (Chứng minh bằng trừ dần).
+    \end{enumerate}
+
+    \pause
+    \vspace{0.3cm}
+    \textbf{Đáp án:}
+    \begin{itemize}
+        \item Vốn: $240 - 222 = 18$ phút.
+        \item Mua bài 1 (5p) + bài 2 (10p) = 15p.
+        \item Dư $18 - 15 = 3$ phút $\rightarrow$ Không đủ mua bài 3 (15p).
+        \item \textbf{Kết quả:} 2 bài.
+    \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 6: TỔNG KẾT
+% ---------------------------------------------------------
+\section{Tổng kết thuật toán}
+\begin{frame}{Tổng kết thuật toán (The Strategy)}
+    Viết chương trình C++ thực hiện quy trình:
+
+    \begin{enumerate}
+        \item \textbf{Bước 1:} Lấy dữ liệu $n$ (số bài thi) và $k$ (thời gian đi lại).
+        \item \textbf{Bước 2:} Tính "Vốn thời gian" còn lại: `time_left = 240 - k`.
+        \item \textbf{Bước 3:} Tạo một cái rổ đếm số bài làm được: `count = 0`.
+        \item \textbf{Bước 4:} Chạy vòng lặp thử làm từng bài (từ $i = 1$ đến $n$):
+            \begin{itemize}
+                \item Tính giá bài $i$: `cost = 5 * i`.
+                \item \textbf{Kiểm tra:} Nếu `time_left >= cost` (Đủ tiền):
+                \begin{itemize}
+                    \item Trừ tiền: `time_left = time_left - cost`.
+                    \item Bỏ vào rổ: `count++`.
+                \end{itemize}
+                \item Nếu không đủ tiền: \textbf{DỪNG NGAY} (`break`).
+            \end{itemize}
+        \item \textbf{Bước 5:} In ra cái rổ `count`.
+    \end{enumerate}
+\end{frame}
+
+\section{Mã giả cụ thể}
+\begin{frame}[fragile]{Mã giả cụ thể (Code Implementation)}
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k; // 1. Nhập dữ liệu
+
+    int time_left = 240 - k; // 2. Tính vốn (Chunk 1)
+    int count = 0;
+
+    // 3. Vòng lặp tư duy (Chunk 2 & 3)
+    for (int i = 1; i <= n; i++) {
+        int cost = 5 * i; // Giá bài i
+        if (time_left >= cost) {
+            time_left = time_left - cost; // Trừ tiền
+            count++; // Tăng đếm
+        } else {
+            break; // Hết tiền -> Dừng
+        }
+    }
+    cout << count << endl; // 4. In kết quả
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+% ---------------------------------------------------------
+% PHẦN 7: LỜI KHUYÊN
+% ---------------------------------------------------------
+\section{Lời khuyên cuối cùng}
+\begin{frame}{Lời khuyên cuối cùng của Coach}
+    \begin{exampleblock}{Bản chất bài toán}
+        Bài toán \textbf{750A} thực chất chỉ là một bài toán \textbf{đi chợ}:
+        "Có 240 nghìn, đi xe ôm mất k nghìn, còn lại bao nhiêu tiền để mua táo? Táo càng mua càng đắt, mua được bao nhiêu quả thì hết tiền?"
+    \end{exampleblock}
+
+    \vspace{0.5cm}
+    \textbf{Bài tập về nhà:}
+    \begin{itemize}
+        \item Thử sức bài: \textbf{Codeforces 546A - Soldier and Bananas}.
+        \item Chủ đề: Tư duy tích lũy (tương tự).
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \centerline{\textbf{Chúc bạn code vui và "Accepted"!}}
+\end{frame}
+
+\end{document}

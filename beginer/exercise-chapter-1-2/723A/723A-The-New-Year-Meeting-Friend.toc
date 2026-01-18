@@ -1,0 +1,6 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Tiếp nhận và Phẫu thuật (Briefing)}{3}{0}{1}
+\beamer@sectionintoc {2}{Chunk 1: Sắp xếp trật tự thế giới}{7}{0}{2}
+\beamer@sectionintoc {3}{Chunk 2: Chiến thuật Kéo co}{10}{0}{3}
+\beamer@sectionintoc {4}{Chunk 3: Chốt công thức Ma thuật}{13}{0}{4}
+\beamer@sectionintoc {5}{Tổng kết chiến thuật (Wrap Up)}{15}{0}{5}

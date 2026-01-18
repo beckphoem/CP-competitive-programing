@@ -1,0 +1,7 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Phẫu thuật đề bài}{3}{0}{1}
+\beamer@sectionintoc {2}{Chunk 1: Quan sát quy luật}{4}{0}{2}
+\beamer@sectionintoc {3}{Chunk 2: Tìm công thức (Số Chẵn)}{5}{0}{3}
+\beamer@sectionintoc {4}{Chunk 3: Tìm công thức (Số Lẻ)}{6}{0}{4}
+\beamer@sectionintoc {5}{Tổng kết Thuật toán}{7}{0}{5}
+\beamer@sectionintoc {6}{Cảnh báo quan trọng}{8}{0}{6}

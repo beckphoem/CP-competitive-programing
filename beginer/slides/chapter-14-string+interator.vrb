@@ -1,0 +1,24 @@
+\frametitle{Code minh họa Algorithms}
+\begin{lstlisting}
+#include <iostream>
+#include <string>
+#include <algorithm> // Bat buoc de dung phep thuat
+using namespace std;
+
+int main() {
+    string s = "PYTHON";
+    cout << "Ban dau: " << s << endl;
+
+    // 1. Phep thuat Sap Xep (Sort)
+    sort(s.begin(), s.end());
+    cout << "Sau khi sort: " << s << endl;
+    // Ket qua: HNOPTY
+
+    // 2. Phep thuat Dao Nguoc (Reverse)
+    reverse(s.begin(), s.end());
+    cout << "Sau khi reverse: " << s << endl;
+    // Ket qua: YTPONH
+
+    return 0;
+}
+\end{lstlisting}

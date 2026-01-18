@@ -1,0 +1,273 @@
+\documentclass{beamer}
+
+% --- USER PACKAGES & PREAMBLE ---
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref} % Added for clickable links
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks (kept as requested, though not used for text slides)
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% --- TITLE INFO ---
+\title[Codeforces Training]{Tuyển tập 20 Bài Tập Simulation \& Constructive Algorithms}
+\subtitle{Dành cho Rank Newbie (800 - 900 Elo)}
+\author{Học C++ cùng Codeforces}
+\date{}
+
+% --- DOCUMENT START ---
+\begin{document}
+
+% Slide 1: Title
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 2: Table of Contents (Optional)
+\begin{frame}{Mục lục}
+    \tableofcontents
+\end{frame}
+
+% --- SECTION 1 ---
+\section{Phần 1: Bài 1 - 10}
+
+% Problem 1
+\begin{frame}{1. Bear and Big Brother (791A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/791/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Gấu Limak nặng $a$ và Bob nặng $b$ ($a \le b$). Sau mỗi năm, Limak tăng cân gấp 3, Bob tăng cân gấp 2. Hỏi sau bao nhiêu năm Limak sẽ nặng hơn Bob?
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 2
+\begin{frame}{2. Vanya and Cubes (492A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/492/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Xây kim tự tháp từ $n$ khối lập phương. Tầng 1 cần 1 khối, tầng 2 cần 3 khối ($1+2$), tầng $i$ cần tổng các số từ 1 đến $i$. Tìm chiều cao tối đa xây được.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 3
+\begin{frame}{3. Wrong Subtraction (977A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/977/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Giảm số $n$ đi $k$ lần. Quy tắc: nếu tận cùng là 0 thì chia 10, nếu khác 0 thì trừ 1.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 4
+\begin{frame}{4. Elephant (617A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/617/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Con voi cần đi đến điểm $x$. Mỗi bước đi được 1, 2, 3, 4 hoặc 5 bước. Tìm số bước tối thiểu.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 5
+\begin{frame}{5. Soldier and Bananas (546A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/546/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Mua $w$ quả chuối. Quả thứ $i$ giá $i \times k$. Tính số tiền phải vay.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 6
+\begin{frame}{6. Tram (116A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/116/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Tàu điện qua $n$ trạm. Mỗi trạm có người lên và xuống. Tìm sức chứa tối thiểu cần thiết (số khách cực đại tại một thời điểm).
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 7
+\begin{frame}{7. Beautiful Year (271A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/271/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Tìm năm nhỏ nhất lớn hơn năm $y$ đã cho mà các chữ số của nó đôi một khác nhau.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 8
+\begin{frame}{8. Near Lucky Number (110A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/110/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Đếm số lượng chữ số may mắn (4 và 7) trong số nguyên $n$. Kiểm tra xem số lượng đó có phải số may mắn không.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 9
+\begin{frame}{9. Word (59A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/59/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Đếm số chữ hoa và thường. Nếu hoa $>$ thường thì in toàn bộ hoa, ngược lại in thường.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 10
+\begin{frame}{10. Translation (41A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/41/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Kiểm tra chuỗi $t$ có phải là đảo ngược của chuỗi $s$ không.
+    \end{tcolorbox}
+\end{frame}
+
+% --- SECTION 2 ---
+\section{Phần 2: Bài 11 - 20}
+
+% Problem 11
+\begin{frame}{11. Anton and Danik (734A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/734/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Đếm số trận thắng của Anton ('A') và Danik ('D'). So sánh xem ai thắng nhiều hơn.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 12
+\begin{frame}{12. Queue at the School (266B)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/266/B}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Hàng đợi có nam (B) và nữ (G). Mỗi giây, nếu B đứng trước G thì đổi chỗ. Mô phỏng sau $t$ giây.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 13
+\begin{frame}{13. In Search of an Easy Problem (1030A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/1030/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Khảo sát độ khó. Nếu có ít nhất 1 người nói khó (1) thì bài toán là KHÓ.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 14
+\begin{frame}{14. George and Accommodation (467A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/467/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Đếm số phòng ký túc xá còn trống ít nhất 2 chỗ.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 15
+\begin{frame}{15. Stones on the Table (266A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/266/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Đếm số lượng đá cần bỏ bớt để không có hai viên đá màu giống nhau nằm cạnh nhau.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 16
+\begin{frame}{16. Magnets (344A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/344/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Đếm số nhóm nam châm liên kết với nhau (do hút nhau 01-10). Nhóm mới hình thành khi cực thay đổi.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 17
+\begin{frame}{17. Drinks (200B)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/200/B}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Tính nồng độ phần trăm trung bình của cocktail từ $n$ loại nước.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 18
+\begin{frame}{18. Hulk (705A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/705/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} In ra chuỗi cảm xúc "I hate that I love that..." theo lớp $n$.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 19
+\begin{frame}{19. Calculating Function (486A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/486/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Tính $f(n) = -1 + 2 - 3 + \dots + (-1)^n n$.
+    \end{tcolorbox}
+\end{frame}
+
+% Problem 20
+\begin{frame}{20. Police Recruits (427A)}
+    \begin{tcolorbox}[colback=white, colframe=blue!75!black, title=Thông tin bài tập]
+        \textbf{Link:} \url{https://codeforces.com/problemset/problem/427/A}
+        
+        \vspace{0.5cm}
+        \textbf{Tóm tắt:} Nhận sự kiện: số dương là tuyển cảnh sát, -1 là có tội phạm. Đếm số tội phạm không bị bắt (khi không có cảnh sát).
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \Huge \textcolor{blue!75!black}{\textbf{Happy Coding!}}
+    \end{center}
+\end{frame}
+
+\end{document}

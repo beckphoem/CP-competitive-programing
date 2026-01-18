@@ -1,0 +1,17 @@
+\frametitle{Chương 5: Code mẫu}
+\begin{lstlisting}[language=C++]
+#include <algorithm>
+#include <deque>
+#include <iostream>
+using namespace std;
+
+int main() {
+    deque<int> diem = {8, 2, 9};
+    sort(diem.begin(), diem.end()); // {2, 8, 9}
+    reverse(diem.begin(), diem.end()); // {9, 8, 2}
+
+    auto it = find(diem.begin(), diem.end(), 8);
+    if (it != diem.end()) cout << "Tim thay 8!";
+    return 0;
+}
+\end{lstlisting}

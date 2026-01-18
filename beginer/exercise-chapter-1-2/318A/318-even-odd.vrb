@@ -1,0 +1,16 @@
+\frametitle{Tổng kết thuật toán (The Blueprint)}
+Đây là bản thiết kế để bạn chuyển ngữ sang C++:
+
+    \begin{enumerate}
+        \item \textbf{Input:} Nhập $n, k$ (Nhớ dùng \texttt{long long}).
+        \item \textbf{Bước 1 (Tính P):}
+        \begin{verbatim}
+long long part = (n + 1) / 2;
+        \end{verbatim}
+        \item \textbf{Bước 2 (Kiểm tra vị trí):}
+        \begin{itemize}
+            \item \textbf{Nếu} $k \le part$: In ra $2 \times k - 1$.
+            \item \textbf{Ngược lại (Else)}: In ra $2 \times (k - part)$.
+        \end{itemize}
+        \item \textbf{Output:} Kết quả.
+    \end{enumerate}

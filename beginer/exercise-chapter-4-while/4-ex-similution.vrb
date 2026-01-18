@@ -1,0 +1,23 @@
+\frametitle{Mẫu Code C++ Cơ bản}
+\begin{lstlisting}[language=C++, caption=Cấu trúc cơ bản cho các bài tập này]
+#include <iostream>
+using namespace std;
+
+int main() {
+    // 1. Khai báo biến
+    int n;
+    cin >> n;
+
+    // 2. Xử lý logic với while
+    int count = 0;
+    while (n > 0) {
+        // Logic mô phỏng quá trình
+        // Ví dụ: n = n / 10;
+        count++;
+    }
+
+    // 3. In kết quả
+    cout << count << endl;
+    return 0;
+}
+    \end{lstlisting}

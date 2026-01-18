@@ -1,0 +1,20 @@
+\frametitle{Nhiệm vụ: Chiếc máy lọc thông minh}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+int main() {
+    // 1. Danh sach loi trung lap
+    vector<int> diem_loi = {8, 5, 9, 8, 7, 5, 10, 7};
+
+    // 2. Do vao Set de loc
+    set<int> diem_sach(diem_loi.begin(), diem_loi.end());
+
+    // 3. In ket qua: 5 7 8 9 10
+    for (int x : diem_sach) cout << x << " ";
+
+    return 0;
+}
+\end{lstlisting}

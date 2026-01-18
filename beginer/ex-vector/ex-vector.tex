@@ -1,0 +1,264 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces Vector 800-1000]{Phân tích Chiến lược và Giải thuật}
+\subtitle{Hệ thống Bài toán Vector trên Codeforces (Rating 800-1000)}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Tổng quan}
+  \begin{block}{Vai trò của Vector trong CP}
+    \begin{itemize}
+      \item Quản lý bộ nhớ linh hoạt (Dynamic Arrays).
+      \item Tư duy về chỉ số (\texttt{indexing}) và truy cập ngẫu nhiên.
+      \item Nền tảng cho các thuật toán tham lam (\texttt{greedy}) và mô phỏng.
+    \end{itemize}
+  \end{block}
+  \begin{exampleblock}{Phân khúc Rating 800-1000}
+    Tập trung vào khả năng chuyển đổi logic thành mã nguồn (\texttt{implementation}) và tư duy \texttt{ad-hoc}.
+  \end{exampleblock}
+\end{frame}
+
+% --- NHÓM 1: THE CLASSICS ---
+
+\begin{frame}{2.1. Next Round (158A)}
+  \textbf{Link:} \href{https://codeforces.com/problemset/problem/158/A}{codeforces.com/problem/158/A}
+  
+  \begin{block}{Đề bài}
+    Xác định số lượng thí sinh lọt vào vòng tiếp theo. Điều kiện: Điểm số phải dương ($>0$) và lớn hơn hoặc bằng điểm của người ở vị trí thứ $k$.
+  \end{block}
+
+  \begin{exampleblock}{Chiến thuật: Tư duy Vector}
+    \begin{itemize}
+      \item Chuyển đổi 1-based index sang 0-based: Ngưỡng điểm là \texttt{a[k-1]}.
+      \item Duyệt qua \texttt{vector<int> a}: Kiểm tra \texttt{a[i] >= a[k-1] \&\& a[i] > 0}.
+      \item \textbf{Lưu ý:} Dừng sớm nếu gặp phần tử vi phạm vì mảng đã sắp xếp giảm dần.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2.2. Way Too Long Words (71A)}
+  \textbf{Link:} \href{https://codeforces.com/problemset/problem/71/A}{codeforces.com/problem/71/A}
+  
+  \begin{block}{Đề bài}
+    Viết tắt từ có độ dài $> 10$ ký tự: Giữ ký tự đầu, cuối và thay phần giữa bằng số lượng ký tự bị lược bỏ.
+  \end{block}
+
+  \begin{exampleblock}{Chiến thuật: String as Vector}
+    \begin{itemize}
+      \item Kiểm tra \texttt{s.length() > 10}.
+      \item Sử dụng \texttt{s.front()}, \texttt{s.back()} và \texttt{s.length() - 2}.
+      \item \pause \textbf{Kết quả:} \texttt{s[0] + to\_string(s.length()-2) + s.back()}.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2.3. Team (231A)}
+  \textbf{Link:} \href{https://codeforces.com/problemset/problem/231/A}{codeforces.com/problem/231/A}
+  
+  \begin{block}{Đề bài}
+    Đếm số bài toán mà ít nhất 2 trong 3 người chắc chắn về lời giải.
+  \end{block}
+
+  \begin{exampleblock}{Chiến thuật: Row Sum}
+    \begin{itemize}
+      \item Coi mỗi bài toán là một hàng trong ma trận hoặc một tập hợp 3 số.
+      \item Tính \texttt{sum = p + v + t}. Nếu \texttt{sum >= 2}, tăng biến đếm.
+      \item Có thể xử lý trực tiếp (\texttt{online}) mà không cần lưu vector 2 chiều.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2.4. Bit++ (282A)}
+  \textbf{Link:} \href{https://codeforces.com/problemset/problem/282/A}{codeforces.com/problem/282/A}
+  
+  \begin{block}{Đề bài}
+    Thực hiện các lệnh \texttt{++} và \texttt{--} trên biến $X$ (khởi tạo bằng 0).
+  \end{block}
+
+  \begin{exampleblock}{Chiến thuật: Pattern Matching}
+    \begin{itemize}
+        \item Thay vì so sánh cả chuỗi, chỉ cần kiểm tra ký tự ở giữa \texttt{s[1]}.
+        \item Nếu \texttt{s[1] == '+'} thì \texttt{X++}, ngược lại \texttt{X--}.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2.5. Domino Piling (50A)}
+  \textbf{Link:} \href{https://codeforces.com/problemset/problem/50/A}{codeforces.com/problem/50/A}
+  
+  \begin{block}{Đề bài}
+    Tìm số quân domino $2 \times 1$ tối đa có thể đặt vào bảng $M \times N$.
+  \end{block}
+
+  \begin{alertblock}{Tư duy toán học}
+    \begin{itemize}
+      \item Không cần dùng mảng/vector để mô phỏng lưới.
+      \item Mỗi quân chiếm 2 đơn vị diện tích.
+      \item Công thức: $\lfloor \frac{M \times N}{2} \rfloor$. Trong C++: \texttt{(m * n) / 2}.
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+% --- NHÓM 2: HÌNH HỌC & SẮP XẾP ---
+
+\begin{frame}{3.1. Beautiful Matrix (263A)}
+  \textbf{Link:} \href{https://codeforces.com/problemset/problem/263/A}{codeforces.com/problem/263/A}
+  
+  \begin{block}{Đề bài}
+    Tìm số bước tối thiểu đưa số 1 về tâm $(2, 2)$ của ma trận $5 \times 5$.
+  \end{block}
+
+  \begin{exampleblock}{Chiến thuật: Khoảng cách Manhattan}
+    \begin{itemize}
+      \item Tìm tọa độ $(r, c)$ của số 1.
+      \item Kết quả: $|r - 2| + |c - 2|$ (với 0-based index).
+      \item Sử dụng hàm \texttt{abs()} trong thư viện \texttt{<cmath>}.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{3.3. Helpful Maths (339A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/339/A}{codeforces.com/problem/339/A}
+    
+    \begin{block}{Đề bài}
+      Sắp xếp lại chuỗi phép cộng các số 1, 2, 3 theo thứ tự tăng dần.
+    \end{block}
+  
+    \begin{exampleblock}{Chiến thuật: Parsing và Sorting}
+      \begin{itemize}
+        \item Trích xuất các số vào \texttt{vector<int> numbers}.
+        \item Dùng \texttt{std::sort(numbers.begin(), numbers.end())}.
+        \item In lại kèm dấu \texttt{+}. Lưu ý không in dấu dư ở cuối.
+      \end{itemize}
+    \end{exampleblock}
+  \end{frame}
+
+% --- NHÓM 3: MÔ PHỎNG ---
+
+\begin{frame}{4.2. Nearly Lucky Number (110A)}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/110/A}{codeforces.com/problem/110/A}
+    
+    \begin{block}{Đề bài}
+      Đếm số chữ số may mắn (4, 7). Kiểm tra xem \textbf{số lượng} đó có phải là số may mắn không.
+    \end{block}
+  
+    \begin{alertblock}{Cạm bẫy}
+      \begin{itemize}
+        \item Dữ liệu đầu vào cực lớn: Phải đọc bằng \texttt{string}.
+        \item Đếm xong mới kiểm tra \texttt{count == 4 || count == 7}.
+      \end{itemize}
+    \end{alertblock}
+  \end{frame}
+
+% --- NHÓM 4: NÂNG CAO ---
+
+\begin{frame}{5.1. Numbers Box (1447B) - Rating 1000}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/1447/B}{codeforces.com/problem/1447/B}
+    
+    \begin{block}{Đề bài}
+      Đổi dấu 2 ô kề nhau tùy ý. Tìm tổng lớn nhất có thể của ma trận.
+    \end{block}
+  
+    \begin{exampleblock}{Tư duy kiến thiết (Constructive)}
+      \begin{itemize}
+        \item Dấu trừ có thể "di chuyển" tự do.
+        \item Nếu số lượng số âm là \textbf{Chẵn}: Tổng = Tổng trị tuyệt đối.
+        \item Nếu số lượng số âm là \textbf{Lẻ}: Phải để lại 1 số mang dấu âm. Chọn số có trị tuyệt đối nhỏ nhất (\texttt{min\_abs}).
+        \item \pause \textbf{Công thức:} \texttt{total\_abs\_sum - 2 * min\_abs}.
+      \end{itemize}
+    \end{exampleblock}
+  \end{frame}
+
+\begin{frame}{5.8. Twins (160A) - Rating 900}
+    \textbf{Link:} \href{https://codeforces.com/problemset/problem/160/A}{codeforces.com/problem/160/A}
+    
+    \begin{block}{Đề bài}
+      Lấy ít đồng xu nhất sao cho tổng tiền của bạn lớn hơn tổng tiền còn lại.
+    \end{block}
+  
+    \begin{exampleblock}{Chiến thuật: Greedy}
+      \begin{itemize}
+        \item Sắp xếp vector giảm dần: \texttt{sort(v.rbegin(), v.rend())}.
+        \item Lấy dần các đồng xu lớn nhất.
+        \item Dừng lại khi \texttt{my\_sum > total\_sum / 2}.
+      \end{itemize}
+    \end{exampleblock}
+  \end{frame}
+
+% --- TỔNG KẾT & BEST PRACTICES ---
+
+\begin{frame}[fragile]{6.3. Cạm bẫy và Tối ưu hóa}
+    \begin{alertblock}{Lưu ý kỹ thuật}
+      \begin{itemize}
+        \item \textbf{Integer Overflow:} Dùng \texttt{long long} cho các bài tính tổng hoặc nhân (ví dụ: Soldier and Bananas).
+        \item \textbf{Indexing:} Luôn cẩn thận với lỗi lệch 1 (Off-by-one).
+      \end{itemize}
+    \end{alertblock}
+  
+    \begin{exampleblock}{Fast I/O trong C++}
+  \begin{lstlisting}[language=C++]
+  int main() {
+      ios_base::sync_with_stdio(false);
+      cin.tie(NULL);
+      // Code logic here
+      return 0;
+  }
+  \end{lstlisting}
+    \end{exampleblock}
+  \end{frame}
+
+\begin{frame}{Lời kết}
+  \begin{center}
+    \Large \textbf{Cảm ơn bạn đã theo dõi!}
+    
+    \vspace{0.8cm}
+    \small Hãy luyện tập thường xuyên để biến tư duy Vector thành phản xạ.
+    
+    \vspace{0.5cm}
+    \textit{Slide created for CP Learning Path.}
+  \end{center}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,316 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@,
+    language=C++
+}
+
+\lstset{style=mystyle}
+
+% Thông tin slide
+\title{Bí Mật Của Đoàn Tàu Ký Tự}
+\subtitle{C++ String \& Iterator}
+\author{Learning How to Learn}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Mục lục
+\begin{frame}{Mục Lục: Lộ Trình Khám Phá}
+    \begin{block}{Chương 1: Đoàn tàu và Người dẫn đường}
+        Hiểu bản chất \texttt{string} là đoàn tàu và \texttt{iterator} là người soát vé.
+    \end{block}
+
+    \begin{block}{Chương 2: Hai cách để đi hết một con đường}
+        Duyệt qua đoàn tàu bằng vòng lặp \texttt{while} (Dò đường) và \texttt{for} (Lập trình sẵn).
+    \end{block}
+    
+    \begin{block}{Chương 3: Phép thuật của Thầy phù thủy}
+        Sử dụng Algorithms (\texttt{sort}, \texttt{reverse}) để thay đổi trật tự đoàn tàu.
+    \end{block}
+\end{frame}
+
+% --- CHƯƠNG 1 ---
+\begin{frame}{Chương 1: Đoàn Tàu và Người Dẫn Đường}
+    \begin{exampleblock}{Phép ẩn dụ: Đoàn tàu "String"}
+        Hãy tưởng tượng từ \textbf{"HELLO"} là một đoàn tàu gồm 5 toa xe:
+        \begin{itemize}
+            \item Mỗi toa chở một hành khách: H - E - L - L - O.
+            \item Cả đoàn tàu chính là biến \texttt{string}.
+        \end{itemize}
+    \end{exampleblock}
+
+    \vspace{0.5cm}
+    \textbf{Nhân vật chính: Iterator (Người Soát Vé)}
+    \begin{itemize}
+        \item Không phải là toa tàu, không phải hành khách.
+        \item Là người \textbf{đang đứng tại} một toa và chỉ tay vào hành khách.
+        \item Trong C++ gọi là: \texttt{string::iterator}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Hai nhà ga quan trọng: .begin() và .end()}
+    Để Người Soát Vé làm việc, họ cần biết điểm đầu và điểm cuối.
+    
+    \begin{itemize}
+        \item \textbf{\texttt{.begin()}}: Người Soát Vé đứng ngay tại toa đầu tiên (chữ 'H').
+    \end{itemize}
+
+    \begin{alertblock}{Cảnh báo quan trọng về .end()}
+        \textbf{\texttt{.end()}} (Vực thẳm): Đây là chỗ dễ nhầm lẫn nhất!
+        \begin{itemize}
+            \item \texttt{.end()} \textbf{KHÔNG PHẢI} là toa cuối cùng (chữ 'O').
+            \item Nó là mặt đất \textbf{ngay sau} toa cuối cùng.
+            \item Nếu đi đến \texttt{.end()}, nghĩa là đã bước ra khỏi tàu (Hết tàu!).
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Code minh họa: Triệu hồi Người Soát Vé}
+\begin{lstlisting}
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    // 1. Tao ra doan tau
+    string doan_tau = "HELLO";
+
+    // 2. Thue mot Nguoi Soat Ve (khai bao iterator)
+    string::iterator nguoi_soat_ve;
+
+    // 3. Cho nguoi soat ve dung o toa dau tien
+    nguoi_soat_ve = doan_tau.begin();
+
+    // 4. Hoi nguoi soat ve: "Ong dang thay ai?"
+    // Dau * giong nhu doi mat nhin vao toa tau
+    cout << "Hanh khach dau tien: " << *nguoi_soat_ve << endl;
+
+    return 0;
+}
+\end{lstlisting}
+    \small \textit{Lưu ý: Dấu * dùng để truy cập giá trị (hành khách) tại vị trí iterator đang đứng.}
+\end{frame}
+
+\begin{frame}{Trạm dừng kiểm tra (Checkpoint 1)}
+    \begin{alertblock}{Câu hỏi}
+        Nếu tôi ra lệnh cho \texttt{nguoi\_soat\_ve} đi đến vị trí \texttt{doan\_tau.end()}, và tôi cố tình dùng dấu \texttt{*} để hỏi xem ông ấy thấy gì (\texttt{*nguoi\_soat\_ve}), chuyện gì sẽ xảy ra?
+    \end{alertblock}
+
+    \begin{itemize}
+        \item A. Ông ấy thấy chữ cái cuối cùng của đoàn tàu (chữ 'O').
+        \item B. Ông ấy thấy toa tàu đầu tiên.
+        \item C. Lỗi! Ông ấy đang đứng dưới đường ray (ngoài đoàn tàu) nên không thấy ai cả.
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án: C.} Chính xác! \texttt{.end()} là vực thẳm, cố nhìn vào đó sẽ gây lỗi chương trình (crash).
+\end{frame}
+
+% --- CHƯƠNG 2 ---
+\begin{frame}[fragile]{Chương 2: Vũ khí bí mật AUTO}
+    Thay vì viết chức danh dài dòng: \texttt{string::iterator nguoi\_soat\_ve}, chúng ta dùng \textbf{\texttt{auto}}.
+    
+    \begin{block}{Tại sao dùng auto?}
+        \texttt{auto} giống như bộ đồ tắc kè hoa. Máy tính tự hiểu: "Ông này đứng trên tàu String, nên chắc chắn là String Iterator".
+    \end{block}
+
+    \textbf{Code cũ:} 
+    \begin{verbatim}string::iterator nguoi_soat_ve = doan_tau.begin();\end{verbatim}
+    
+    \textbf{Code mới (Gọn hơn):} 
+    \begin{verbatim}auto nguoi_soat_ve = doan_tau.begin();\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Cách 1: Phong cách "Dò Đường" (WHILE Loop)}
+    Giống như đi bộ cẩn thận. Vừa đi vừa tự hỏi: "Mình đã rơi khỏi tàu chưa?".
+
+\begin{lstlisting}
+    string doan_tau = "CODING";
+    auto it = doan_tau.begin(); 
+
+    cout << "Duyet bang WHILE: ";
+
+    // "Chung nao toi chua cham den vuc tham (.end)"
+    while (it != doan_tau.end()) {
+        // Lam viec: In hanh khach ra
+        cout << *it << " "; 
+
+        // QUAN TRONG: Buoc sang toa tiep theo
+        it++; 
+    }
+\end{lstlisting}
+    \textbf{Lưu ý:} \texttt{it++} là bước chân. Nếu quên, iterator đứng mãi một chỗ (vòng lặp vô tận).
+\end{frame}
+
+\begin{frame}[fragile]{Cách 2: Phong cách "Lập trình sẵn" (FOR Loop)}
+    Giống như đi trên băng chuyền. Gom tất cả quy tắc vào một dòng.
+    
+    \begin{enumerate}
+        \item \textbf{Khởi động:} \texttt{auto it = doan\_tau.begin()}
+        \item \textbf{Điều kiện:} \texttt{it != doan\_tau.end()}
+        \item \textbf{Bước nhảy:} \texttt{it++}
+    \end{enumerate}
+
+\begin{lstlisting}
+    cout << "Duyet bang FOR: ";
+    
+    // Gom tat ca vao mot dong
+    for (auto it = doan_tau.begin(); it != doan_tau.end(); it++) {
+        cout << *it << " ";
+    }
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng kết & So sánh}
+    \begin{block}{WHILE (Đi bộ tự do)}
+        Bạn phải tự nhớ để bước đi (\texttt{it++}) ở bên trong. Linh hoạt nhưng dễ quên bước chân.
+    \end{block}
+
+    \begin{block}{FOR (Băng chuyền tự động)}
+        Mọi thứ (xuất phát, đích đến, bước đi) đều được cài đặt ngay từ đầu. An toàn và khó quên hơn.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Trạm dừng kiểm tra (Checkpoint 2)}
+    \begin{alertblock}{Câu hỏi tình huống}
+        Trong vòng lặp \texttt{while}, nếu lỡ tay viết nhầm: Cho \texttt{it++} (bước đi) lên \textbf{trước} câu lệnh \texttt{cout << *it} (in ra). Chuyện gì xảy ra?
+    \end{alertblock}
+
+    \begin{itemize}
+        \item A. Mọi thứ vẫn bình thường.
+        \item B. Bỏ qua toa đầu, và khi đến cuối sẽ lỗi vì bước ra ngoài vực thẳm rồi mới nhìn.
+        \item C. Nó sẽ in ngược từ dưới lên.
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án: B.} 
+    \begin{itemize}
+        \item \textbf{Bỏ sót:} Bước đi rồi mới nhìn -> Toa đầu bị bỏ qua.
+        \item \textbf{Tai nạn:} Bước ra \texttt{.end()} rồi mới nhìn -> Lỗi chương trình.
+    \end{itemize}
+\end{frame}
+
+% --- CHƯƠNG 3 ---
+\begin{frame}[fragile]{Chương 3: Phép thuật của Thầy phù thủy (Algorithms)}
+    Cần thư viện: \texttt{\#include <algorithm>}
+    
+    \textbf{Nguyên lý hoạt động:} Luôn hỏi 2 câu:
+    \begin{enumerate}
+        \item "Bắt đầu làm phép từ đâu?" (\texttt{.begin()})
+        \item "Dừng lại trước chỗ nào?" (\texttt{.end()})
+    \end{enumerate}
+
+    \begin{exampleblock}{Hai phép thuật phổ biến}
+        \textbf{1. Sắp xếp (Sort):} Biến đoàn tàu lộn xộn thành ngăn nắp (A-Z).\\
+        \texttt{sort(s.begin(), s.end());}
+        
+        \textbf{2. Đảo ngược (Reverse):} Quay đầu toàn bộ đoàn tàu.\\
+        \texttt{reverse(s.begin(), s.end());}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Code minh họa Algorithms}
+\begin{lstlisting}
+#include <iostream>
+#include <string>
+#include <algorithm> // Bat buoc de dung phep thuat
+using namespace std;
+
+int main() {
+    string s = "PYTHON";
+    cout << "Ban dau: " << s << endl;
+
+    // 1. Phep thuat Sap Xep (Sort)
+    sort(s.begin(), s.end());
+    cout << "Sau khi sort: " << s << endl; 
+    // Ket qua: HNOPTY
+
+    // 2. Phep thuat Dao Nguoc (Reverse)
+    reverse(s.begin(), s.end());
+    cout << "Sau khi reverse: " << s << endl;
+    // Ket qua: YTPONH
+
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách tốt nghiệp (Final Boss)}
+    \begin{block}{Đề bài}
+        Có chuỗi \texttt{string s = "hocbai";}.\\
+        Muốn sắp xếp \textbf{chỉ 3 chữ cái đầu} ("hoc") thành "cho", giữ nguyên "bai". Kết quả: "chobai".
+    \end{block}
+
+    Chọn câu lệnh đúng:
+    \begin{itemize}
+        \item A. \texttt{sort(s.begin(), s.end());}
+        \item B. \texttt{sort(s.begin(), s.begin() + 3);}
+        \item C. \texttt{sort(s.begin() + 3, s.end());}
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án: B.}
+    \begin{itemize}
+        \item Vị trí kết thúc luôn là vị trí đứng \textbf{ngay sau} phần tử muốn tác động.
+        \item Muốn xếp 3 toa đầu -> Cần chỉ vào vạch ngăn cách sau toa thứ 3 (\texttt{begin() + 3}).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lễ Tốt Nghiệp: Tổng Kết}
+    Chúc mừng bạn đã làm chủ \textbf{Đoàn Tàu Ký Tự}!
+    
+    \begin{block}{Hành trang đã thu thập}
+        \begin{enumerate}
+            \item \textbf{Iterator:} Ngón tay chỉ vị trí (Người soát vé).
+            \item \textbf{Loop (For/While):} Hai phong cách đi bộ trên tàu.
+            \item \textbf{Algorithms (Sort/Reverse):} Phép thuật dựa trên điểm đầu và điểm cuối.
+        \end{enumerate}
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{Bước tiếp theo?}
+    \begin{itemize}
+        \item Thực chiến với bài toán mini?
+        \item Khám phá \textbf{Vector} (Đoàn tàu vô tận)?
+    \end{itemize}
+\end{frame}
+
+\end{document}

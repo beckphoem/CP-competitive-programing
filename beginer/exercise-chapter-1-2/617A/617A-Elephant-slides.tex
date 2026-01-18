@@ -1,0 +1,123 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors and Style for code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Elephant]{Bài Tập Codeforces 617A: Elephant \\ "Chiến Thuật Tham Lam"}
+\subtitle{C++ Competitive Programming Series - Elo 800}
+\author{Học Cùng C++}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% 1. Hình Dung
+\begin{frame}{1. Hình Dung Bài Toán}
+  \begin{block}{Đề bài}
+      Chú Voi con đang ở vị trí 0. Nhà ở vị trí $x$.
+      Voi có thể bước các bước dài: 1, 2, 3, 4, hoặc 5 mét.
+  \end{block}
+
+  \begin{alertblock}{Mục tiêu}
+      Về nhà với số bước đi \textbf{ÍT NHẤT}.
+  \end{alertblock}
+\end{frame}
+
+% 2. Chiến Thuật
+\begin{frame}{2. Chiến Thuật: Tham Lam (Greedy)}
+  Để về nhanh nhất, ta phải đi những bước \textbf{dài nhất có thể}.
+  
+  \begin{itemize}
+      \item Luôn ưu tiên đi bước dài nhất: \textbf{5m}.
+  \end{itemize}
+
+  \begin{exampleblock}{Ví dụ: Nhà ở vị trí 12}
+      \begin{enumerate}
+          \item Bước 1: Đi 5m (Đến vị trí 5). Còn xa 7m.
+          \item Bước 2: Đi 5m (Đến vị trí 10). Còn xa 2m.
+          \item Bước 3: Đi nốt 2m (Dùng bước 2).
+          \item $\rightarrow$ Tổng: 3 bước.
+      \end{enumerate}
+  \end{exampleblock}
+\end{frame}
+
+% 3. Phân Tích Logic
+\begin{frame}{3. Phân Tích Logic Chia Dư}
+  Bài toán quy về việc: Số $x$ chứa được bao nhiêu số 5?
+  
+  \begin{columns}
+      \column{0.5\textwidth}
+      \begin{block}{Trường hợp 1: Chia hết}
+          $x = 10$.
+          $10 = 5 + 5$.
+          $\rightarrow$ Số bước = $10 / 5 = 2$.
+      \end{block}
+
+      \column{0.5\textwidth}
+      \begin{block}{Trường hợp 2: Có dư}
+          $x = 12$.
+          $12 = 5 + 5 + \textbf{2}$.
+          Phần dư (dù là 1, 2, 3, hay 4) cũng chỉ cần thêm \textbf{1 bước}.
+          $\rightarrow$ Số bước = $2 + 1 = 3$.
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% 4. Code Mẫu
+\begin{frame}[fragile]{4. Lời Giải Tham Khảo}
+  Dùng cấu trúc \texttt{if-else} để xử lý phần dư.
+
+\begin{lstlisting}[language=C++]
+int x;
+cin >> x;
+
+if (x % 5 == 0) {
+    // @Trường hợp chia hết: Vừa đủ các bước 5m@
+    cout << x / 5;
+} else {
+    // @Trường hợp có dư: Cần thêm 1 bước cuối@
+    cout << (x / 5) + 1;
+}
+\end{lstlisting}
+  
+  \textit{Mẹo nâng cao: Có thể dùng công thức toán học làm tròn trần \texttt{(x + 4) / 5} để viết ngắn hơn (như bài 1A Theatre Square).}
+\end{frame}
+
+\end{document}

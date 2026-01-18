@@ -1,0 +1,18 @@
+\frametitle{6.3. Cạm bẫy và Tối ưu hóa}
+\begin{alertblock}{Lưu ý kỹ thuật}
+      \begin{itemize}
+        \item \textbf{Integer Overflow:} Dùng \texttt{long long} cho các bài tính tổng hoặc nhân (ví dụ: Soldier and Bananas).
+        \item \textbf{Indexing:} Luôn cẩn thận với lỗi lệch 1 (Off-by-one).
+      \end{itemize}
+    \end{alertblock}
+
+    \begin{exampleblock}{Fast I/O trong C++}
+  \begin{lstlisting}[language=C++]
+  int main() {
+      ios_base::sync_with_stdio(false);
+      cin.tie(NULL);
+      // Code logic here
+      return 0;
+  }
+  \end{lstlisting}
+    \end{exampleblock}

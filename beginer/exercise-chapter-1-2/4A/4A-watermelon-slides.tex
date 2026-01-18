@@ -1,0 +1,136 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Watermelon]{Bài Tập Codeforces 4A: Watermelon \\ "Chia Dưa Hấu"}
+\subtitle{C++ Competitive Programming Series - Elo 800}
+\author{Học Cùng C++}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% 1. Đề bài
+\begin{frame}{1. Đề Bài}
+  \begin{block}{Cốt truyện}
+      Pete và Billy mua một quả dưa hấu nặng $w$ kg.
+      Họ muốn chia quả dưa thành \textbf{2 phần} sao cho:
+      \begin{itemize}
+          \item Mỗi phần có khối lượng là số dương ($>0$).
+          \item Khối lượng của \textbf{cả hai phần} đều phải là \textbf{số chẵn}.
+      \end{itemize}
+  \end{block}
+
+  \begin{exampleblock}{Yêu cầu}
+      Nhập $w$. In \texttt{YES} nếu chia được, \texttt{NO} nếu không.
+  \end{exampleblock}
+\end{frame}
+
+% 2. Phân tích
+\begin{frame}{2. Phân Tích Logic}
+  Gọi hai phần là $a$ và $b$.
+  Ta có: $a + b = w$.
+  
+  Yêu cầu: $a$ là số chẵn, $b$ là số chẵn.
+  
+  \begin{alertblock}{Tính chất toán học}
+      Tổng của hai số chẵn luôn là một số chẵn.
+      \[ \text{Chẵn} + \text{Chẵn} = \text{Chẵn} \]
+  \end{alertblock}
+  
+  $\rightarrow$ Điều kiện cần đầu tiên: $w$ phải là \textbf{số chẵn}.
+  Nếu $w$ là số lẻ (3, 5, 7...), chắc chắn in \texttt{NO}.
+\end{frame}
+
+% 3. Cạm bẫy
+\begin{frame}{3. Cạm Bẫy (Edge Case)}
+  Rất nhiều bạn chỉ kiểm tra: `if (w \% 2 == 0) cout << "YES";`
+  
+  \begin{tcolorbox}[colback=red!10,colframe=red!70!black,title=Trường hợp đặc biệt: $w = 2$]
+      Số 2 là số chẵn.
+      Nhưng ta chỉ có thể chia $2 = 1 + 1$.
+      \begin{itemize}
+          \item 1 là số lẻ.
+          \item 1 là số lẻ.
+      \end{itemize}
+      $\rightarrow$ Không thỏa mãn yêu cầu "cả 2 phần đều chẵn".
+  \end{tcolorbox}
+  
+  \textbf{Kết luận:} $w$ phải chẵn VÀ $w > 2$.
+\end{frame}
+
+% 4. Ví dụ
+\begin{frame}{4. Kiểm Chứng Test Case}
+  \begin{table}[]
+      \begin{tabular}{|c|c|c|l|}
+      \hline
+      \textbf{w} & \textbf{Chẵn?} & \textbf{> 2?} & \textbf{Kết quả} \\ \hline
+      8 & Có & Có & \textbf{YES} ($4+4$ hoặc $2+6$) \\ \hline
+      5 & Không & Có & \textbf{NO} (Số lẻ) \\ \hline
+      100 & Có & Có & \textbf{YES} ($2+98$) \\ \hline
+      2 & Có & \textbf{Không} & \textbf{NO} ($1+1$, không phải chẵn) \\ \hline
+      \end{tabular}
+  \end{table}
+\end{frame}
+
+% 5. Code
+\begin{frame}[fragile]{5. Lời Giải Tham Khảo}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    int w;
+    cin >> w;
+
+    // Kiem tra w chan VA w lon hon 2
+    if (w % 2 == 0 && w > 2) {
+        cout << "YES";
+    } else {
+        cout << "NO";
+    }
+
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\end{document}

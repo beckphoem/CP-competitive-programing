@@ -1,0 +1,17 @@
+\frametitle{4. Lời Giải Tham Khảo}
+Dùng cấu trúc \texttt{if-else} để xử lý phần dư.
+
+\begin{lstlisting}[language=C++]
+int x;
+cin >> x;
+
+if (x % 5 == 0) {
+    // @Trường hợp chia hết: Vừa đủ các bước 5m@
+    cout << x / 5;
+} else {
+    // @Trường hợp có dư: Cần thêm 1 bước cuối@
+    cout << (x / 5) + 1;
+}
+\end{lstlisting}
+
+  \textit{Mẹo nâng cao: Có thể dùng công thức toán học làm tròn trần \texttt{(x + 4) / 5} để viết ngắn hơn (như bài 1A Theatre Square).}

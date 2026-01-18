@@ -1,0 +1,22 @@
+\frametitle{Chunk 3: Tổng kết \& Mã giả (Blueprint)}
+Chúng ta xử lý $n$ dưới dạng \textbf{Chuỗi ký tự (String)}.
+
+    \begin{exampleblock}{Kịch bản chương trình}
+        \begin{enumerate}
+            \item \textbf{Nhập liệu:} Đọc cả dòng vào biến chuỗi \texttt{s}.
+            \item \textbf{Chuẩn bị:} Tạo biến đếm \texttt{dem = 0}.
+            \item \textbf{Duyệt (Loop):}
+            \begin{lstlisting}[language=C++, basicstyle=\ttfamily\footnotesize]
+FOR mỗi ky_tu trong s:
+    IF ky_tu == '4' OR ky_tu == '7':
+        dem = dem + 1
+            \end{lstlisting}
+            \item \textbf{Phán quyết:}
+            \begin{lstlisting}[language=C++, basicstyle=\ttfamily\footnotesize]
+IF dem == 4 OR dem == 7:
+    PRINT "YES"
+ELSE:
+    PRINT "NO"
+            \end{lstlisting}
+        \end{enumerate}
+    \end{exampleblock}

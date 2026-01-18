@@ -1,0 +1,23 @@
+\frametitle{Tổng kết thuật toán (Blueprint)}
+Bản thiết kế (Mã giả - Pseudocode):
+
+    \begin{block}{1. Chuẩn bị (Setup)}
+        \begin{itemize}
+            \item Đọc số lượng trạm \texttt{n}.
+            \item \texttt{hien\_tai = 0} (số khách đang ngồi trên xe).
+            \item \texttt{suc\_chua = 0} (kỷ lục đông nhất).
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{2. Vòng lặp hành trình (Loop)}
+        Lặp \texttt{n} lần (đi qua từng trạm):
+        \begin{itemize}
+            \item Đọc 2 số \texttt{a} (xuống) và \texttt{b} (lên).
+            \item \textbf{Cập nhật:} \texttt{hien\_tai = hien\_tai - a + b}
+            \item \textbf{Kiểm tra kỷ lục:} Nếu \texttt{hien\_tai > suc\_chua} thì \texttt{suc\_chua = hien\_tai}
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{3. Kết quả}
+        In ra \texttt{suc\_chua}.
+    \end{block}

@@ -1,0 +1,187 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{F. Print Even Indices}
+\subtitle{Huấn luyện viên tư duy thuật toán}
+\author{Micro-Chunks Learning}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Tóm tắt bài toán}
+        Bạn có một danh sách các số. Nhiệm vụ của bạn là:
+        \begin{enumerate}
+            \item Chỉ nhìn vào những vị trí (chỉ số) \textbf{chẵn} (0, 2, 4...).
+            \item In những số đó theo \textbf{thứ tự ngược lại} (từ cuối lên đầu).
+            \item \textbf{Điều kiện bắt buộc:} Phải dùng \textbf{Đệ quy (Recursion)}.
+        \end{enumerate}
+    \end{block}
+
+    \begin{exampleblock}{Lộ trình tư duy (Chunks)}
+        \begin{itemize}
+            \item \textbf{Chunk 1:} Xác định vị trí chẵn.
+            \item \textbf{Chunk 2:} Hiểu về Đệ quy - "Búp bê Nga".
+            \item \textbf{Chunk 3:} Xử lý thứ tự ngược \& Điểm dừng.
+            \item \textbf{Chunk 4:} Tổng kết thuật toán.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Xác định vị trí chẵn (Even Indices)}
+    \begin{itemize}
+        \item Mảng là một dãy các ngăn tủ đánh số từ $0$ đến $N-1$.
+        \item Ví dụ với $N=4$, mảng: \texttt{1 4 2 7}
+        \begin{itemize}
+            \item Ngăn 0: số 1 (\textbf{Chẵn})
+            \item Ngăn 1: số 4 (Lẻ)
+            \item Ngăn 2: số 2 (\textbf{Chẵn})
+            \item Ngăn 3: số 7 (Lẻ)
+        \end{itemize}
+    \end{itemize}
+
+    \begin{alertblock}{Quy luật}
+        Để nhảy từ vị trí chẵn này sang vị trí chẵn tiếp theo, chúng ta thực hiện bước nhảy: \texttt{index = index + 2}.
+    \end{alertblock}
+
+    \begin{exampleblock}{Thử thách tư duy}
+        Nếu mảng có 7 phần tử ($0$ đến $6$), các chỉ số cần quan tâm là gì?
+        \pause
+        \textbf{Đáp án:} 0, 2, 4, và 6.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 2: Đệ quy – "Hành động lùi lại"}
+    Đệ quy giống như mở búp bê Nga: Mở con lớn $\rightarrow$ gặp con nhỏ hơn $\rightarrow$ ... $\rightarrow$ \textbf{Base Case} (con nhỏ nhất).
+
+    \begin{block}{Cơ chế hoạt động}
+        \begin{enumerate}
+            \item \textbf{Đi tiếp:} Gọi chính nó với chỉ số tiếp theo (\texttt{index + 2}).
+            \item \textbf{Quay về \& Thực hiện:} In ra màn hình khi quay ngược trở lại.
+        \end{enumerate}
+    \end{block}
+
+    \begin{exampleblock}{Thử thách: Đặt lệnh \texttt{cout << A[i]} ở đâu?}
+        A. Đặt \textbf{trước} khi gọi hàm đệ quy tiếp theo.\\
+        B. Đặt \textbf{sau} khi gọi hàm đệ quy tiếp theo.
+        \pause
+        \vfill
+        \textbf{Đáp án B:} Để chờ các hàm sau chạy xong (chạm đến cuối mảng) rồi mới in ngược lại.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 3: Điểm dừng (Base Case)}
+    \begin{alertblock}{Tại sao cần điểm dừng?}
+        Để tránh lỗi \textbf{Stack Overflow} (Tràn bộ nhớ) do gọi hàm vô tận.
+    \end{alertblock}
+
+    \begin{exampleblock}{Thử thách tư duy}
+        Điều kiện dừng nào an toàn nhất cho mảng có $N$ phần tử?
+        \begin{itemize}
+            \item A. Khi \texttt{index < N}.
+            \item B. Khi \texttt{index >= N}.
+            \item C. Khi \texttt{index == N}.
+        \end{itemize}
+        \pause
+        \textbf{Đáp án B:} \texttt{index >= N} đảm bảo chúng ta dừng lại ngay khi vượt quá phạm vi mảng.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 4: Luồng hoạt động của thuật toán}
+    Giả sử $N=3$, mảng có chỉ số $0, 2$:
+    
+    \begin{itemize}
+        \item \texttt{printEven(0)} gọi \texttt{printEven(2)}
+        \item \texttt{printEven(2)} gọi \texttt{printEven(4)}
+        \item \texttt{printEven(4)} thỏa mãn \texttt{index >= 3} $\rightarrow$ \textbf{Dừng}.
+        \item Quay về \texttt{printEven(2)}: In \texttt{A[2]}.
+        \item Quay về \texttt{printEven(0)}: In \texttt{A[0]}.
+    \end{itemize}
+
+    \begin{exampleblock}{Câu hỏi khởi động}
+        Trong hàm \texttt{main}, ta gọi hàm lần đầu với tham số nào?
+        \pause
+        \textbf{Đáp án:} \texttt{printEven(0, N, A)}.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Cấu trúc mã nguồn C++}
+\begin{lstlisting}[language=C++]
+void printEven(int index, int N, long long A[]) {
+    // 1. Diem dung (Base Case)
+    if (index >= N) {
+        return;
+    }
+
+    // 2. Loi goi de quy (Buoc nhay)
+    // Di sau vao cac chi so tiep theo truoc
+    printEven(index + 2, N, A);
+
+    // 3. Hanh dong (In ra)
+    // Khi ham quay nguoc tro lai, ta moi in gia tri
+    cout << A[index] << " ";
+}
+\end{lstlisting}
+
+\begin{block}{Lưu ý kỹ thuật}
+    \begin{itemize}
+        \item \textbf{Kiểu dữ liệu:} Dùng \texttt{long long} cho giá trị mảng.
+        \item \textbf{Giới hạn:} $N$ lên tới $10^3$, mảng khai báo \texttt{A[1005]}.
+    \end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Tổng kết \& Bước tiếp theo}
+    \begin{exampleblock}{Bạn đã nắm vững:}
+        \begin{itemize}
+            \item Cách nhảy bước đôi trong mảng.
+            \item Cơ chế Stack của đệ quy để đảo ngược dữ liệu.
+            \item Cách xác định điều kiện dừng an toàn.
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{block}{Bước tiếp theo}
+        1. Thử tự viết code hoàn chỉnh dựa trên cấu trúc trên.\\
+        2. Tìm hiểu cách truyền mảng/vector tối ưu vào hàm.
+    \end{block}
+\end{frame}
+
+\end{document}

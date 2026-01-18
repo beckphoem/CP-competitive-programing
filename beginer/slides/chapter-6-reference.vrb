@@ -1,0 +1,22 @@
+\frametitle{Thử thách Code nhỏ}
+\begin{alertblock}{Đề bài}
+        Viết đoạn code ngắn:
+        \begin{enumerate}
+            \item Tạo biến \texttt{diem\_so} bằng 10.
+            \item Tạo tham chiếu \texttt{ket\_qua} trỏ tới \texttt{diem\_so}.
+            \item Thay đổi \texttt{ket\_qua} thành 100.
+            \item In ra \texttt{diem\_so}.
+        \end{enumerate}
+    \end{alertblock}
+
+    \pause
+    \begin{exampleblock}{Đáp án (Chuẩn ngữ pháp)}
+\begin{lstlisting}[language=C++]
+int diem_so = 10;
+int &ket_qua = diem_so;
+ket_qua = 100;
+
+// Ket qua in ra se la 100
+cout << diem_so;
+\end{lstlisting}
+    \end{exampleblock}

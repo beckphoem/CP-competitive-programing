@@ -1,0 +1,5 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Tiếp nhận \& Phẫu thuật}{3}{0}{1}
+\beamer@sectionintoc {2}{Bước 2: Vòng lặp Tư duy (Chunk 1)}{4}{0}{2}
+\beamer@sectionintoc {3}{Bước 2: Vòng lặp Tư duy (Chunk 2)}{6}{0}{3}
+\beamer@sectionintoc {4}{Bước 3: Tổng kết chiến thuật}{8}{0}{4}

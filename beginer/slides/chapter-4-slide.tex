@@ -1,0 +1,242 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Meta information
+\title{Bài 4: Vòng lặp While (While Loop)}
+\author{CPP}
+\date{}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Giới thiệu ---
+\begin{frame}{Lời chào và Bức tranh toàn cảnh}
+  
+
+    \vspace{0.5cm}
+
+    \begin{alertblock}{🌟 BỨC TRANH TOÀN CẢNH: SỨC MẠNH TỰ ĐỘNG HÓA}
+        Hãy tưởng tượng bạn đang xúc cát để lấp đầy một cái hố.
+        \begin{itemize}
+            \item \textbf{Manual (Không vòng lặp):} Tự nhủ "Xúc một xẻng. Xúc thêm một xẻng...". Rất mệt và dễ quên đếm.
+            \item \textbf{Automation (Có vòng lặp):} Ra lệnh cho Robot một lần duy nhất: \textbf{"Này Robot, KHI MÀ (WHILE) cái hố chưa đầy, hãy cứ xúc cát liên tục cho ta!"}
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% --- Slide Lộ trình ---
+\begin{frame}{🗺️ Lộ trình khám phá (Roadmap)}
+    Dựa trên cấu trúc bài học, chúng ta có 2 "khối" kiến thức (chunks) quan trọng:
+
+    \vspace{0.5cm}
+
+    \begin{itemize}
+        \item \textbf{Chương 1: "Người Gác Cổng" Nghiêm Khắc}
+        \begin{itemize}
+            \item Cơ chế hoạt động & Tại sao gọi là "Người gác cổng".
+            \item Phân tích cú pháp: `while (condition) \{ code \}`.
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        
+        \item \textbf{Chương 2: Nghệ thuật Đếm lùi (Ứng dụng thực tế)}
+        \begin{itemize}
+            \item Ví dụ "Countdown" (Đếm ngược).
+            \item Do/While Loop: Sự khác biệt với While.
+            \item Những cạm bẫy cần tránh (Vòng lặp vô tận).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% --- Slide Chương 1 ---
+\begin{frame}[fragile]{Chương 1: "Người Gác Cổng" Nghiêm Khắc}
+    Tại sao gọi là \textbf{"Người Gác Cổng"}?
+    \begin{itemize}
+        \item Vòng lặp `while` làm việc rất nguyên tắc: \textbf{Kiểm tra giấy tờ trước, cho vào sau.}
+        \item Nếu ngay từ đầu điều kiện đã sai, cánh cổng sẽ không bao giờ mở ra.
+    \end{itemize}
+
+    \begin{exampleblock}{Cú pháp}
+\begin{lstlisting}[language=C++]
+// @Điều kiện được kiểm tra ĐẦU TIÊN@
+while (condition) {
+  // @Khối lệnh này chỉ chạy khi condition là TRUE@
+  // @code to be executed@
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+% --- Slide Chương 2: Đếm ngược ---
+\begin{frame}[fragile]{Chương 2: Nghệ thuật Đếm lùi (The Countdown)}
+    \textbf{Phép ẩn dụ:} Đồng hồ đếm ngược đêm Giao thừa.
+    
+    Hãy tưởng tượng bạn đang chờ đợi khoảnh khắc bắn pháo hoa:
+
+    \begin{exampleblock}{Code mô phỏng}
+\begin{lstlisting}[language=C++]
+int countdown = 3;  // @Bắt đầu từ số 3@
+
+while (countdown > 0) {       // @Khi nào vẫn còn thời gian (số > 0)@
+  cout << countdown << "\n";  // @Hét to số đó lên!@
+  countdown--;                // @Thời gian trôi đi (Giảm 1 đơn vị)@
+}
+
+cout << "Happy New Year!!\n"; // @Pháo hoa nổ tung!@
+\end{lstlisting}
+    \end{exampleblock}
+    
+    Dòng chữ "Happy New Year!!" nằm \textit{ngoài} vòng lặp nên nó được chạy ngay khi vòng lặp kết thúc.
+\end{frame}
+
+% --- Slide Phân tích chuyển động ---
+\begin{frame}[fragile]{Phân tích chuyển động: Đi xuống cầu thang}
+    Ở đây chúng ta dùng `countdown--` thay vì `i++`.
+    
+    \begin{itemize}
+        \item \textbf{`--` (Decrement):} Hãy hình dung nó giống như bạn đang đi xuống cầu thang.
+        \item Đang ở bậc 3 $\rightarrow$ Hét "3" $\rightarrow$ Bước xuống (còn 2).
+        \item Đang ở bậc 2 $\rightarrow$ Hét "2" $\rightarrow$ Bước xuống (còn 1).
+        \item Đang ở bậc 1 $\rightarrow$ Hét "1" $\rightarrow$ Bước xuống (còn 0).
+        \item \textbf{Tại bậc 0:} Người gác cổng nhìn thấy số 0. Điều kiện `0 > 0` là \textbf{SAI}. Cổng đóng lại.
+    \end{itemize}
+\end{frame}
+
+% --- Slide Do/While ---
+\begin{frame}[fragile]{Mở rộng: Vòng lặp "Làm trước, Nghĩ sau" (Do/While)}
+    Nếu `While` là "Người Gác Cổng" cẩn trọng, thì \textbf{`Do/While`} là một \textbf{"Gã Liều Lĩnh"}.
+    
+    \begin{block}{Triết lý của Do/While}
+        \textit{"Cứ làm thử một lần đi đã, rồi tính tiếp!"}
+    \end{block}
+
+    \begin{exampleblock}{Cú pháp Do/While}
+\begin{lstlisting}[language=C++]
+do {
+  // @Làm gì đó đi! (Code block)@
+}
+while (condition);
+\end{lstlisting}
+    \end{exampleblock}
+
+    \textbf{Sự khác biệt cốt tử:}
+    \begin{itemize}
+        \item \textbf{While:} Kiểm tra vé \textbf{trước khi} vào cổng.
+        \item \textbf{Do/While:} Cho phép vào chơi \textbf{ít nhất một lần}, sau đó mới kiểm tra vé ở cổng ra.
+    \end{itemize}
+\end{frame}
+
+% --- Slide Kiểm tra sự thấu hiểu ---
+\begin{frame}[fragile]{🧠 Kiểm tra sự thấu hiểu (Check-in)}
+    Hãy giải câu đố sau để phân biệt hai loại vòng lặp:
+    
+    \begin{alertblock}{Câu đố}
+        Giả sử tôi có biến `int i = 0`.
+        \begin{enumerate}
+            \item \textbf{Trường hợp A:} Dùng `while (i > 0) \{ cout << "Hello"; \}`
+            \item \textbf{Trường hợp B:} Dùng `do \{ cout << "Hello"; \} while (i > 0);`
+        \end{enumerate}
+        \textbf{Trong mỗi trường hợp, chữ "Hello" được in ra màn hình mấy lần?}
+    \end{alertblock}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án:}
+    \begin{itemize}
+        \item \textbf{Trường hợp A (While):} "Người gác cổng" chặn ngay từ đầu ($0 > 0$ sai). \textbf{0 lần.}
+        \item \textbf{Trường hợp B (Do/While):} "Gã liều lĩnh" cho làm trước 1 lần rồi mới kiểm tra. \textbf{1 lần.}
+    \end{itemize}
+\end{frame}
+
+% --- Slide Mảnh ghép cuối cùng ---
+\begin{frame}[fragile]{🎁 Mảnh ghép cuối cùng: Ứng dụng thực tế}
+    Khi nào dùng cái nào? Hãy học tư duy giải quyết vấn đề.
+
+    \begin{columns}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{1. Do/While $\rightarrow$ Nhập mật khẩu}
+                Bạn luôn muốn người dùng nhập \textit{ít nhất một lần}.
+\begin{lstlisting}[language=C++]
+int password;
+do {
+  cout << "Moi nhap pass: ";
+  cin >> password; 
+}
+while (password != 1234);
+// @Sai (khác 1234) thì nhập lại!@
+\end{lstlisting}
+                \small \textit{Ẩn dụ: Ăn thử một miếng rồi mới quyết định ăn tiếp hay không.}
+            \end{block}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{block}{2. While $\rightarrow$ Kiểm tra bình xăng}
+                Trước khi nổ máy, phải kiểm tra xăng.
+                \begin{itemize}
+                    \item Xăng hết $\rightarrow$ Không đi mét nào (0 lần).
+                    \item Còn xăng $\rightarrow$ Lái xe, xăng vơi dần.
+                \end{itemize}
+                \vspace{0.5cm}
+                \small \textit{Ẩn dụ: An toàn là trên hết. Kiểm tra trước khi hành động.}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide Tổng kết ---
+\begin{frame}{🏁 Tổng kết hành trình}
+    Chúng ta đã hoàn thành xuất sắc bài học về \textbf{Vòng lặp While}!
+
+    \begin{enumerate}
+        \item \textbf{While Loop:} Người gác cổng nghiêm khắc. Kiểm tra trước, làm sau. (Dùng khi có thể không cần làm lần nào).
+        \item \textbf{Do/While Loop:} Gã liều lĩnh. Làm trước, kiểm tra sau. (Dùng khi bắt buộc phải làm ít nhất 1 lần).
+        \item \textbf{Vòng lặp vô tận:} Cơn ác mộng khi quên thay đổi biến đếm (quên `i++` hoặc `i--`).
+    \end{enumerate}
+
+    \vspace{1cm}
+    
+    \begin{block}{Bước tiếp theo}
+        Thông thường, sau khi học `While` (không biết trước số lần), chúng ta sẽ chuyển sang \textbf{`For Loop`}. Bạn có muốn tiếp tục sang bài For Loop ngay không?
+    \end{block}
+\end{frame}
+
+\end{document}

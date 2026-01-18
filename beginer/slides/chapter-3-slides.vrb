@@ -1,0 +1,27 @@
+\frametitle{5. Toán Tử Logic - "Bộ Đôi Vệ Sĩ"}
+
+  \begin{columns}
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{\&\&} (VÀ) - Ông Bố Khó Tính}
+          Phải thỏa mãn \textbf{TẤT CẢ}.
+          \begin{itemize}
+              \item Vé \textbf{VÀ} Khẩu trang $\rightarrow$ Vào.
+          \end{itemize}
+      \end{block}
+      \begin{lstlisting}[language=C++]
+if (n >= 1 && n <= 10)
+// @Trong khoảng [1, 10]@
+      \end{lstlisting}
+
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{||} (HOẶC) - Bà Mẹ Dễ Tính}
+          Chỉ cần \textbf{MỘT} cái đúng.
+          \begin{itemize}
+              \item Vé VIP \textbf{HOẶC} Quen biết $\rightarrow$ Vào.
+          \end{itemize}
+      \end{block}
+      \begin{lstlisting}[language=C++]
+if (n % 3 == 0 || n % 5 == 0)
+// @Chia hết cho 3 hoặc 5@
+      \end{lstlisting}
+  \end{columns}

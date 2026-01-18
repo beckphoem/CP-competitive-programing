@@ -1,0 +1,201 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Huấn luyện viên tư duy thuật toán}
+\subtitle{Bài toán: Base Conversion (Chuyển đổi cơ số)}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào dẫn nhập}
+    \begin{tcolorbox}[colback=blue!5,colframe=blue!75,title=Mục tiêu bài học]
+        Chào mừng bạn! Chúng ta sẽ cùng nhau "mổ xẻ" bài toán chuyển đổi cơ số theo phong cách \textbf{Learning How to Learn}, tập trung vào bản chất logic và hình ảnh hóa thay vì chỉ nhìn vào code.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{1. Phẫu thuật đề bài (Briefing)}
+    \begin{block}{Cốt lõi vấn đề}
+        \begin{itemize}
+            \item \textbf{Nhiệm vụ:} Nhập số thập phân (cơ số 10), in ra dạng Nhị phân (cơ số 2).
+            \item \textbf{Điều kiện bắt buộc:} Sử dụng \textbf{Đệ quy (Recursion)}.
+            \item \textbf{Dữ liệu:} Nhiều bộ thử nghiệm, $N$ có thể lên tới $10^{18}$.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        1. Hiểu bản chất "chia để trị".\\
+        2. Xây dựng cấu trúc đệ quy (Điểm dừng \& Hành động).\\
+        3. Xử lý thứ tự in ấn (Tránh bẫy in ngược).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2. Chunk 1: Cơ chế "Rút tỉa"}
+    \begin{itemize}
+        \item Hệ nhị phân chỉ hiểu hai trạng thái: \textbf{Dư lẻ (1)} hoặc \textbf{Chẵn đôi (0)}.
+        \item \textbf{Quy tắc:}
+        \begin{enumerate}
+            \item Lấy số đó chia cho 2.
+            \item Ghi lại số dư (0 hoặc 1).
+            \item Lấy phần nguyên tiếp tục chia cho đến khi bằng 0.
+        \end{enumerate}
+    \end{itemize}
+
+    \begin{alertblock}{Bẫy logic (The Trap)}
+        Nếu vừa chia vừa in ngay, kết quả sẽ bị \textbf{ngược} (Ví dụ 6 ra \texttt{011} thay vì \texttt{110}).
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    \begin{block}{Câu hỏi}
+        Nếu $N = 13$, hãy thực hiện các bước chia cho 2. Liệt kê các số dư thu được theo thứ tự từ bước đầu đến cuối?
+    \end{block}
+    \pause
+    \begin{exampleblock}{Đáp án \& Giải thích}
+        $13 \div 2 = 6$ dư \textbf{1} (đơn vị $2^0$)\\
+        $6 \div 2 = 3$ dư \textbf{0} (hàng $2^1$)\\
+        $3 \div 2 = 1$ dư \textbf{1} (hàng $2^2$)\\
+        $1 \div 2 = 0$ dư \textbf{1} (hàng $2^3$)\\
+        $\rightarrow$ Kết quả: \textbf{1101}. Chữ số cuối cùng tìm được lại có giá trị lớn nhất.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Mảnh ghép 2: Cơ chế Stack trong Đệ quy}
+    \begin{itemize}
+        \item Đệ quy sử dụng cơ chế \textbf{Stack (Ngăn xếp)}: Vào sau - Ra trước.
+        \item \textbf{Bước gọi:} Chia cho 2 đến khi chạm đáy ($N=0$).
+        \item \textbf{Bước in:} Chỉ thực hiện \textbf{sau khi} lệnh gọi đệ quy quay trở về.
+    \end{itemize}
+    
+    \begin{exampleblock}{Mô phỏng đệ quy}
+        1. \texttt{convert(13)} gọi \texttt{convert(6)}\\
+        2. \texttt{convert(6)} gọi \texttt{convert(3)}\\
+        3. \texttt{convert(3)} gọi \texttt{convert(1)}\\
+        4. \texttt{convert(1)} gọi \texttt{convert(0)} $\rightarrow$ Chạm đáy!
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Mảnh ghép 3: Thiết kế hàm đệ quy}
+    \begin{block}{Thành phần quan trọng}
+        \begin{enumerate}
+            \item \textbf{Điểm dừng (Base Case):} Khi nào không chia nữa?
+            \item \textbf{Bước đệ quy (Recursive Step):} Gọi lại chính nó với $N/2$.
+        \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Thử thách lựa chọn}
+        Nên đặt lệnh in ở đâu để đúng thứ tự?
+        \begin{itemize}
+            \item \textbf{Phương án A:} In số dư $\rightarrow$ Gọi \texttt{convert(N/2)}
+            \item \textbf{Phương án B:} Gọi \texttt{convert(N/2)} $\rightarrow$ In số dư
+        \end{itemize}
+    \end{alertblock}
+    \pause
+    \textbf{Đáp án:} Phương án B. Lệnh in sau lời gọi đệ quy sẽ chờ "bung" ngược từ đáy lên.
+\end{frame}
+
+\begin{frame}{Mô phỏng "Vụ nổ ngược"}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}lll@{}}
+            \toprule
+            \textbf{Tầng} & \textbf{Trạng thái} & \textbf{Hành động tiếp theo} \\ \midrule
+            Tầng 1 & \texttt{convert(13)} & Gọi \texttt{convert(6)}, chờ in $13\%2=1$ \\
+            Tầng 2 & \texttt{convert(6)} & Gọi \texttt{convert(3)}, chờ in $6\%2=0$ \\
+            Tầng 3 & \texttt{convert(3)} & Gọi \texttt{convert(1)}, chờ in $3\%2=1$ \\
+            Tầng 4 & \texttt{convert(1)} & Gọi \texttt{convert(0)}, chờ in $1\%2=1$ \\
+            Tầng 5 & \texttt{convert(0)} & \textbf{Chạm đáy!} Kết thúc gọi. \\ \bottomrule
+        \end{tabular}
+    \end{table}
+    \pause
+    Thứ tự in thực tế: $1 \rightarrow 1 \rightarrow 0 \rightarrow 1$.
+\end{frame}
+
+\begin{frame}{Mảnh ghép cuối cùng: Điểm dừng (Base Case)}
+    \begin{block}{Điều kiện dừng}
+        Khi nào chúng ta ngừng chia?
+        \begin{itemize}
+            \item A. Khi $N = 1$
+            \item B. Khi $N = 0$
+            \item C. Khi $N$ âm
+        \end{itemize}
+    \end{block}
+    \pause
+    \textbf{Đáp án: B.} Khi $N=0$, không còn gì để chia.
+    
+    \begin{tcolorbox}[colback=orange!5,colframe=orange!75]
+        \textbf{Lưu ý:} Nếu đề cho $N=0$ ngay từ đầu, cần xử lý riêng để in ra số \texttt{0}.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Tổng kết Logic \& Mã giả}
+    \begin{lstlisting}[language=C++, caption=Cấu trúc hàm đệ quy]
+void convert(long long n) {
+    // 1. Diem dung (Base Case)
+    if (n == 0) return;
+
+    // 2. Goi de quy (Di sau vao stack)
+    convert(n / 2);
+
+    // 3. In ket qua (Thuc hien khi quay lui)
+    cout << n % 2;
+}
+    \end{lstlisting}
+    
+    \begin{exampleblock}{Kết quả với N = 3}
+        1. \texttt{convert(1)} chạy trước $\rightarrow$ in \texttt{1}.\\
+        2. \texttt{convert(3)} chạy sau $\rightarrow$ in \texttt{1}.\\
+        Kết quả: \texttt{11}.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bước cuối cùng: Thực hành}
+    \begin{tcolorbox}[colback=green!5,colframe=green!75]
+        Bạn đã nắm vững "trái tim" của đệ quy. Hãy thử hiện thực hóa nó bằng ngôn ngữ lập trình của bạn!
+    \end{tcolorbox}
+    
+    \begin{itemize}
+        \item Bạn muốn tôi hỗ trợ viết mã hoàn chỉnh cho bài này?
+        \item Hay bạn muốn chuyển sang một thử thách đệ quy khó hơn?
+    \end{itemize}
+\end{frame}
+
+\end{document}

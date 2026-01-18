@@ -1,0 +1,291 @@
+\documentclass{beamer}
+
+% --- CẤU HÌNH TIẾNG VIỆT & FONT ---
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}      % Bắt buộc cho tiếng Việt đúng chuẩn
+\usepackage[vietnamese]{babel}
+\usepackage{lmodern}          % Bộ font hỗ trợ tiếng Việt tốt hơn font mặc định
+
+% --- CẤU HÌNH TOÁN HỌC ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+
+% --- CẤU HÌNH THEME ---
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Sửa lỗi hiển thị bookmark PDF tiếng Việt
+\hypersetup{unicode=true} 
+
+% Thông tin bài thuyết trình
+\title[Codeforces 318A - Even Odds]{Codeforces 318A - Even Odds}
+\subtitle{Rèn luyện tư duy toán học (Math vs Brute Force)}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+% Cấu hình hiển thị code
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily, breaklines=true}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Giới thiệu ---
+\begin{frame}{Lời chào}
+    \begin{block}{Coach Tư Duy Thuật Toán}
+        Chào mừng bạn. Rất tốt, bạn đã chọn bài \textbf{Codeforces 318A - Even Odds}. 
+        
+        Đây là một bài toán kinh điển để rèn luyện tư duy toán học (Math) thay vì dùng vòng lặp (Brute Force).
+        
+        Chúng ta sẽ không vội vàng viết code. Hãy cùng nhau ``mổ xẻ'' nó ngay bây giờ.
+    \end{block}
+\end{frame}
+
+% --- MỤC LỤC ---
+\begin{frame}{Nội dung chính}
+    \tableofcontents
+\end{frame}
+
+% =========================================================================
+% SECTION 1: BRIEFING
+% =========================================================================
+\section{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \textbf{Tên bài toán:} Even Odds (Chẵn Lẻ).
+
+    \begin{block}{Đề bài (Ngôn ngữ con người)}
+        Người ta viết các số nguyên từ $1$ đến $n$ lên bảng. Nhưng họ không viết theo thứ tự bình thường ($1, 2, 3 \dots$). Họ viết theo quy tắc \textbf{``Lẻ trước, Chẵn sau''}:
+        \begin{enumerate}
+            \item Đầu tiên là tất cả các số lẻ (tăng dần).
+            \item Sau đó mới đến tất cả các số chẵn (tăng dần).
+        \end{enumerate}
+        \textbf{Nhiệm vụ:} Tìm xem con số nằm ở vị trí thứ $k$ trong dãy số mới này là số mấy?
+    \end{block}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    Để giải quyết bài này, chúng ta cần đi qua 2 mảnh ghép logic (Micro-Chunks):
+
+    \begin{itemize}
+        \item \textbf{Chunk 1: Tìm ``Biên giới''} \\
+        (Có bao nhiêu số lẻ? Khi nào thì bước sang vùng số chẵn?).
+        \vspace{0.5cm}
+        \item \textbf{Chunk 2: Công thức truy xuất} \\
+        (Nếu ở vùng Lẻ thì tính sao? Nếu ở vùng Chẵn thì tính sao?).
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textit{Bạn đã sẵn sàng bước vào mảnh ghép đầu tiên chưa?}
+\end{frame}
+
+% =========================================================================
+% SECTION 2: CHUNK 1 - BIÊN GIỚI
+% =========================================================================
+\section{Chunk 1: Xác định ``Biên giới''}
+
+\begin{frame}{1. Logic (Explain)}
+    Hãy tưởng tượng dãy số từ $1$ đến $n$ giống như một lớp học có $n$ học sinh.
+    Thầy giáo chia lớp thành 2 nhóm:
+    
+    \begin{itemize}
+        \item \textbf{Nhóm 1 (Nhóm Lẻ):} Gồm các bạn mang số báo danh 1, 3, 5... xếp hàng trước.
+        \item \textbf{Nhóm 2 (Nhóm Chẵn):} Gồm các bạn mang số báo danh 2, 4, 6... xếp hàng nối đuôi phía sau.
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textbf{Vấn đề cốt lõi đầu tiên:} Để biết vị trí thứ $k$ nằm ở Nhóm 1 hay Nhóm 2, ta phải biết \textbf{Nhóm 1 có tất cả bao nhiêu thành viên}.
+    
+    Ta gọi số lượng thành viên nhóm lẻ là $P$ (Partition point).
+\end{frame}
+
+\begin{frame}{2. Bẫy (Trap) \alert{\textbf{WARN}}}
+    \begin{alertblock}{Sai lầm thường gặp}
+        Rất nhiều bạn mặc định chia đôi: $P = n / 2$.
+    \end{alertblock}
+
+    \begin{itemize}
+        \item Với $n = 10$, số lẻ là $\{1, 3, 5, 7, 9\} \rightarrow$ có 5 số. ($10/2 = 5 \rightarrow$ Đúng).
+        \item Nhưng với $n = 7$, số lẻ là $\{1, 3, 5, 7\} \rightarrow$ có 4 số.
+        \item Nếu dùng phép chia số nguyên trong máy tính: $7 / 2 = 3 \rightarrow$ \textbf{SAI} (Thiếu mất 1 người).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{3. Thử thách (Challenge) - Phần 1}
+    \begin{exampleblock}{Câu hỏi}
+        Giúp tôi xác định số lượng phần tử lẻ ($P$) trong các trường hợp sau:
+        \begin{enumerate}
+            \item Nếu $n = 4$ (Dãy: 1, 3, 2, 4).
+            \item Nếu $n = 5$ (Dãy: 1, 3, 5, 2, 4).
+        \end{enumerate}
+    \end{exampleblock}
+    
+    \textbf{Câu hỏi chốt:} Công thức toán học nào đúng để tính số lượng số lẻ $P$ cho mọi $n$?
+    \begin{itemize}
+        \item A. $n / 2$
+        \item B. $(n - 1) / 2$
+        \item C. $(n + 1) / 2$ (Lấy phần nguyên)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{3. Thử thách (Challenge) - Đáp án}
+    \textbf{Đáp án:}
+    
+    \pause % Hiệu ứng: Bấm chuột mới hiện đáp án
+    
+    Chính xác! 🎯 \textbf{Đáp án C} là chuẩn nhất.
+
+    Trong lập trình C++ (và nhiều ngôn ngữ khác), phép chia số nguyên \texttt{(int / int)} sẽ tự động làm tròn xuống (ví dụ $3.5 \rightarrow 3$).
+    
+    Vì vậy, công thức:
+    \[ P = (n + 1) / 2 \]
+    chính là mẹo toán học để ``làm tròn lên'', đảm bảo tính đúng số lượng cho cả trường hợp $n$ lẻ và $n$ chẵn.
+
+    \vspace{0.5cm}
+    \textit{Tuyệt vời. Bạn đã nắm được biến quan trọng nhất: \textbf{Biên giới $P$}.}
+\end{frame}
+
+% =========================================================================
+% SECTION 3: CHUNK 2 - THE MAGIC FORMULA
+% =========================================================================
+\section{Chunk 2: Định vị \& Truy xuất}
+
+\begin{frame}{1. Logic (Explain)}
+    Bây giờ chúng ta cầm trong tay tấm vé số thứ tự $k$. Chúng ta cần biết mình phải đi vào \textbf{Cửa số 1 (Nhóm Lẻ)} hay \textbf{Cửa số 2 (Nhóm Chẵn)}.
+    
+    \textbf{Quy trình:} So sánh vị trí $k$ với biên giới $P = (n+1)/2$.
+\end{frame}
+
+\begin{frame}{Trường hợp 1: Nhóm Lẻ ($k \le P$)}
+    Nếu $k \le P$ (Vị trí nằm trong nửa đầu):
+    
+    \begin{itemize}
+        \item Dãy số là: 1, 3, 5, 7...
+        \item Vị trí thứ 1 $\rightarrow$ giá trị 1 ($2 \times 1 - 1$)
+        \item Vị trí thứ 2 $\rightarrow$ giá trị 3 ($2 \times 2 - 1$)
+    \end{itemize}
+    
+    \begin{block}{Công thức tổng quát}
+        \[ \text{Value} = 2 \times k - 1 \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{Trường hợp 2: Nhóm Chẵn ($k > P$)}
+    Nếu $k > P$ (Vị trí nằm ở nửa sau):
+    
+    \begin{itemize}
+        \item Lúc này, ta đã bước qua hết $P$ số lẻ.
+        \item Vị trí \textbf{thực sự} của ta trong nhóm chẵn là: $new\_k = k - P$.
+        \item Dãy số chẵn: 2, 4, 6, 8...
+        \item Vị trí thứ 1 trong nhóm chẵn $\rightarrow$ giá trị 2 ($2 \times 1$)
+    \end{itemize}
+    
+    \begin{block}{Công thức tổng quát}
+        \[ \text{Value} = 2 \times (k - P) \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{2. Bẫy (Trap) \alert{\textbf{TLE}}}
+    \begin{alertblock}{Sai lầm chết người}
+        Ở bài này, giới hạn của $n$ và $k$ lên tới $10^{12}$ (1000 tỷ).
+        \begin{itemize}
+            \item Dùng vòng lặp \texttt{for (int i = 1...)} để đếm.
+            \item \textbf{Hậu quả:} Máy tính chạy quá 1 giây $\rightarrow$ \textbf{Time Limit Exceeded (TLE)}.
+        \end{itemize}
+    \end{alertblock}
+
+    \textbf{Giải pháp:} Bắt buộc dùng công thức $O(1)$ như trên, không được dùng vòng lặp. Và kiểu dữ liệu phải là \texttt{long long}.
+\end{frame}
+
+\begin{frame}{3. Thử thách (Challenge) - Áp dụng}
+    Hãy áp dụng 2 công thức trên để giải quyết tình huống sau.
+    
+    \textbf{Dữ liệu:} Cho $n = 10, k = ?$. (Ta đã biết $P = 5$).
+
+    \begin{exampleblock}{Câu hỏi}
+        \begin{enumerate}
+            \item Nếu $k = 3$: Kết quả là bao nhiêu?
+            \item Nếu $k = 7$: Kết quả là bao nhiêu? (Gợi ý: $7 > 5$, hãy tìm vị trí tương đối trước).
+        \end{enumerate}
+    \end{exampleblock}
+    
+    \pause % Hiệu ứng ẩn đáp án
+    
+    \textbf{Kết quả:}
+    \begin{itemize}
+        \item \textbf{Logic 1:} $k=3 \le 5$ (Vùng Lẻ) $\rightarrow 2 \times 3 - 1 = \mathbf{5}$.
+        \item \textbf{Logic 2:} $k=7 > 5$ (Vùng Chẵn) $\rightarrow$ Bỏ qua 5 số lẻ, tìm số chẵn thứ $(7-5)=2$. $\rightarrow 2 \times 2 = \mathbf{4}$.
+    \end{itemize}
+    \textit{Hoàn hảo!}
+\end{frame}
+
+% =========================================================================
+% SECTION 4: CHUNK 3 - DATA TYPE TRAP
+% =========================================================================
+\section{Chunk 3: Bẫy dữ liệu (Data Type Trap)}
+
+\begin{frame}{Chunk 3: Bẫy dữ liệu (Data Type Trap)}
+    Đây là nơi 50\% người mới (Newbies) bị ``ăn hành'' (Wrong Answer hoặc Runtime Error) dù thuật toán đúng.
+
+    \textbf{Dữ kiện:}
+    \begin{itemize}
+        \item Đề bài cho $n$ và $k$ có thể lên tới $10^{12}$ (1000 tỷ).
+        \item Kiểu \texttt{int} trong C++ chỉ chứa được tối đa khoảng $2 \times 10^9$ (2 tỷ).
+    \end{itemize}
+
+    \begin{alertblock}{Kết luận}
+        Nếu bạn khai báo \texttt{int n, k;}, biến của bạn sẽ bị tràn số (Overflow) giống như đổ 10 lít nước vào cái chai 2 lít vậy. Kết quả sẽ ra sai lệch hoàn toàn.
+    \end{alertblock}
+
+    \textbf{Giải pháp:} Bắt buộc dùng \texttt{long long} (chứa được tới $9 \times 10^{18}$).
+\end{frame}
+
+% =========================================================================
+% SECTION 5: TỔNG KẾT & NEXT STEP
+% =========================================================================
+\section{Tổng kết thuật toán (The Blueprint)}
+
+\begin{frame}[fragile]{Tổng kết thuật toán (The Blueprint)}
+    Đây là bản thiết kế để bạn chuyển ngữ sang C++:
+
+    \begin{enumerate}
+        \item \textbf{Input:} Nhập $n, k$ (Nhớ dùng \texttt{long long}).
+        \item \textbf{Bước 1 (Tính P):} 
+        \begin{verbatim}
+long long part = (n + 1) / 2;
+        \end{verbatim}
+        \item \textbf{Bước 2 (Kiểm tra vị trí):}
+        \begin{itemize}
+            \item \textbf{Nếu} $k \le part$: In ra $2 \times k - 1$.
+            \item \textbf{Ngược lại (Else)}: In ra $2 \times (k - part)$.
+        \end{itemize}
+        \item \textbf{Output:} Kết quả.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Next Step}
+    \huge \centering \textbf{Bạn đã có đủ mọi ``nguyên liệu''!}
+    
+    \normalsize
+    \vspace{1cm}
+    \begin{enumerate}
+        \item Công thức tính biên giới.
+        \item Công thức tính giá trị từng vùng.
+        \item Loại dữ liệu cần dùng.
+    \end{enumerate}
+    
+    \vspace{1cm}
+    \textit{Bạn có muốn tự tay viết đoạn code này để tôi kiểm tra (Review), hay bạn muốn tôi cung cấp Code mẫu chuẩn (Best Practice) ngay bây giờ?}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge \textbf{Cảm ơn bạn đã theo dõi!}
+\end{frame}
+
+\end{document}

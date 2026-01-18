@@ -1,0 +1,186 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Cấu Trúc Rẽ Nhánh]{Bài 3: Cấu Trúc Rẽ Nhánh \\ "Những Ngã Rẽ Cuộc Đời"}
+\subtitle{C++ Competitive Programming Series}
+\author{Học Cùng C++}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% 1. Comparison Operators
+\begin{frame}{1. Toán Tử So Sánh - "Cán Cân Công Lý"}
+  \begin{block}{Nguyên lý}
+      Đặt 2 giá trị lên bàn cân. Kết quả chỉ có thể là \textbf{ĐÚNG (True)} hoặc \textbf{SAI (False)}.
+  \end{block}
+
+  \begin{center}
+  \begin{tabular}{|c|c|c|}
+      \hline
+      \textbf{Toán tử} & \textbf{Ý nghĩa} & \textbf{Ví dụ} (a=5, b=3) \\
+      \hline
+      \texttt{==} & Bằng nhau (2 dấu bằng) & \texttt{a == b} (False) \\
+      \texttt{!=} & Khác nhau & \texttt{a != b} (True) \\
+      \texttt{>} & Lớn hơn & \texttt{a > b} (True) \\
+      \texttt{<} & Nhỏ hơn & \texttt{a < b} (False) \\
+      \hline
+  \end{tabular}
+  \end{center}
+
+  \begin{alertblock}{Cảnh báo}
+      Đừng nhầm lẫn \texttt{=} (Gán) và \texttt{==} (So sánh)!
+  \end{alertblock}
+\end{frame}
+
+% 2. If statement
+\begin{frame}[fragile]{2. Câu Lệnh \texttt{if} - "Người Gác Cổng"}
+  
+  \begin{columns}
+      \column{0.6\textwidth}
+      \begin{lstlisting}[language=C++]
+int diem = 8;
+
+if (diem >= 5) {
+    // @Chỉ mở cửa nếu Đúng@
+    cout << "Chuc mung!"; 
+}
+      \end{lstlisting}
+      
+      \column{0.4\textwidth}
+      \begin{block}{Cơ chế hoạt động}
+          \begin{itemize}
+              \item Điều kiện \textbf{ĐÚNG} $\rightarrow$ Mở cửa (Thực hiện lệnh).
+              \item Điều kiện \textbf{SAI} $\rightarrow$ Đuổi đi (Bỏ qua).
+          \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% 3. If-Else
+\begin{frame}[fragile]{3. Câu Lệnh \texttt{if - else} - "Ngã Ba Đường"}
+  
+  \textit{"Nếu Mưa thì Ở nhà, Ngược lại thì Đi chơi."} (Chọn 1 trong 2).
+
+  \begin{lstlisting}[language=C++]
+int n = 7;
+
+if (n % 2 == 0) {
+    cout << "So Chan"; // @Đường 1: Nếu Đúng@
+} else {
+    cout << "So Le";   // @Đường 2: Nếu Sai@
+}
+  \end{lstlisting}
+  
+  $\rightarrow$ Chắc chắn \textbf{một trong hai} hành động sẽ xảy ra.
+\end{frame}
+
+% 4. Else-If
+\begin{frame}[fragile]{4. Cấu Trúc \texttt{if - else if} - "Chiếc Nón Phân Loại"}
+  
+  Xếp loại học sinh vào các Nhà (Giỏi, Khá, TB...):
+
+  \begin{lstlisting}[language=C++]
+double diem = 7.5;
+
+if (diem >= 8.0) {
+    cout << "Gioi";
+} else if (diem >= 6.5) {
+    cout << "Kha"; // @7.5 thỏa mãn ở đây -> XONG!@
+} else if (diem >= 5.0) {
+    cout << "Trung Binh"; // @Không bao giờ chạy xuống đây@
+} else {
+    cout << "Yeu";
+}
+  \end{lstlisting}
+
+  \begin{block}{Lưu ý}
+      Chỉ xét từ trên xuống dưới. Gặp cái nào đúng đầu tiên thì thực hiện và \textbf{KẾT THÚC} luôn.
+  \end{block}
+\end{frame}
+
+% 5. Logical Operators
+\begin{frame}[fragile]{5. Toán Tử Logic - "Bộ Đôi Vệ Sĩ"}
+  
+  \begin{columns}
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{\&\&} (VÀ) - Ông Bố Khó Tính}
+          Phải thỏa mãn \textbf{TẤT CẢ}.
+          \begin{itemize}
+              \item Vé \textbf{VÀ} Khẩu trang $\rightarrow$ Vào.
+          \end{itemize}
+      \end{block}
+      \begin{lstlisting}[language=C++]
+if (n >= 1 && n <= 10)
+// @Trong khoảng [1, 10]@
+      \end{lstlisting}
+
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{||} (HOẶC) - Bà Mẹ Dễ Tính}
+          Chỉ cần \textbf{MỘT} cái đúng.
+          \begin{itemize}
+              \item Vé VIP \textbf{HOẶC} Quen biết $\rightarrow$ Vào.
+          \end{itemize}
+      \end{block}
+      \begin{lstlisting}[language=C++]
+if (n % 3 == 0 || n % 5 == 0)
+// @Chia hết cho 3 hoặc 5@
+      \end{lstlisting}
+  \end{columns}
+\end{frame}
+
+% 6. Challenge
+\begin{frame}{Thử Thách: Kiểm Tra Năm Nhuận}
+  Viết chương trình nhập vào một năm và kiểm tra xem đó có phải \textbf{Năm Nhuận} không.
+  
+  \vspace{0.5cm}
+  \textbf{Gợi ý điều kiện:}
+  \begin{enumerate}
+      \item Chia hết cho 400.
+      \item \textbf{HOẶC}
+      \item (Chia hết cho 4 \textbf{VÀ} KHÔNG chia hết cho 100).
+  \end{enumerate}
+
+  \vspace{0.5cm}
+  \texttt{if ( (n \% 400 == 0) || (n \% 4 == 0 \&\& n \% 100 != 0) )}
+\end{frame}
+
+\end{document}

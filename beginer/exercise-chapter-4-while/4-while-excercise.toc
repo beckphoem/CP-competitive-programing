@@ -1,0 +1,6 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Mô phỏng Sự Tăng trưởng (Simulation)}{3}{0}{1}
+\beamer@sectionintoc {2}{Tách Số và Xử lý Chữ số}{6}{0}{2}
+\beamer@sectionintoc {3}{Duyệt Mảng và Chuỗi}{9}{0}{3}
+\beamer@sectionintoc {4}{Cờ Hiệu và Logic (Flags)}{16}{0}{4}
+\beamer@sectionintoc {5}{Tư duy Không gian và Quy luật}{18}{0}{5}

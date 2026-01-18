@@ -1,0 +1,18 @@
+\frametitle{Tổng kết Thuật toán (Pseudocode)}
+\begin{exampleblock}{Mã giả hàm \texttt{printNumbers(n)}}
+        \begin{lstlisting}[language=C++]
+void printNumbers(int n) {
+    // 1. Diem dung
+    if (n <= 0) return;
+
+    // 2. Than ham & Xu ly khoang trang
+    cout << n;
+    if (n > 1) {
+        cout << " ";
+    }
+
+    // 3. Goi de quy
+    printNumbers(n - 1);
+}
+        \end{lstlisting}
+    \end{exampleblock}

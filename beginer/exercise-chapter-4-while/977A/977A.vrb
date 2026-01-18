@@ -1,0 +1,19 @@
+\frametitle{Bản thiết kế thuật toán (Blueprint)}
+Chúng ta gom các mảnh ghép lại thành mã giả (Pseudocode):
+
+    \begin{enumerate}
+        \item \textbf{Input:} Nhận $n$ (số cần sửa) và $k$ (số lần sửa).
+        \item \textbf{Loop:} Lặp lại hành động $k$ lần:
+        \begin{itemize}
+            \item Kiểm tra đuôi: \verb|tail = n % 10|
+            \item \textbf{IF} \verb|tail == 0|:
+            \begin{itemize}
+                \item \verb|n = n / 10|
+            \end{itemize}
+            \item \textbf{ELSE} (đuôi khác 0):
+            \begin{itemize}
+                \item \verb|n = n - 1|
+            \end{itemize}
+        \end{itemize}
+        \item \textbf{Output:} In số $n$ ra màn hình.
+    \end{enumerate}

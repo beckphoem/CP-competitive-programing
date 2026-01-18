@@ -1,0 +1,270 @@
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% --- Cấu hình Tiếng Việt và Font (Khuyên dùng XeLaTeX) ---
+\usepackage{fontspec}
+\setsansfont{Arial} % Hoặc font hệ thống khác như Calibri, Roboto
+\usepackage{polyglossia}
+\setdefaultlanguage{vietnamese}
+
+% --- Gói giao diện và màu sắc ---
+\usetheme{Madrid}
+\usecolortheme{beaver} % Màu đỏ/xám tạo cảm giác cảnh báo/tư duy
+\usepackage{xcolor}
+\usepackage{listings} % Để hiển thị code
+
+% --- Cấu hình hiển thị Code C++ ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=C++,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    extendedchars=true,
+    inputencoding=utf8
+}
+
+% --- Thông tin bài giảng ---
+\title[Codeforces 80A]{Codeforces 80A - Panoramix's Prediction}
+\subtitle{Tư duy thuật toán theo triết lý "Learning How to Learn"}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Mục lục ---
+\begin{frame}{Lộ trình Tư duy}
+    \tableofcontents
+\end{frame}
+
+% =========================================================================
+\section{Khởi động & Phẫu thuật đề bài}
+% =========================================================================
+
+\begin{frame}{Chào mừng đến lớp huấn luyện tư duy!}
+    \begin{block}{Lời nhắn từ Coach}
+        Đừng vội lao vào viết hàm \texttt{isPrime} hay vòng lặp vội. Hãy để bàn phím sang một bên và khởi động não bộ trước.
+    \end{block}
+
+    \vspace{0.5cm}
+    Chúng ta sẽ xử lý bài \textbf{Codeforces 80A - Panoramix's Prediction}.
+\end{frame}
+
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    Đề bài gốc kể về một câu chuyện tiên tri, nhưng hãy lột bỏ lớp vỏ bọc đó đi. Đây là "cốt lõi" trần trụi:
+
+    \begin{itemize}
+        \item \textbf{Input:} 2 số nguyên, gọi là $n$ và $m$. (Đề đảm bảo $n$ đã là số nguyên tố).
+        \item \textbf{Yêu cầu:} Kiểm tra xem $m$ có phải là \textbf{số nguyên tố liền kề ngay sau} $n$ hay không.
+        \item \textbf{Output:} In ra \texttt{YES} nếu đúng, \texttt{NO} nếu sai.
+    \end{itemize}
+
+    \begin{alertblock}{Lộ trình tư duy (3 Chunks)}
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Định nghĩa "Người hàng xóm tiếp theo".
+        \item \textbf{Chunk 2:} Chiến thuật dò tìm (The Blind Walk).
+        \item \textbf{Chunk 3:} Cú chốt hạ (Phán quyết).
+    \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+% =========================================================================
+\section{Chunk 1: Định nghĩa logic}
+% =========================================================================
+
+\begin{frame}{Chunk 1: Định nghĩa "Người hàng xóm tiếp theo"}
+    Hãy tưởng tượng tập hợp các số tự nhiên là một con đường dài.
+    
+    \begin{itemize}
+        \item Các \textbf{Trạm dừng xe buýt} = \textbf{Số Nguyên Tố} (2, 3, 5, 7, 11...).
+        \item Bãi cỏ ven đường = Hợp số (4, 6, 8, 9...).
+    \end{itemize}
+
+    \vspace{0.3cm}
+    \textbf{Tình huống:} Chiếc xe buýt đang đỗ ở trạm $n$.
+    \\ \textbf{Câu hỏi:} "Nếu xe lăn bánh tiếp, trạm dừng \textbf{đầu tiên} nó gặp có phải là $m$ không?"
+
+    \begin{exampleblock}{Cạm bẫy (Traps) \emoji{warning}}
+        \begin{itemize}
+            \item \textbf{Sai lầm 1:} Chỉ kiểm tra xem $m$ có phải là số nguyên tố hay không. (Chưa đủ!)
+            \item \textbf{Sai lầm 2:} Thấy $m > n$ và là số nguyên tố, vội kết luận YES. (Sai vì có thể bị "nhảy cóc").
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    Giả sử xe đang ở trạm $n = 7$.
+    Hãy xác định kết quả \textbf{YES/NO} cho các trường hợp sau:
+
+    \begin{enumerate}
+        \item Case A: $m = 9$
+        \item Case B: $m = 13$
+        \item Case C: $m = 11$
+    \end{enumerate}
+    
+    \vspace{0.5cm}
+    \textit{(Hãy suy nghĩ trước khi sang slide tiếp theo...)}
+\end{frame}
+
+\begin{frame}{Giải đáp Thử thách}
+    \begin{itemize}
+        \item \textbf{1. Case A ($m=9$): NO}. (9 không phải trạm dừng - không phải SNT).
+        \item \textbf{2. Case B ($m=13$): NO}. \textbf{Bẫy!} Dù 13 là SNT, nhưng xe buýt đã \textit{bỏ quên} trạm số 11. Đề bài yêu cầu "liền kề".
+        \item \textbf{3. Case C ($m=11$): YES}. (Trạm dừng ngay tiếp theo).
+    \end{itemize}
+    
+    \begin{block}{Kết luận Chunk 1}
+        Phải tìm số nguyên tố \textbf{gần nhất} lớn hơn $n$, không được nhảy cóc.
+    \end{block}
+\end{frame}
+
+% =========================================================================
+\section{Chunk 2: Chiến thuật dò tìm}
+% =========================================================================
+
+\begin{frame}{Chunk 2: Chiến thuật dò tìm (The Blind Walk)}
+    Máy tính không có bảng số nguyên tố trong đầu, nó phải "mò mẫm".
+    
+    \textbf{Hình ảnh ẩn dụ:} Bạn đứng ở $n$, bị bịt mắt, tay cầm máy dò SNT.
+    Bạn nhích từng bước: $n+1, n+2, n+3 \dots$
+    
+    \begin{itemize}
+        \item Máy kêu "Tít tít" (Là SNT) $\rightarrow$ \textbf{DỪNG LẠI NGAY!} (Đây là \texttt{True\_Next}).
+        \item Máy "Im lặng" (Hợp số) $\rightarrow$ Bước tiếp.
+    \end{itemize}
+
+    \begin{block}{Kỹ thuật}
+        Cần một vòng lặp chạy từ $i = n + 1$. Vòng lặp sẽ \texttt{break} ngay khi gặp SNT đầu tiên.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Thử thách tư duy (Tracing)}
+    Giả sử $n = 8$ (Test logic dò tìm).
+    Liệt kê quá trình "bước đi" để tìm \texttt{True\_Next}:
+    
+    \vspace{0.3cm}
+    \pause
+    \begin{itemize}
+        \item \textbf{Bước 1:} Kiểm tra 9 $\rightarrow$ Không phải SNT $\rightarrow$ Đi tiếp.
+        \item \textbf{Bước 2:} Kiểm tra 10 $\rightarrow$ Không phải SNT $\rightarrow$ Đi tiếp.
+        \item \textbf{Bước 3:} Kiểm tra 11 $\rightarrow$ LÀ SNT! $\rightarrow$ \textbf{DỪNG}.
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    $\Rightarrow$ \texttt{True\_Next} của 8 là 11.
+    
+    \begin{lstlisting}[caption={Mô phỏng logic trong đầu}]
+// Logic này sẽ được chuyển thành code
+for (int i = n + 1; ; i++) {
+    if (check_SNT(i)) {
+        true_next = i;
+        break; // Tim thay roi thi dung ngay
+    }
+}
+    \end{lstlisting}
+\end{frame}
+
+% =========================================================================
+\section{Chunk 3: Phán quyết}
+% =========================================================================
+
+\begin{frame}{Chunk 3: Phán quyết (Judgment Day)}
+    Sau khi vòng lặp kết thúc, ta có \texttt{True\_Next}.
+    Lúc này mới nhìn đến số $m$ của đề bài.
+    
+    \vspace{0.5cm}
+    \textbf{So sánh thẻ căn cước:}
+    \begin{itemize}
+        \item Nếu \texttt{True\_Next} == $m$ $\rightarrow$ In \textbf{YES}.
+        \item Nếu \texttt{True\_Next} != $m$ $\rightarrow$ In \textbf{NO}.
+    \end{itemize}
+    
+    \textit{Lưu ý: Không cần kiểm tra tính nguyên tố của $m$ nữa, vì \texttt{True\_Next} chắc chắn đã là SNT rồi.}
+\end{frame}
+
+\begin{frame}{Tổng kết thuật toán (Blueprint)}
+    \begin{enumerate}
+        \item \textbf{Hàm phụ \texttt{check\_SNT(k)}:} Kiểm tra $k$ có phải SNT không.
+        \item \textbf{Nhập} $n, m$.
+        \item \textbf{Vòng lặp (The Blind Walk):}
+        \begin{itemize}
+            \item Chạy $i$ từ $n + 1$.
+            \item Nếu \texttt{check\_SNT(i)} đúng $\rightarrow$ Dừng, lưu vào \texttt{True\_Next}.
+            \item Nếu sai $\rightarrow$ Tăng $i$.
+        \end{itemize}
+        \item \textbf{So sánh:} \texttt{True\_Next} == $m$?
+    \end{enumerate}
+\end{frame}
+
+% =========================================================================
+\section{Thử thách cuối cùng (Edge Cases)}
+% =========================================================================
+
+\begin{frame}{Thử thách cuối cùng (Final Boss)}
+    \textbf{Đề bài:} Giới hạn $n, m \le 50$.
+    \\ \textbf{Tình huống:} $n = 47$ (47 là SNT).
+    \\ Vòng lặp chạy: 48... 49... 50...
+    
+    \vspace{0.5cm}
+    \textbf{Câu hỏi:}
+    \begin{enumerate}
+        \item \texttt{True\_Next} tìm được là số mấy?
+        \item Nếu đề cho $m = 53$, kết quả in ra là gì?
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Giải mã sai lầm thường gặp}
+    \begin{alertblock}{Bức tường vô hình}
+        Nhiều bạn nghĩ in ra NO hoặc không in gì vì 53 vượt quá giới hạn 50 của đề bài.
+    \end{alertblock}
+
+    \pause
+    \begin{block}{Sự thật (The Truth)}
+        \textbf{Giới hạn chỉ áp dụng cho INPUT, không áp dụng cho LOGIC trung gian.}
+        \begin{enumerate}
+            \item Máy tính chạy từ 47 $\rightarrow$ tìm thấy 53 (SNT).
+            \item So sánh: \texttt{True\_Next} (53) == $m$ (53).
+            \item Kết quả: \textbf{YES}.
+        \end{enumerate}
+    \end{block}
+    \textbf{Kết luận:} Thuật toán phải đúng về mặt toán học, bất kể giới hạn đầu vào.
+\end{frame}
+
+\begin{frame}{Bật đèn xanh (Green Light) \emoji{rocket}}
+    Tư duy đã thông suốt! Bạn đã có đủ 3 mảnh ghép:
+    
+    \begin{enumerate}
+        \item Hàm \texttt{check\_SNT}.
+        \item Vòng lặp tìm \texttt{True\_Next} (từ $n+1$).
+        \item So sánh kết quả.
+    \end{enumerate}
+
+    \vspace{1cm}
+    \centering
+    \Large \textbf{Hãy mở Editor và Code ngay bài Codeforces 80A!}
+    
+    \small \textit{(Nếu sai, hãy xem lại logic vòng lặp dò tìm)}
+\end{frame}
+
+\end{document}

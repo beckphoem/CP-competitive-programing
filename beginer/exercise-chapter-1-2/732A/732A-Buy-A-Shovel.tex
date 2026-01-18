@@ -1,0 +1,208 @@
+\documentclass{beamer}
+
+% Cấu hình ngôn ngữ và encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Encoding cho tiếng Việt
+\usepackage[vietnamese]{babel}
+
+% Cấu hình giao diện (Theme)
+\usetheme{Madrid}
+\usecolortheme{beaver} % Tông màu đỏ/xám phù hợp với sự "Cảnh báo/Tư duy"
+
+% Cấu hình hiển thị mã giả
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  backgroundcolor=\color{gray!10},
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{green!60!black}
+}
+
+% Thông tin trang tiêu đề
+\title[Codeforces 732A - Buy a Shovel]{Phân tích Tư duy Thuật toán: Codeforces 732A}
+\subtitle{Triết lý "Learning How to Learn"}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% Slide 1: Tiêu đề
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Slide 2: Giới thiệu
+\begin{frame}{Lời mở đầu}
+  Chào mừng bạn! Tôi đã nhận tín hiệu. Tôi là \textbf{Coach Tư Duy Thuật Toán} của bạn đây.
+
+  Hôm nay chúng ta sẽ cùng "mổ xẻ" bài toán \textbf{Codeforces 732A - Buy a Shovel (Mua xẻng)}. 
+  
+  \vspace{0.5cm}
+  \begin{alertblock}{Lưu ý}
+    Đừng lo về code vội, hãy cất bàn phím đi và dùng "bộ não" trước đã.
+  \end{alertblock}
+\end{frame}
+
+% Slide 3: Bước 1 - Briefing
+\section{Bước 1: Tiếp nhận & Phẫu thuật}
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+  Đề bài kể về anh chàng Polycarp đi mua xẻng, nhưng chúng ta hãy gạt bỏ câu chuyện đó sang một bên. Đây là cốt lõi logic của vấn đề:
+
+  \begin{itemize}
+    \item \textbf{1. Dữ liệu đầu vào (Input):}
+      \begin{itemize}
+        \item $k$: Giá tiền của \textbf{một} chiếc xẻng.
+        \item $r$: Mệnh giá của một đồng xu lẻ duy nhất mà bạn có (trong túi bạn có vô hạn tờ tiền mệnh giá 10, nhưng chỉ có đúng \textbf{một} đồng xu mệnh giá $r$).
+      \end{itemize}
+    \item \textbf{2. Mục tiêu (Goal):}
+      \begin{itemize}
+        \item Tìm số lượng xẻng \textbf{ít nhất} (gọi là $x$) mà bạn cần mua.
+        \item \textbf{Điều kiện:} Bạn phải trả tiền \textbf{vừa đủ khít} (không thối lại tiền thừa).
+      \end{itemize}
+    \item \textbf{3. Công cụ thanh toán:}
+      \begin{itemize}
+        \item Bạn chỉ có thể trả bằng các tờ tiền \textbf{10 đồng} (số lượng vô hạn).
+        \item Và (tùy chọn) dùng thêm đúng \textbf{một đồng xu $r$} nếu muốn.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% Slide 4: Lộ trình tư duy
+\begin{frame}{Lộ trình tư duy (Roadmap)}
+  Chúng ta sẽ giải quyết bài toán này qua 3 mảnh ghép (Chunks):
+  \begin{enumerate}
+    \item \textbf{Chunk 1:} Phân tích "Cơ chế ví tiền" (Điều kiện chia hết).
+    \item \textbf{Chunk 2:} Truy tìm "Chữ số tận cùng" (Last Digit Logic).
+    \item \textbf{Chunk 3:} Chiến thuật thử sai (Simulation).
+  \end{enumerate}
+  
+  \vspace{0.5cm}
+  \textit{Bạn đã sẵn sàng bước vào Chunk 1: Phân tích cơ chế ví tiền chưa?}
+\end{frame}
+
+% Slide 5: Chunk 1 - Cơ chế ví tiền (Logic)
+\section{Chunk 1: Cơ chế ví tiền}
+\begin{frame}{Chunk 1: Cơ chế ví tiền (Điều kiện thanh toán)}
+  Hãy tưởng tượng bạn đang đứng trước quầy thu ngân.
+  Tổng số tiền bạn phải trả là:
+  $$S = k \times x$$
+  \textit{(Trong đó: $k$ là giá 1 cái xẻng, $x$ là số xẻng bạn mua)}.
+
+  Trong túi bạn có:
+  \begin{enumerate}
+    \item Rất nhiều tờ \textbf{10 đồng}.
+    \item Đúng \textbf{1 đồng xu lẻ} mệnh giá $r$.
+  \end{enumerate}
+
+  Để trả vừa đủ, tổng số tiền $S$ phải thỏa mãn 1 trong 2 trường hợp:
+  \begin{itemize}
+    \item \textbf{Trường hợp 1:} Dùng toàn tờ 10 đồng $\rightarrow S$ chia hết cho 10 (Tận cùng là \textbf{0}).
+    \item \textbf{Trường hợp 2:} Dùng tờ 10 đồng + đồng xu $r$ $\rightarrow (S - r)$ chia hết cho 10 (Tận cùng là \textbf{$r$}).
+  \end{itemize}
+
+  \textbf{TÓM LẠI:} Chữ số tận cùng của $S$ bắt buộc phải là \textbf{0} hoặc \textbf{$r$}.
+\end{frame}
+
+% Slide 6: Chunk 1 - Bẫy & Check
+\begin{frame}{Chunk 1: Cạm bẫy \& Thử thách tư duy}
+  \begin{alertblock}{⚠️ Cạm bẫy (Trap)}
+    Nhiều bạn nghĩ rằng bắt buộc phải dùng đồng xu $r$.
+    \textbf{Sai!} Bạn có thể cất đồng xu đó đi nếu Tổng tiền $S$ đã tròn chục (tận cùng là 0).
+  \end{alertblock}
+
+  \begin{block}{❓ Thử thách tư duy (Mental Check)}
+    Giả sử giá xẻng \textbf{$k = 12$} và đồng xu lẻ \textbf{$r = 8$}. Hãy kiểm tra:
+    \begin{enumerate}
+      \item Mua $x = 1 \rightarrow S = 12$ (Tận cùng 2). Có trả được không? \textbf{Không}.
+      \item Mua $x = 4 \rightarrow S = 48$ (Tận cùng 8). Có trả được không? \textbf{Có} (trùng $r=8$).
+      \item Mua $x = 5 \rightarrow S = 60$ (Tận cùng 0). Có trả được không? \textbf{Có} (tròn chục).
+    \end{enumerate}
+  \end{block}
+  \textit{Bạn đã nắm vững "Điều kiện thắng"!}
+\end{frame}
+
+% Slide 7: Chunk 2 - Chiến thuật
+\section{Chunk 2: Chiến thuật truy tìm}
+\begin{frame}{Chunk 2: Chiến thuật truy tìm (The Loop)}
+  Đề bài yêu cầu tìm số xẻng \textbf{ít nhất}. Cách đơn giản nhất là \textbf{"Thử từng cái một"}.
+  
+  Giống như bạn đi thử chìa khóa vào ổ vậy:
+  \begin{enumerate}
+    \item Thử mua 1 cái ($x=1$) $\rightarrow$ Tính tổng tiền $\rightarrow$ Kiểm tra đuôi.
+    \begin{itemize}
+        \item Nếu đúng: Dừng lại ngay! (Đây là đáp án nhỏ nhất).
+        \item Nếu sai: Thử tiếp 2 cái ($x=2$).
+    \end{itemize}
+    \item Lặp lại cho đến khi tìm thấy.
+  \end{enumerate}
+
+  Để máy tính "nhìn" được chữ số tận cùng, dùng phép toán \textbf{Chia lấy dư cho 10} (Modulus \% 10).
+  \begin{itemize}
+      \item Ví dụ: $48 \% 10 = 8$
+      \item Ví dụ: $60 \% 10 = 0$
+  \end{itemize}
+\end{frame}
+
+% Slide 8: Chunk 2 - Bẫy & Check
+\begin{frame}{Chunk 2: Cạm bẫy \& Thử thách tư duy}
+  \begin{alertblock}{⚠️ Cạm bẫy (Trap)}
+    \textit{"Nhỡ thử mãi không tìm được thì sao? Nhỡ nó chạy đến vô tận thì sao?"}
+    \\ \textbf{Yên tâm:} Vì chỉ quan tâm chữ số tận cùng (0-9), quy luật sẽ lặp lại. Thực tế chỉ cần thử tối đa 10 lần.
+  \end{alertblock}
+
+  \begin{block}{❓ Thử thách tư duy (Mental Check)}
+    Máy tính chạy bằng cơm. $k = 7$, $r = 3$. Thử dần $x$ tăng lên:
+    \begin{itemize}
+        \item $x=1 \rightarrow S=7$ (Sai: $7 \neq 0, 7 \neq 3$)
+        \item $x=2 \rightarrow S=14$ (Sai)
+        \item ... (Bạn đã tính ra) ...
+        \item \textbf{$x=9 \rightarrow S=63$} (Tận cùng là 3 $\rightarrow$ Trùng $r=3$).
+    \end{itemize}
+  \end{block}
+  \textbf{Bingo!} Chúng ta dừng lại và mua 9 cái.
+\end{frame}
+
+% Slide 9: Chunk 3 - Tổng kết
+\section{Chunk 3: Tổng kết & Mã giả}
+\begin{frame}[fragile]{Chunk 3: Tổng kết \& Mã giả (Wrap Up)}
+  \textbf{Thuật toán (Algorithm):}
+  \begin{enumerate}
+      \item Nhập $k, r$.
+      \item Vòng lặp đếm $i$ từ 1 tăng dần mãi.
+      \item Mỗi bước tính `Tổng tiền = k * i`.
+      \item Kiểm tra: Nếu (`% 10 == 0`) HOẶC (`% 10 == r`) $\rightarrow$ Chọn và Dừng.
+  \end{enumerate}
+
+  \textbf{Mã giả (Pseudocode):}
+\begin{lstlisting}
+Đọc k, r
+
+Cho i chạy từ 1 đến vô tận:
+    S = k * i
+    duoi = S % 10  // Lấy chữ số tận cùng
+
+    Nếu (duoi == 0) HOẶC (duoi == r):
+        In ra i
+        Dừng vòng lặp (Break)
+\end{lstlisting}
+\end{frame}
+
+% Slide 10: Bài tập về đích
+\begin{frame}{Bài tập về đích (Final Check)}
+  Trước khi tôi đưa bạn xem code C++/Python mẫu, hãy xác nhận một điều nhỏ về cú pháp logic:
+
+  \begin{block}{Câu hỏi}
+    Trong lập trình, điều kiện \textbf{"Hoặc"} được viết là gì?
+    \begin{enumerate}[A]
+        \item \texttt{\&\&}
+        \item \texttt{||}
+    \end{enumerate}
+  \end{block}
+
+  \vspace{1cm}
+  \centering \textbf{Chọn đáp án đúng để mở khóa Code mẫu nhé! 🔓}
+\end{frame}
+
+\end{document}

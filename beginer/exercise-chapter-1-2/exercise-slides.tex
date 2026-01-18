@@ -1,0 +1,323 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\title[Bài Tập Codeforces]{Tổng Hợp Bài Tập Codeforces}\\
+\subtitle{Level 800 - Chương 1 \& 2 (Không Vòng Lặp)}
+\author{Học Cùng C++}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% 1. Theatre Square
+\begin{frame}{1. Theatre Square (1A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1/A}
+    
+    \begin{block}{Đề bài}
+        Quảng trường kích thước $n \times m$. Lát bằng gạch $a \times a$. Tìm số gạch ít nhất cần dùng (không được cắt gạch).
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 6 6 4 \\
+        \textbf{Output:} 4
+    \end{exampleblock}
+\end{frame}
+
+% 2. Watermelon
+\begin{frame}{2. Watermelon (4A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/4/A}
+    
+    \begin{block}{Đề bài}
+        Chia quả dưa $w$ kg thành 2 phần sao cho mỗi phần đều có trọng lượng chẵn (không cần bằng nhau).
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 8 \\
+        \textbf{Output:} YES
+    \end{exampleblock}
+\end{frame}
+
+% 3. Domino piling
+\begin{frame}{3. Domino piling (50A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/50/A}
+    
+    \begin{block}{Đề bài}
+        Bảng hình chữ nhật $M \times N$. Xếp được tối đa bao nhiêu quân Domino kích thước $2 \times 1$?
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 2 4 \\
+        \textbf{Output:} 4
+    \end{exampleblock}
+\end{frame}
+
+% 4. Elephant
+\begin{frame}{4. Elephant (617A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/617/A}
+    
+    \begin{block}{Đề bài}
+        Voi con ở vị trí 0, muốn đến $x$. Mỗi bước đi được 1, 2, 3, 4, hoặc 5 đơn vị. Tìm số bước đi ít nhất.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 12 \\
+        \textbf{Output:} 3
+    \end{exampleblock}
+\end{frame}
+
+% 5. Expression
+\begin{frame}{5. Expression (479A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/479/A}
+    
+    \begin{block}{Đề bài}
+        Cho 3 số $a, b, c$. Chèn dấu $+$, $*$ và ngoặc $()$ để được giá trị lớn nhất. Giữ nguyên thứ tự số.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 1 2 3 \\
+        \textbf{Output:} 9 ( (1+2)*3 )
+    \end{exampleblock}
+\end{frame}
+
+% 6. Even Odds
+\begin{frame}{6. Even Odds (318A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/318/A}
+    
+    \begin{block}{Đề bài}
+        Dãy số: Tất cả số lẻ tăng dần, sau đó đến tất cả số chẵn tăng dần ($1, 3, 5, \dots, 2, 4, 6, \dots$). Tìm số ở vị trí tứ $k$.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 10 3 \\
+        \textbf{Output:} 5
+    \end{exampleblock}
+\end{frame}
+
+% 7. Calculating Function
+\begin{frame}{7. Calculating Function (486A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/486/A}
+    
+    \begin{block}{Đề bài}
+        Tính $f(n) = -1 + 2 - 3 + 4 - \dots + (-1)^n n$.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 5 \\
+        \textbf{Output:} -3
+    \end{exampleblock}
+\end{frame}
+
+% 8. Again Twenty Five!
+\begin{frame}{8. Again Twenty Five! (630A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/630/A}
+    
+    \begin{block}{Đề bài}
+        Tìm 2 chữ số tận cùng của $5^n$ với $n \ge 2$.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 2 \\
+        \textbf{Output:} 25
+    \end{exampleblock}
+\end{frame}
+
+% 9. Restoring Three Numbers
+\begin{frame}{9. Restoring Three Numbers (1154A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1154/A}
+    
+    \begin{block}{Đề bài}
+        Tìm 3 số $a, b, c$ khi biết 4 số bị xáo trộn: $a+b, a+c, b+c, a+b+c$.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 3 6 5 4 \\
+        \textbf{Output:} 2 1 3
+    \end{exampleblock}
+\end{frame}
+
+% 10. The New Year: Meeting Friends
+\begin{frame}{10. The New Year: Meeting Friends (723A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/723/A}
+    
+    \begin{block}{Đề bài}
+        3 người ở $x_1, x_2, x_3$. Tìm điểm gặp mặt sao cho tổng quãng đường di chuyển của cả 3 người là nhỏ nhất.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 7 1 4 \\
+        \textbf{Output:} 6 (Gặp tại 4: $|7-4| + |1-4| + |4-4| = 3+3+0=6$)
+    \end{exampleblock}
+\end{frame}
+
+% 11. Soft Drinking
+\begin{frame}{11. Soft Drinking (151A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/151/A}
+    
+    \begin{block}{Đề bài}
+        Chia đều nguyên liệu làm bánh (Nước, Chanh, Muối) cho $n$ người. Tính số bánh tối đa mỗi người nhận được. (Bị giới hạn bởi nguyên liệu ít nhất).
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 3 4 5 10 8 100 3 1 \\
+        \textbf{Output:} 2
+    \end{exampleblock}
+\end{frame}
+
+% 12. Patrick and Shopping
+\begin{frame}{12. Patrick and Shopping (599A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/599/A}
+    
+    \begin{block}{Đề bài}
+        Tìm đường đi ngắn nhất thăm 2 shop rồi về nhà. Biết khoảng cách Nhà-Shop1 ($d1$), Nhà-Shop2 ($d2$), Shop1-Shop2 ($d3$).
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 10 20 30 \\
+        \textbf{Output:} 60
+    \end{exampleblock}
+\end{frame}
+
+% 13. Mahmoud and Ehab and the even-odd game
+\begin{frame}{13. Mahmoud and Ehab (959A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/959/A}
+    
+    \begin{block}{Đề bài}
+        Mahmoud chọn số chắn, Ehab chọn số lẻ. Trừ dần $n$. Ai không đi được thì thua. Mahmoud đi trước. Hỏi ai thắng?
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 1 \\
+        \textbf{Output:} Ehab
+    \end{exampleblock}
+\end{frame}
+
+% 14. Vasya the Hipster
+\begin{frame}{14. Vasya the Hipster (581A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/581/A}
+    
+    \begin{block}{Đề bài}
+        Có $a$ tất đỏ, $b$ tất xanh. Đếm số ngày đeo khác màu (1 đỏ 1 xanh) và số ngày đeo cùng màu (khi hết 1 loại).
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 3 1 \\
+        \textbf{Output:} 1 1
+    \end{exampleblock}
+\end{frame}
+
+% 15. Buy a Shovel
+\begin{frame}{15. Buy a Shovel (732A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/732/A}
+    
+    \begin{block}{Đề bài}
+        Xẻng giá $k$. Có đồng tiền lẻ $r$. Cần mua bao nhiêu xẻng để trả tiền chẵn (chia hết cho 10 hoặc dư $r$)?
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 117 3 \\
+        \textbf{Output:} 9
+    \end{exampleblock}
+\end{frame}
+
+% 16. Vasya and Socks
+\begin{frame}{16. Vasya and Socks (460A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/460/A}
+    
+    \begin{block}{Đề bài}
+        Có $n$ đôi tất. Cứ $m$ ngày được thêm 1 đôi. Hỏi sau bao lâu hết tất?
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 2 2 \\
+        \textbf{Output:} 3
+    \end{exampleblock}
+\end{frame}
+
+% 17. New Year and Hurry
+\begin{frame}{17. New Year and Hurry (750A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/750/A}
+    
+    \begin{block}{Đề bài}
+        Có 240 phút. Mất $k$ phút đi lại. Thời gian còn lại giải bài tập. Bài $i$ tốn $5 \times i$ phút. Giải tối đa bao nhiêu bài?
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 3 222 \\
+        \textbf{Output:} 2
+    \end{exampleblock}
+\end{frame}
+
+% 18. Panoramix's Prediction
+\begin{frame}{18. Panoramix's Prediction (80A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/80/A}
+    
+    \begin{block}{Đề bài}
+        Cho số nguyên tố $n$. Kiểm tra $m$ có phải là số nguyên tố LIỀN SAU của $n$ không.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 3 5 \\
+        \textbf{Output:} YES
+    \end{exampleblock}
+\end{frame}
+
+% 19. Gennady and a Card Game
+\begin{frame}{19. Gennady and a Card Game (1097A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1097/A}
+    
+    \begin{block}{Đề bài}
+        Kiểm tra trong 5 lá bài trên tay, có lá nào cùng Rank hoặc cùng Suit với lá bài trên bàn không.
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} AS \\ 2H 4C TH JH AD \\
+        \textbf{Output:} YES
+    \end{exampleblock}
+\end{frame}
+
+% 20. Is your horseshoe on the other hoof?
+\begin{frame}{20. Is your horseshoe... (228A)}
+    \small
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/228/A}
+    
+    \begin{block}{Đề bài}
+        Có 4 móng ngựa. Cần thay bao nhiêu cái để 4 cái có màu khác nhau hoàn toàn? (Đếm số cặp trùng màu).
+    \end{block}
+
+    \begin{exampleblock}{Test mẫu}
+        \textbf{Input:} 1 7 3 3 \\
+        \textbf{Output:} 1
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,347 @@
+\documentclass[10pt]{beamer}
+
+% Cấu hình ngôn ngữ và encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Chọn theme
+\usetheme{Madrid}
+\usecolortheme{beaver} % Màu đỏ/xám phù hợp với sự "Cảnh báo/Bẫy"
+
+% Cấu hình hiển thị code
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    frame=single,
+    breaklines=true
+    literate={á}{{\'a}}1 {à}{{\`a}}1 {ả}{{\h{a}}}1 {ã}{{\~a}}1 {ạ}{{\d{a}}}1
+             {Á}{{\'A}}1 {À}{{\`A}}1 {Ả}{{\h{A}}}1 {Ã}{{\~A}}1 {Ạ}{{\d{A}}}1
+             {ă}{{\u{a}}}1 {ắ}{{\'{\u{a}}}}1 {ằ}{{\`{\u{a}}}}1 {ẳ}{{\h{\u{a}}}}1 {ẵ}{{\~{\u{a}}}}1 {ặ}{{\d{\u{a}}}}1
+             {Ă}{{\u{A}}}1 {Ắ}{{\'{\u{A}}}}1 {Ằ}{{\`{\u{A}}}}1 {Ẳ}{{\h{\u{A}}}}1 {Ẵ}{{\~{\u{A}}}}1 {Ặ}{{\d{\u{A}}}}1
+             {â}{{\^a}}1 {ấ}{{\'{\^a}}}1 {ầ}{{\`{\^a}}}1 {ẩ}{{\h{\^a}}}1 {ẫ}{{\~{\^a}}}1 {ậ}{{\d{\^a}}}1
+             {Â}{{\^A}}1 {Ấ}{{\'{\^A}}}1 {Ầ}{{\`{\^A}}}1 {Ẩ}{{\h{\^A}}}1 {Ẫ}{{\~{\^A}}}1 {Ậ}{{\d{\^A}}}1
+             {đ}{{\d{d}}}1 {Đ}{{\d{D}}}1
+             {é}{{\'e}}1 {è}{{\`e}}1 {ẻ}{{\h{e}}}1 {ẽ}{{\~e}}1 {ẹ}{{\d{e}}}1
+             {É}{{\'E}}1 {È}{{\`E}}1 {Ẻ}{{\h{E}}}1 {Ẽ}{{\~E}}1 {Ẹ}{{\d{E}}}1
+             {ê}{{\^e}}1 {ế}{{\'{\^e}}}1 {ề}{{\`{\^e}}}1 {ể}{{\h{\^e}}}1 {ễ}{{\~{\^e}}}1 {ệ}{{\d{\^e}}}1
+             {Ê}{{\^E}}1 {Ế}{{\'{\^E}}}1 {Ề}{{\`{\^E}}}1 {Ể}{{\h{\^E}}}1 {Ễ}{{\~{\^E}}}1 {Ệ}{{\d{\^E}}}1
+             {í}{{\'i}}1 {ì}{{\`i}}1 {ỉ}{{\h{i}}}1 {ĩ}{{\~i}}1 {ị}{{\d{i}}}1
+             {Í}{{\'I}}1 {Ì}{{\`I}}1 {Ỉ}{{\h{I}}}1 {Ĩ}{{\~I}}1 {Ị}{{\d{I}}}1
+             {ó}{{\'o}}1 {ò}{{\`o}}1 {ỏ}{{\h{o}}}1 {õ}{{\~o}}1 {ọ}{{\d{o}}}1
+             {Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ỏ}{{\h{O}}}1 {Õ}{{\~O}}1 {Ọ}{{\d{O}}}1
+             {ô}{{\^o}}1 {ố}{{\'{\^o}}}1 {ồ}{{\`{\^o}}}1 {ổ}{{\h{\^o}}}1 {ỗ}{{\~{\^o}}}1 {ộ}{{\d{\^o}}}1
+             {Ô}{{\^O}}1 {Ố}{{\'{\^O}}}1 {Ồ}{{\`{\^O}}}1 {Ổ}{{\h{\^O}}}1 {Ỗ}{{\~{\^O}}}1 {Ộ}{{\d{\^O}}}1
+             {ơ}{{\horn{o}}}1 {ớ}{{\'{\horn{o}}}}1 {ờ}{{\`{\horn{o}}}}1 {ở}{{\h{\horn{o}}}}1 {ỡ}{{\~{\horn{o}}}}1 {ợ}{{\d{\horn{o}}}}1
+             {Ơ}{{\horn{O}}}1 {Ớ}{{\'{\horn{O}}}}1 {Ờ}{{\`{\horn{O}}}}1 {Ở}{{\h{\horn{O}}}}1 {Ỡ}{{\~{\horn{O}}}}1 {Ợ}{{\d{\horn{O}}}}1
+             {ú}{{\'u}}1 {ù}{{\`u}}1 {ủ}{{\h{u}}}1 {ũ}{{\~u}}1 {ụ}{{\d{u}}}1
+             {Ú}{{\'U}}1 {Ù}{{\`U}}1 {Ủ}{{\h{U}}}1 {Ũ}{{\~U}}1 {Ụ}{{\d{U}}}1
+             {ư}{{\horn{u}}}1 {ứ}{{\'{\horn{u}}}}1 {ừ}{{\`{\horn{u}}}}1 {ử}{{\h{\horn{u}}}}1 {ữ}{{\~{\horn{u}}}}1 {ự}{{\d{\horn{u}}}}1
+             {Ư}{{\horn{U}}}1 {Ứ}{{\'{\horn{U}}}}1 {Ừ}{{\`{\horn{U}}}}1 {Ử}{{\h{\horn{U}}}}1 {Ữ}{{\~{\horn{U}}}}1 {Ự}{{\d{\horn{U}}}}1
+             {ý}{{\'y}}1 {ỳ}{{\`y}}1 {ỷ}{{\h{y}}}1 {ỹ}{{\~y}}1 {ỵ}{{\d{y}}}1
+             {Ý}{{\'Y}}1 {Ỳ}{{\`Y}}1 {Ỷ}{{\h{Y}}}1 {Ỹ}{{\~Y}}1 {Ỵ}{{\d{Y}}}1
+}
+
+% Thông tin bài giảng
+\title{Phân Tích Tư Duy Thuật Toán}
+\subtitle{Codeforces 460A - Vasya and Socks}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Mục lục ---
+\begin{frame}{Lộ Trình Tư Duy}
+    \tableofcontents
+\end{frame}
+
+% =================================================================
+\section{Bước 1: Tiếp Nhận \& Phẫu Thuật (Briefing)}
+% =================================================================
+
+\begin{frame}{Tóm tắt đề bài (Ngôn ngữ con người)}
+    Hãy lột bỏ lớp vỏ bọc "Vasya" và "đôi tất" để nhìn thấy lõi toán học.
+    
+    \begin{itemize}
+        \item \textbf{Vốn khởi nghiệp:} Bạn có tài nguyên ban đầu là $n$.
+        \item \textbf{Luật tiêu dùng:} Mỗi ngày trôi qua, tiêu hao \textbf{1} đơn vị.
+        \item \textbf{Luật hồi phục (Bonus):} Cứ sau mỗi $m$ ngày, bạn được thưởng thêm \textbf{1} đơn vị vào kho.
+        \item \textbf{Mục tiêu:} Tìm xem sau bao nhiêu ngày thì "phá sản" (tài nguyên về 0).
+    \end{itemize}
+    
+    \begin{block}{Lộ trình tư duy}
+    \begin{enumerate}
+        \item \textbf{Cơ chế dòng chảy:} Hiểu cách tài nguyên giảm và tăng.
+        \item \textbf{Mô phỏng (Simulation):} Chạy thử quy trình.
+        \item \textbf{Toán học O(1):} Tìm công thức tối ưu.
+    \end{enumerate}
+    \end{block}
+\end{frame}
+
+% =================================================================
+\section{Bước 2: Vòng Lặp Tư Duy - Chunk 1 (Cơ chế)}
+% =================================================================
+
+\begin{frame}{Chunk 1: Logic \& Ẩn dụ hóa}
+    \begin{block}{Logic (Ẩn dụ hóa)}
+        Hãy tưởng tượng $n$ là mức pin điện thoại.
+        \begin{itemize}
+            \item Mỗi ngày pin tụt 1 vạch.
+            \item Cứ đến ngày thứ $m, 2m, 3m\dots$ bạn cắm sạc dự phòng kích thêm được 1 vạch pin.
+        \end{itemize}
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{Vấn đề:} Cái "vạch pin" được sạc thêm đó, nó lại giúp điện thoại sống thêm được 1 ngày nữa. Và biết đâu trong cái ngày sống thêm đó, nó lại chạm mốc để được sạc tiếp?
+\end{frame}
+
+\begin{frame}{Chunk 1: Bẫy \& Thử thách tư duy}
+    \begin{alertblock}{Bẫy (Trap) \textbf{⚠️}}
+        Sai lầm phổ biến là dùng phép chia đơn thuần (Tổng chia $m$).
+        \textbf{Lý do:} Bạn quên mất rằng cái đôi tất được tặng thêm cũng tính vào quy trình để nhận đôi tất tiếp theo (Lãi suất kép).
+    \end{alertblock}
+
+    \begin{exampleblock}{Thử thách tư duy (Mental Check) \textbf{❓}}
+        \textbf{Input:} $n = 4$ (4 đôi gốc), $m = 2$ (2 ngày thưởng 1).
+        \begin{itemize}
+            \item Ngày 1: Dùng 1. Còn 3.
+            \item Ngày 2: Dùng 1. Còn 2. \textbf{Sự kiện:} Qua 2 ngày $\rightarrow$ Thưởng +1. Thực tế còn $2+1=3$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Kết quả thử thách}
+    \textbf{Câu trả lời của bạn:} $4 + 2 + 1 = 7$ ngày.
+    
+    \begin{block}{Phân tích trực giác}
+    Phép tính này cho thấy bạn đã nắm được bản chất:
+    \begin{itemize}
+        \item 4 đôi gốc giúp sống qua ngày 2 và 4 (được thưởng 2 đôi).
+        \item 2 đôi thưởng đó giúp sống qua ngày 6 (được thưởng thêm 1 đôi nữa).
+        \item 1 đôi cuối cùng giúp sống nốt ngày 7.
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+% =================================================================
+\section{Bước 2: Vòng Lặp Tư Duy - Chunk 2 (Mô phỏng)}
+% =================================================================
+
+\begin{frame}{Chunk 2: Chiến thuật mô phỏng (Simulation)}
+    Chúng ta dạy máy tính cách "Sống qua từng ngày".
+    
+    \begin{block}{Logic (Cơ chế vận hành)}
+        Hai biến số:
+        \begin{enumerate}
+            \item \textbf{Đồng hồ (Days):} Bắt đầu từ 0. Tăng dần.
+            \item \textbf{Kho tất (Socks):} Bắt đầu là $n$. Giảm dần.
+        \end{enumerate}
+    \end{block}
+
+    \textbf{Quy trình mỗi sáng:}
+    \begin{itemize}
+        \item Kho tất giảm 1.
+        \item Đồng hồ tăng 1.
+        \item \textbf{KIỂM TRA THƯỞNG:} Nhìn vào Đồng hồ.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 2: Bẫy Logic \& Modulo}
+    \begin{alertblock}{Bẫy (Trap) \textbf{⚠️}}
+        Rất nhiều bạn kiểm tra thưởng dựa trên số tất còn lại $\rightarrow$ SAI.
+        \textbf{Đúng:} Phải kiểm tra dựa trên \textbf{số ngày đã trôi qua}.
+    \end{alertblock}
+
+    \begin{block}{Kiểm tra tư duy}
+        Để biết ngày nào được thưởng ($m=3 \rightarrow$ ngày 3, 6, 9...), ta dùng phép toán gì?
+        
+        \vspace{0.2cm}
+        $\rightarrow$ \textbf{Phép Chia lấy dư (Modulo \%)}.
+        
+        Nếu \texttt{số\_ngày \% m == 0} thì Thưởng!
+    \end{block}
+\end{frame}
+
+% =================================================================
+\section{Bước 2: Vòng Lặp Tư Duy - Chunk 3 (Thứ tự)}
+% =================================================================
+
+\begin{frame}{Chunk 3: Thứ tự sinh tồn}
+    Thứ tự hành động quyết định sống hay chết!
+    
+    \begin{block}{Kịch bản trong ngày}
+    \begin{enumerate}
+        \item Sáng ngủ dậy, rút 1 đôi tất ($n$ giảm 1).
+        \item Ngày trôi qua ($days$ tăng 1).
+        \item Chiều tối, nếu là ngày thưởng ($days \% m == 0$) $\rightarrow$ Nhận thêm 1 đôi ($n$ tăng 1).
+    \end{enumerate}
+    \end{block}
+    
+    \textbf{Điều kiện lặp:} Tiếp tục miễn là $n > 0$.
+\end{frame}
+
+\begin{frame}{Chunk 3: Tình huống "Ngàn cân treo sợi tóc"}
+    \begin{exampleblock}{Thử thách}
+        Input: $n=2, m=2$.
+        \begin{itemize}
+            \item Ngày 1: Dùng 1 $\rightarrow$ Còn 1.
+            \item Ngày 2: Dùng 1 $\rightarrow$ Còn 0 (Kho sạch bách!).
+        \end{itemize}
+        \textbf{Câu hỏi:} Tại thời điểm này, Game Over hay Sống tiếp?
+    \end{exampleblock}
+
+    \pause
+    
+    \begin{block}{Giải đáp}
+        \textbf{Đáp án:} Sống tiếp!
+        \\
+        Vì là ngày 2 (chia hết cho 2), vào buổi tối bạn được thưởng 1 đôi. Kho từ 0 lên 1.
+        \\
+        $\rightarrow$ \textit{Thứ tự thực hiện lệnh (Order of Execution)} đã cứu bạn.
+    \end{block}
+\end{frame}
+
+% =================================================================
+\section{Bước 3: Tổng kết & Code Mô phỏng}
+% =================================================================
+
+\begin{frame}[fragile]{Bản thiết kế (Pseudocode)}
+    Tổng hợp logic thành mã giả:
+
+\begin{lstlisting}[language=C++]
+BẮT ĐẦU:
+   Nhập n, m
+   Đặt biến đếm ngày (days) = 0
+
+   TRONG KHI (n > 0):  <-- Chừng nào còn tất thì còn sống
+       1. Giảm n đi 1      (Sáng ngủ dậy dùng)
+       2. Tăng days lên 1  (Thời gian trôi qua)
+       
+       3. KIỂM TRA THƯỞNG:
+          NẾU (days % m == 0):
+              Tăng n lên 1 (Chiều tối nhận quà)
+   
+   KẾT THÚC VÒNG LẶP:
+   In ra số days
+\end{lstlisting}
+\end{frame}
+
+% =================================================================
+\section{Tư duy Toán học O(1)}
+% =================================================================
+
+\begin{frame}{Nâng cấp tư duy: Từ Mô phỏng sang O(1)}
+    Bạn đã nhận ra quy luật cấp số nhân ($n + n/m + \dots$).
+    Hãy chuyển sang tư duy \textbf{"Chi phí thực"}.
+
+    \begin{block}{Phân tích Lỗ - Lãi}
+        Trong một chu kỳ $m$ ngày:
+        \begin{itemize}
+            \item Bạn mất: $m$ đôi.
+            \item Bạn nhận lại: $1$ đôi.
+        \end{itemize}
+        $\rightarrow$ \textbf{Chi phí thực:} Để sống qua $m$ ngày (nhận 1 lần thưởng), kho tất thực sự chỉ hụt đi:
+        \[ m - 1 \quad (\text{đôi}) \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{Công thức "Thần Thánh"}
+    \begin{alertblock}{Bẫy "Đôi tất cuối cùng"}
+        Công thức $\frac{n}{m-1}$ bị sai ở biên vì bạn không thể tiêu đôi tất cuối cùng để chờ thưởng được.
+    \end{alertblock}
+
+    \textbf{Giải pháp:} Cất đi 1 đôi an toàn, chỉ tính thưởng trên $(n-1)$ đôi.
+    
+    \[ \text{Số tất thưởng} = \left\lfloor \frac{n - 1}{m - 1} \right\rfloor \]
+
+    \textbf{Tổng số ngày = Vốn gốc + Số tất thưởng:}
+    \[ \text{Kết quả} = n + \left\lfloor \frac{n - 1}{m - 1} \right\rfloor \]
+\end{frame}
+
+\begin{frame}[fragile]{Code O(1) - C++ \& Python}
+\begin{columns}
+    \column{0.5\textwidth}
+    \textbf{C++ Solution:}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    // Cong thuc O(1)
+    cout << n + (n - 1) / (m - 1);
+    return 0;
+}
+\end{lstlisting}
+
+    \column{0.5\textwidth}
+    \textbf{Python Solution:}
+\begin{lstlisting}[language=Python]
+n, m = map(int, input().split())
+
+# Phep chia lay nguyen //
+print(n + (n - 1) // (m - 1))
+\end{lstlisting}
+\end{columns}
+\end{frame}
+
+% =================================================================
+\section{Giải thích sâu (Deep Dive)}
+% =================================================================
+
+\begin{frame}{Tại sao công thức khớp với chuỗi cộng dồn?}
+    \textbf{Câu hỏi:} Tại sao chuỗi $50 + 25 + 12 + \dots$ lại bằng $\frac{n-1}{m-1}$?
+    
+    \begin{block}{Truy tìm "Vụn bánh mì"}
+        Phép chia số nguyên bỏ qua phần dư.
+        \begin{itemize}
+            \item $100/2 = 50$
+            \item $25/2 = 12$ (Dư 1 $\rightarrow$ Cất đi)
+            \item $3/2 = 1$ (Dư 1 $\rightarrow$ Cất đi)
+        \end{itemize}
+        Các phần dư này cộng gộp lại sẽ đủ để đổi thêm lần thưởng nữa. Công thức toán học tính luôn cả các phần dư "vô hình" này.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chứng minh toán học (Cấp số nhân)}
+    Tổng số tất thưởng là tổng của chuỗi vô hạn:
+    \[ S = \frac{n}{m} + \frac{n}{m^2} + \frac{n}{m^3} + \dots \]
+    
+    Áp dụng công thức tổng cấp số nhân lùi vô hạn $S = \frac{a}{1-r}$:
+    \begin{itemize}
+        \item Số hạng đầu $a = n/m$
+        \item Công bội $r = 1/m$
+    \end{itemize}
+    
+    \[ S = \frac{\frac{n}{m}}{1 - \frac{1}{m}} = \frac{\frac{n}{m}}{\frac{m - 1}{m}} = \frac{n}{m - 1} \]
+    
+    Do phải giữ lại 1 đôi cuối cùng (không thể chia nhỏ), ta dùng $n-1$.
+\end{frame}
+
+\begin{frame}{Kết luận}
+    \begin{center}
+        \Huge \textbf{Chúc mừng!}
+    \end{center}
+    \vspace{0.5cm}
+    Bạn đã đi từ tư duy \textbf{Mô phỏng (Simulation)} đến tư duy \textbf{Đại số (Algebra)}.
+    
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item Simulation: Dễ hiểu, dễ cài đặt.
+        \item Math O(1): Hiệu suất tối đa, nhìn thấu bản chất.
+    \end{itemize}
+\end{frame}
+
+\end{document}

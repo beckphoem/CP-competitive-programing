@@ -1,0 +1,230 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bat buoc de hien thi tieng Viet
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Khám phá std::map trong C++}
+\author{Đọc Sách - Người đồng hành tri thức}
+\date{2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Lộ trình Khám phá "Chiếc túi Thần kỳ" Map}
+    \begin{enumerate}
+        \item \textbf{Chương 1:} Chiếc hộp vạn năng là gì? (Key và Value)
+        \item \textbf{Chương 2:} Cách tạo ra chiếc hộp (Khai báo và Insertion)
+        \item \textbf{Chương 3:} Tìm đồ trong bóng tối (Truy xuất C++17/20)
+        \item \textbf{Chương 4:} Kiểm kê kho hàng (Structured Bindings)
+        \item \textbf{Chương 5:} Sức mạnh tiềm ẩn (Tại sao Map lại nhanh?)
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chương 1: Chiếc hộp vạn năng là gì?}
+    \begin{block}{Sự khác biệt giữa Vector và Map}
+        \begin{itemize}
+            \item \textbf{Vector/Array:} Ngăn tủ đánh số $0, 1, 2...$ Phải nhớ số thứ tự.
+            \item \textbf{Map:} Dán nhãn trực tiếp lên cửa tủ. Gọi tên nhãn, cửa tự mở.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Thành phần cốt lõi}
+        \begin{itemize}
+            \item \textbf{Key (Khóa):} Nhãn dán duy nhất (ví dụ: "TEO").
+            \item \textbf{Value (Giá trị):} Món đồ bên trong (ví dụ: điểm 10).
+        \end{itemize}
+    \end{exampleblock}
+    \textit{Ẩn dụ: Map giống như một cuốn từ điển. Từ vựng là Key, nghĩa của từ là Value.}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 2: Cách tạo ra chiếc hộp}
+    \begin{block}{Khai báo}
+        \texttt{map<Kiểu\_Key, Kiểu\_Value> tên\_biến;}
+    \end{block}
+
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    map<string, long long> danh_ba;
+
+    // Cach 1: Gan truc tiep
+    danh_ba["Nguyen Van A"] = 9876543210;
+
+    // Cach 2: Dung insert (C++17)
+    danh_ba.insert({"Le Van C", 555666777});
+
+    // Cach 3: insert_or_assign (C++20)
+    danh_ba.insert_or_assign("Nguyen Van A", 111222333);
+    return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Cơ chế tự sắp xếp của Map}
+    \begin{block}{Quản gia ngăn nắp}
+        Mỗi khi bạn thêm một phần tử, \texttt{std::map} tự động sắp xếp các ngăn tủ theo \textbf{thứ tự từ điển (A-Z)} của các Key.
+    \end{block}
+
+    \begin{exampleblock}{Câu hỏi tương tác}
+        Giả sử tôi có đoạn code sau:
+        \texttt{kho\_banh["Banh Mi"] = 10;}
+        \texttt{kho\_banh["Banh Mi"] = 5;}
+        Theo bạn, trong \texttt{kho\_banh} có bao nhiêu ngăn tủ tên là "Banh Mi"?
+        \pause
+        \textbf{Đáp án:} Chỉ có 1 ngăn duy nhất, giá trị mới (5) sẽ đè lên giá trị cũ (10).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 3: Tìm đồ trong bóng tối}
+    \begin{block}{Kiểm tra tồn tại (C++20)}
+        \begin{lstlisting}[language=C++]
+if (kho_banh.contains("Banh Mi")) {
+    cout << "Co banh mi!";
+}
+        \end{lstlisting}
+    \end{block}
+
+    \begin{block}{Tìm và lấy dữ liệu (C++17)}
+        \begin{lstlisting}[language=C++]
+if (auto it = kho_banh.find("Banh Mi"); it != kho_banh.end()) {
+    cout << "So luong: " << it->second;
+}
+        \end{lstlisting}
+    \end{block}
+
+    \begin{alertblock}{Cảnh báo nguy hiểm}
+        Đừng dùng \texttt{[]} để kiểm tra sự tồn tại. Nó sẽ tự động tạo một ngăn tủ trống nếu Key chưa có!
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4: Kiểm kê kho hàng}
+    \begin{block}{Structured Bindings (C++17)}
+        Sử dụng "chiếc kéo thần kỳ" để tách đôi Key và Value ngay trong vòng lặp.
+    \end{block}
+
+    \begin{lstlisting}[language=C++]
+map<string, int> tui_do = {{"Kiem", 1}, {"Mau", 10}};
+
+// Dung & de chay nhanh, const de bao ve du lieu
+for (auto const& [ten, so_luong] : tui_do) {
+    cout << "Ten: " << ten << " | SL: " << so_luong << endl;
+}
+    \end{lstlisting}
+
+    \begin{exampleblock}{Lợi ích}
+        \begin{itemize}
+            \item Trực quan: Nhìn thấy \texttt{ten} và \texttt{so\_luong} thay vì \texttt{first}, \texttt{second}.
+            \item Ngăn nắp: Tự động in ra theo thứ tự A-Z của Key.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4.5: Iterator - Chiếc gậy chỉ đường}
+    \begin{block}{Duyệt thủ công bằng Iterator}
+        \begin{lstlisting}[language=C++]
+map<string, int>::iterator it;
+for (it = tui_do.begin(); it != tui_do.end(); ++it) {
+    cout << it->first << " : " << it->second << endl;
+}
+        \end{lstlisting}
+    \end{block}
+
+    \begin{exampleblock}{Sức mạnh của auto}
+        Thay vì viết \texttt{map<string, int>::iterator}, hãy dùng \texttt{auto}:
+        \begin{lstlisting}[language=C++]
+for (auto it = tui_do.begin(); it != tui_do.end(); ++it) { ... }
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chương 5: Sức mạnh tiềm ẩn}
+    \begin{block}{Tại sao Map lại nhanh?}
+        Map không tìm kiếm tuần tự. Nó sử dụng cấu trúc \textbf{Cây tìm kiếm nhị phân (BST)}. 
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Độ phức tạp:} $O(\log n)$.
+        \item \textbf{Ví dụ:} Với 1 triệu món đồ, Map chỉ cần tối đa khoảng 20 bước thử để tìm ra kết quả.
+    \end{itemize}
+
+    \begin{exampleblock}{Khi nào nên dùng Map?}
+        \begin{itemize}
+            \item Tra cứu dữ liệu (Từ điển, danh bạ).
+            \item Đếm tần suất xuất hiện.
+            \item Khi Key không phải là số nguyên (string, char, struct...).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Trận chiến cuối cùng: Quản lý Kho Vũ Khí}
+    \begin{exampleblock}{Thử thách cho bạn}
+        Viết chương trình:
+        \begin{enumerate}
+            \item Tạo \texttt{map<string, int> vukhi}.
+            \item Thêm "Kiem" (50), "Cung" (40).
+            \item Dùng \texttt{auto \&} để giảm sát thương tất cả đi 10.
+            \item Kiểm tra "Riu" bằng \texttt{contains}.
+        \end{enumerate}
+    \end{exampleblock}
+
+    \pause
+    \begin{lstlisting}[language=C++]
+for (auto & [ten, sat_thuong] : vukhi) {
+    sat_thuong -= 10; // Su dung & de sua du lieu that
+}
+
+if (!vukhi.contains("Riu")) {
+    vukhi["Riu"] = 60;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng kết công thức "Vàng"}
+    \begin{block}{Ghi nhớ cụm từ: "Auto - Xem - Thật"}
+        \texttt{for (auto const \& [k, v] : my\_map)}
+    \end{block}
+    \begin{itemize}
+        \item \textbf{Auto:} Tự nhận diện kiểu dữ liệu.
+        \item \textbf{Xem (const):} Bảo vệ dữ liệu không bị sửa nhầm.
+        \item \textbf{Thật (\&):} Truy cập trực tiếp, không tốn công copy (Tăng tốc độ).
+    \end{itemize}
+\end{frame}
+
+\end{document}

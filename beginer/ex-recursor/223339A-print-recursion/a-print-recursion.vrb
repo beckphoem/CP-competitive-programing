@@ -1,0 +1,19 @@
+\frametitle{Kiến trúc chương trình hoàn chỉnh}
+\begin{lstlisting}[language=C++]
+void printLove(int n) {
+    if (n == 0) return; // 1. Base Case
+
+    // 2. Thuc hien hanh dong
+    cout << "I love Recursion" << endl;
+
+    // 3. Goi de quy
+    printLove(n - 1);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    printLove(n);
+    return 0;
+}
+    \end{lstlisting}

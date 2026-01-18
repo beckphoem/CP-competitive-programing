@@ -1,0 +1,22 @@
+\frametitle{4. Lời Giải & Mẹo C++}
+Trong C++, phép chia số nguyên \texttt{/} tự động "bỏ phần thập phân" (làm tròn xuống).
+
+  \begin{itemize}
+      \item $8 / 2 = 4$.
+      \item $9 / 2 = 4$ (Máy tính bỏ phần .5).
+  \end{itemize}
+
+  $\rightarrow$ Điều này trùng khớp hoàn toàn với yêu cầu bài toán!
+
+  \begin{block}{Code tham khảo}
+\begin{lstlisting}[language=C++]
+int m, n;
+cin >> m >> n;
+
+// @Tính diện tích và chia đôi@
+int dienTich = m * n;
+int soQuan = dienTich / 2;
+
+cout << soQuan;
+\end{lstlisting}
+  \end{block}

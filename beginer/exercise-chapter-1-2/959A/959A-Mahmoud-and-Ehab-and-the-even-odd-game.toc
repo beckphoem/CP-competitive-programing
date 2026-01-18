@@ -1,0 +1,6 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Phẫu thuật đề bài}{3}{0}{1}
+\beamer@sectionintoc {2}{Bước 2: Chunk 1 - Cú đánh của Mahmoud}{5}{0}{2}
+\beamer@sectionintoc {3}{Bước 2: Chunk 2 - Cơn ác mộng số Lẻ}{8}{0}{3}
+\beamer@sectionintoc {4}{Bước 2: Chunk 3 - Quy luật tổng quát}{11}{0}{4}
+\beamer@sectionintoc {5}{Bước 3: Tổng kết \& Mã hóa}{13}{0}{5}

@@ -1,0 +1,14 @@
+\frametitle{15. Twins (160A)}
+\begin{block}{Bài toán}
+        Lấy số lượng đồng xu ít nhất sao cho tổng giá trị lớn hơn phần còn lại.
+    \end{block}
+
+    \begin{block}{Giải thuật: Tham lam + Sắp xếp}
+        \begin{enumerate}
+            \item Sắp xếp mảng giá trị giảm dần: \texttt{sort(v.rbegin(), v.rend())}.
+            \item Lấy dần từng đồng xu từ lớn nhất.
+            \item Dừng khi \texttt{current\_sum > total\_sum / 2}.
+        \end{enumerate}
+    \end{block}
+
+    \textbf{Độ phức tạp:} $O(N \log N)$ do sắp xếp.

@@ -1,0 +1,9 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{1. Bức tranh toàn cảnh}{3}{0}{1}
+\beamer@sectionintoc {2}{2. Lộ trình khám phá}{4}{0}{2}
+\beamer@sectionintoc {3}{Chương 1: Khởi tạo}{5}{0}{3}
+\beamer@sectionintoc {4}{Chương 2: Duyệt bằng while}{9}{0}{4}
+\beamer@sectionintoc {5}{Chương 3: Range-based for}{13}{0}{5}
+\beamer@sectionintoc {6}{Chương 4: Iterator}{15}{0}{6}
+\beamer@sectionintoc {7}{Chương 5: Algorithm}{19}{0}{7}
+\beamer@sectionintoc {8}{Tổng kết}{21}{0}{8}

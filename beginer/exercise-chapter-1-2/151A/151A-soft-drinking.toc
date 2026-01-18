@@ -1,0 +1,9 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Giới thiệu bài toán}{3}{0}{1}
+\beamer@sectionintoc {2}{Phẫu thuật đề bài (Deconstruct)}{4}{0}{2}
+\beamer@sectionintoc {3}{Lộ trình tư duy}{6}{0}{3}
+\beamer@sectionintoc {4}{Chunk 1: Tổng kiểm kê}{7}{0}{4}
+\beamer@sectionintoc {5}{Chunk 2: Quy tắc Chiếc thùng gỗ}{9}{0}{5}
+\beamer@sectionintoc {6}{Chunk 3: Chia phần công bằng}{11}{0}{6}
+\beamer@sectionintoc {7}{Tổng kết chiến thuật}{13}{0}{7}
+\beamer@sectionintoc {8}{Giao nhiệm vụ}{14}{0}{8}

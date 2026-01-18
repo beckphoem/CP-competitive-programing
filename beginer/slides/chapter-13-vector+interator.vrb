@@ -1,0 +1,21 @@
+\frametitle{Thử thách cuối cùng (The Final Boss)}
+\textbf{Đề bài:} Có danh sách điểm: \texttt{vector<int> diem = \{7, 4, 9, 2\};}
+
+    \textbf{Nhiệm vụ:}
+    \begin{enumerate}
+        \item Sắp xếp từ thấp đến cao.
+        \item In ra điểm thấp nhất và cao nhất.
+    \end{enumerate}
+
+    \pause
+    \begin{exampleblock}{Lời giải}
+\begin{lstlisting}[language=C++]
+sort(diem.begin(), diem.end()); // 1. Sap xep: {2, 4, 7, 9}
+
+// 2. Diem thap nhat (Dau tau)
+cout << "Min: " << diem[0];
+
+// 3. Diem cao nhat (Cuoi tau - 1) HOAC dung back()
+cout << "Max: " << diem.back();
+\end{lstlisting}
+    \end{exampleblock}

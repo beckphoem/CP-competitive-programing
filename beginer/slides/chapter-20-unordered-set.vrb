@@ -1,0 +1,16 @@
+\frametitle{Cạm bẫy trong Lập trình thi đấu (CP)}
+\begin{alertblock}{Anti-hash Test trên Codeforces}
+        Kẻ xấu có thể tạo bộ dữ liệu gây xung đột băm (Collision), khiến tốc độ giảm từ $O(1)$ xuống $O(n)$, gây lỗi \textbf{TLE}.
+    \end{alertblock}
+
+    \textbf{Giải pháp: Custom Hash với Random Seed}
+\begin{lstlisting}[language=C++]
+struct custom_hash {
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+// Khai bao an toan
+unordered_map<long long, int, custom_hash> safe_map;
+\end{lstlisting}

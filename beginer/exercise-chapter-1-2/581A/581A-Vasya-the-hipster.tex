@@ -1,0 +1,245 @@
+\documentclass[10pt]{beamer}
+
+% Cấu hình ngôn ngữ và encoding
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Chọn theme
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+% Cấu hình hiển thị code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title[Codeforces 581A]{Codeforces 581A - Vasya the Hipster}
+\subtitle{Tư duy thuật toán theo phương pháp "Learning How to Learn"}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Giới thiệu ---
+\begin{frame}{Giới thiệu: Coach LHTL}
+    \begin{block}{Chào mừng!}
+        Chào mừng bạn đến với lớp học tư duy thuật toán! \\
+        Tôi đã kích hoạt chế độ \textbf{Coach LHTL (Learning How to Learn)}.
+    \end{block}
+
+    \vspace{0.5cm}
+    
+    Hôm nay chúng ta sẽ xử lý bài toán: \\
+    \textbf{\Large Codeforces 581A - Vasya the Hipster}
+    
+    \vspace{0.5cm}
+    
+    \begin{alertblock}{Lưu ý quan trọng}
+        Đừng vội code! Hãy cất bàn phím đi. Chúng ta sẽ "mổ xẻ" bài toán này trước.
+    \end{alertblock}
+\end{frame}
+
+% --- Phần 1: Tiếp nhận & Phẫu thuật ---
+\section{1. Tiếp nhận \& Phẫu thuật}
+\begin{frame}{1. Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Tóm tắt đề bài (Ngôn ngữ con người)}
+        Bạn có 2 đống tất (vớ):
+        \begin{itemize}
+            \item Đống màu Đỏ có số lượng là $a$.
+            \item Đống màu Xanh có số lượng là $b$.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Nhiệm vụ: Tính 2 con số}
+        \begin{enumerate}
+            \item \textbf{Số ngày "sành điệu":} Mỗi ngày mang 1 chiếc Đỏ + 1 chiếc Xanh (cho đến khi không thể mang kiểu này được nữa).
+            \item \textbf{Số ngày "thường thường":} Sau khi hết ngày sành điệu, bạn lấy số tất còn thừa (chắc chắn chỉ còn 1 màu) để mang cặp (2 chiếc cùng màu).
+        \end{enumerate}
+    \end{exampleblock}
+
+    \textbf{Lộ trình tư duy:}
+    \begin{itemize}
+        \item \textbf{Chunk 1:} Tìm số lượng cặp "Sành điệu" (Khác màu).
+        \item \textbf{Chunk 2:} Xử lý đống tất thừa để tính số ngày "Thường thường" (Cùng màu).
+    \end{itemize}
+\end{frame}
+
+% --- Phần 2: Chunk 1 - Logic & Thử thách ---
+\section{2. Chunk 1: Cặp đôi hoàn hảo}
+\begin{frame}{2. Vòng lặp tư duy - Chunk 1: Cặp đôi hoàn hảo}
+    \begin{block}{Logic (Ẩn dụ hóa)}
+        Hãy tưởng tượng đây là một sàn khiêu vũ.
+        \begin{itemize}
+            \item Phe Đỏ có $a$ người.
+            \item Phe Xanh có $b$ người.
+            \item Để nhảy điệu "Sành điệu", bắt buộc phải ghép \textbf{1 người Đỏ} với \textbf{1 người Xanh}.
+        \end{itemize}
+        Cuộc vui sẽ dừng lại ngay khi \textbf{một trong hai phe hết người}.
+    \end{block}
+
+    \begin{alertblock}{Bẫy tư duy (Trap)}
+        Nhiều bạn nghĩ phức tạp hóa vấn đề bằng vòng lặp \texttt{while}. Nhưng thực tế đây là một phép so sánh đơn giản.
+    \end{alertblock}
+
+    \begin{exampleblock}{Thử thách tư duy (Mental Check)}
+        Giả sử: Đỏ ($a$) = \textbf{7} chiếc, Xanh ($b$) = \textbf{4} chiếc. \\
+        \textbf{Câu hỏi:} Bạn sẽ có bao nhiêu ngày "Sành điệu"? Tại sao?
+    \end{exampleblock}
+\end{frame}
+
+% --- Phần 2: Chunk 1 - Giải đáp ---
+\begin{frame}{2. Giải đáp Chunk 1}
+    \begin{center}
+        \Huge \textbf{Đáp án: 4}
+    \end{center}
+    
+    \vspace{0.5cm}
+
+    \begin{block}{Phân tích}
+        \textbf{Chính xác!} Bạn đã nắm được quy luật cốt lõi: \\
+        \emph{"Quyết định bởi kẻ yếu thế hơn"}.
+    \end{block}
+
+    \vspace{0.5cm}
+
+    Trong lập trình, chúng ta gọi đây là tìm giá trị nhỏ nhất: 
+    \[ \min(a, b) \]
+    
+    Chúng ta đã giải quyết xong con số đầu tiên (Output 1). Giờ hãy xử lý phần còn lại.
+\end{frame}
+
+% --- Phần 3: Chunk 2 - Logic & Thử thách ---
+\section{3. Chunk 2: Vét sạch kho}
+\begin{frame}{3. Vòng lặp tư duy - Chunk 2: Vét sạch kho (Leftovers)}
+    \begin{block}{Logic (Tư duy trừu tượng)}
+        Sau khi "bữa tiệc" sành điệu kết thúc (4 cặp đã rời đi):
+        \begin{itemize}
+            \item Phe Xanh: Hết sạch (vì ít hơn).
+            \item Phe Đỏ: Vẫn còn dư.
+        \end{itemize}
+        Số lượng tất còn dư chính là: \textbf{Hiệu số giữa hai đống} ($|a - b|$).
+    \end{block}
+
+    \begin{block}{Luật chơi "Thường thường"}
+        Bạn chỉ còn lại một đống tất cùng màu. Cứ \textbf{2 chiếc} ghép lại thành 1 đôi.
+    \end{block}
+
+    \begin{alertblock}{Bẫy tư duy (Trap)}
+        Nếu còn dư 1 chiếc lẻ loi thì sao? \\
+        $\rightarrow$ Chiếc lẻ đó sẽ bị bỏ đi. Đây là phép \textbf{chia lấy phần nguyên} (Integer Division).
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{3. Thử thách Chunk 2}
+    \begin{exampleblock}{Thử thách tư duy (Mental Check)}
+        Vẫn với ví dụ cũ: Đỏ ($a$) = \textbf{7}, Xanh ($b$) = \textbf{4}.
+        \begin{enumerate}
+            \item Còn dư lại bao nhiêu chiếc tất (sau khi đã lấy 4 cặp sành điệu)?
+            \item Từ số tất dư đó, bạn ghép được thêm \textbf{bao nhiêu cặp} cùng màu nữa?
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+% --- Phần 3: Chunk 2 - Giải đáp ---
+\begin{frame}{3. Giải đáp Chunk 2}
+    \begin{center}
+        \Large \textbf{1. Dư: 3 chiếc} \\
+        \Large \textbf{2. Ghép được: 1 cặp}
+    \end{center}
+
+    \vspace{0.5cm}
+
+    \begin{block}{Chuẩn không cần chỉnh!}
+        \begin{itemize}
+            \item Dư 3 chiếc $\rightarrow$ Ghép được 1 đôi $\rightarrow$ Còn 1 chiếc lẻ bị "ra rìa" (bỏ đi).
+            \item Trong lập trình: Phép tính $3 \div 2 = 1$ (bỏ phần dư) chính là bản chất của phép chia số nguyên.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- Phần 4: Tổng kết ---
+\section{4. Tổng kết & Chốt thuật toán}
+\begin{frame}{4. Tổng kết \& Chốt thuật toán (The Grand Finale)}
+    \textbf{Sơ đồ logic (Algorithm Flow):}
+    
+    \begin{enumerate}
+        \item \textbf{Input:} Nhập $a$ (Đỏ) và $b$ (Xanh).
+        \item \textbf{Bước 1 (Tính ngày Sành điệu):}
+            \begin{itemize}
+                \item Tìm số nhỏ hơn trong hai số.
+                \item Công thức: \texttt{sanh\_dieu = min(a, b)}
+            \end{itemize}
+        \item \textbf{Bước 2 (Tính tất thừa):}
+            \begin{itemize}
+                \item Tìm chênh lệch giữa hai đống.
+                \item Công thức: \texttt{phan\_thua = abs(a - b)}
+            \end{itemize}
+        \item \textbf{Bước 3 (Tính ngày Thường thường):}
+            \begin{itemize}
+                \item Lấy phần thừa chia đôi.
+                \item Công thức: \texttt{thuong\_thuong = phan\_thua / 2}
+            \end{itemize}
+        \item \textbf{Output:} In ra \texttt{sanh\_dieu} và \texttt{thuong\_thuong}.
+    \end{enumerate}
+\end{frame}
+
+% --- Phần 4: Mã giả ---
+\begin{frame}[fragile]{4. Mã giả (Pseudocode) - C++ Style}
+    \begin{lstlisting}[language=C++]
+// Nhap a, b
+cin >> a >> b;
+
+// Tinh toan
+// 1. So ngay sanh dieu la min cua a va b
+int days_fashion = min(a, b);
+
+// 2. So tat thua la tri tuyet doi hieu a va b
+int remaining_socks = abs(a - b); 
+// Luu y: Can thu vien <cmath> hoac tu viet if/else
+
+// 3. So ngay thuong thuong la phan nguyen cua phep chia 2
+int days_boring = remaining_socks / 2;
+
+// Ket qua
+cout << days_fashion << " " << days_boring;
+    \end{lstlisting}
+
+    \vspace{0.5cm}
+    \begin{center}
+        \textbf{🚀 BƯỚC CUỐI CÙNG:} \\
+        Hãy thử viết code hoàn chỉnh và nộp thử (Submit)! \\
+        Nếu gặp lỗi, hãy gọi: \textbf{"Coach, bài tiếp theo!"} 👊
+    \end{center}
+\end{frame}
+
+\end{document}

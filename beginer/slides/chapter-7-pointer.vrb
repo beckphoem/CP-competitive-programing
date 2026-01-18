@@ -1,0 +1,23 @@
+\frametitle{Thử thách: Code Challenge}
+\textbf{Đề bài:}
+    \begin{enumerate}
+        \item Tạo biến \texttt{diemThi} bằng 9.
+        \item Tạo con trỏ \texttt{p} trỏ vào \texttt{diemThi}.
+        \item Dùng \texttt{p} sửa điểm thành 10.
+        \item In \texttt{diemThi} ra màn hình.
+    \end{enumerate}
+
+    \pause
+    \begin{exampleblock}{Lời giải tham khảo}
+\begin{lstlisting}[language=C++]
+int main() {
+    int diemThi = 9;    // 1. Tao bien
+    int* p = &diemThi;  // 2. Tao con tro
+
+    *p = 10;            // 3. Sua diem (phep thuat!)
+
+    cout << diemThi;    // 4. In ra: 10
+    return 0;
+}
+\end{lstlisting}
+    \end{exampleblock}

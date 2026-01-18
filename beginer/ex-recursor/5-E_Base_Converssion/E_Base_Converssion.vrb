@@ -1,0 +1,19 @@
+\frametitle{Tổng kết Logic \& Mã giả}
+\begin{lstlisting}[language=C++, caption=Cấu trúc hàm đệ quy]
+void convert(long long n) {
+    // 1. Diem dung (Base Case)
+    if (n == 0) return;
+
+    // 2. Goi de quy (Di sau vao stack)
+    convert(n / 2);
+
+    // 3. In ket qua (Thuc hien khi quay lui)
+    cout << n % 2;
+}
+    \end{lstlisting}
+
+    \begin{exampleblock}{Kết quả với N = 3}
+        1. \texttt{convert(1)} chạy trước $\rightarrow$ in \texttt{1}.\\
+        2. \texttt{convert(3)} chạy sau $\rightarrow$ in \texttt{1}.\\
+        Kết quả: \texttt{11}.
+    \end{exampleblock}

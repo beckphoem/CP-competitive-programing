@@ -1,0 +1,11 @@
+\frametitle{Bước 2: Giải mã cấu trúc Kim tự tháp}
+Hãy nhìn kỹ vào ví dụ với $N = 3$:
+\begin{verbatim}
+  * (Dòng 1)
+ *** (Dòng 2)
+***** (Dòng 3)
+\end{verbatim}
+
+    \begin{block}{Ẩn dụ hóa}
+        Hãy tưởng tượng mỗi dòng là một hàng gạch. Để hàng trên cùng nằm ở đỉnh, bạn phải đặt những "viên gạch tàng hình" (khoảng trống) ở phía trước.
+    \end{block}

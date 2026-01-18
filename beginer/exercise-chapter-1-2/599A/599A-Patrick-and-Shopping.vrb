@@ -1,0 +1,24 @@
+\frametitle{Hiện thực hóa: C++ Code}
+Với C++11 trở lên, dùng \texttt{min(\{...\})} để so sánh danh sách.
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <algorithm> // Thu vien chua ham min
+using namespace std;
+
+int main() {
+    long long d1, d2, d3;
+    // Dung long long phong khi tong > 2 ty
+    cin >> d1 >> d2 >> d3;
+
+    long long opt1 = d1 + d2 + d3;
+    long long opt2 = 2 * (d1 + d2);
+    long long opt3 = 2 * (d1 + d3);
+    long long opt4 = 2 * (d2 + d3);
+
+    // Tim min trong danh sach khoi tao
+    cout << min({opt1, opt2, opt3, opt4});
+
+    return 0;
+}
+\end{lstlisting}

@@ -1,0 +1,9 @@
+\babel@toc {nil}{}\relax 
+\beamer@sectionintoc {1}{Giới thiệu chung}{3}{0}{1}
+\beamer@sectionintoc {2}{Bước 1: Phẫu thuật đề bài}{4}{0}{2}
+\beamer@sectionintoc {3}{Chunk 1: Tính "Túi tiền thời gian"}{6}{0}{3}
+\beamer@sectionintoc {4}{Chunk 2: Cơ chế "Cộng dồn"}{9}{0}{4}
+\beamer@sectionintoc {5}{Chunk 3: Điểm dừng}{12}{0}{5}
+\beamer@sectionintoc {6}{Tổng kết thuật toán}{15}{0}{6}
+\beamer@sectionintoc {7}{Mã giả cụ thể}{16}{0}{7}
+\beamer@sectionintoc {8}{Lời khuyên cuối cùng}{17}{0}{8}

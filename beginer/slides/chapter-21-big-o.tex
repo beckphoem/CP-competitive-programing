@@ -1,0 +1,237 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Big O trong C++]{Hành trình chinh phục Big O}
+\subtitle{Thước đo hiệu năng thuật toán}
+\author{Đọc Sách - Learning How to Learn}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Chào mừng bạn!}
+    \begin{block}{Triết lý học tập}
+        Chúng ta sẽ không học Big O như một mớ công thức toán học khô khan. Chúng ta sẽ coi nó như một \textbf{"thước đo hiệu năng"} để đánh giá xem thuật toán của bạn ngốn bao nhiêu tài nguyên khi dữ liệu lớn dần lên.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Lộ trình khám phá Big O}
+    \begin{enumerate}
+        \item \textbf{Chương 1:} Big O là gì? – Phép ẩn dụ về Đội quân vận chuyển.
+        \item \textbf{Chương 2:} $O(1)$ – Tốc độ của một cái búng tay.
+        \item \textbf{Chương 3:} $O(n)$ – Cuộc đi bộ đường dài.
+        \item \textbf{Chương 4:} $O(n^2)$ – Thảm họa vòng lặp lồng nhau.
+        \item \textbf{Chương 5:} $O(\log n)$ – Phép màu của việc chia đôi.
+        \item \textbf{Chương 6:} Tổng kết và Cách tính nhanh Big O.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 1: Big O là gì? (Bức tranh toàn cảnh)}
+    \begin{block}{Ẩn dụ: Đội quân Robot}
+        Big O không cho bạn biết chính xác số giây. Nó cho bạn biết \textbf{"tốc độ tăng trưởng"} của thời gian khi số lượng hàng hóa ($n$) tăng lên.
+    \end{block}
+
+    \begin{exampleblock}{Ví dụ: Truy cập mảng $O(1)$}
+\begin{lstlisting}[language=C++]
+int lay_phan_tu(int mang[], int index) {
+    return mang[index]; // May tinh chi ton dung 1 buoc
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Kiểm tra sự hiểu biết}
+    \begin{question}
+        Nếu thuật toán chạy mất 10 giây với 100 con số, và 100 giây với 1.000 con số. Bạn thấy thời gian tăng có tỉ lệ thuận không?
+    \end{question}
+    \pause
+    \begin{block}{Đáp án}
+        Có! Khi dữ liệu tăng 10 lần mà thời gian cũng tăng 10 lần, đó chính là đặc điểm của \textbf{Tuyến tính $O(n)$}.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 2: $O(1)$ – Tốc độ hằng số}
+    \begin{block}{Ẩn dụ: Siêu năng lực dịch chuyển}
+        Dù điểm đến xa 1 mét hay 1.000 cây số, bạn chỉ cần búng tay là tới nơi. Khoảng cách ($n$) không làm bạn chậm đi.
+    \end{block}
+
+    \begin{exampleblock}{Code minh họa}
+\begin{lstlisting}[language=C++]
+void kiem_tra_so_chan(int n) {
+    if (n % 2 == 0) {
+        cout << "Day la so chan";
+    } else {
+        cout << "Day la so le";
+    }
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 3: $O(n)$ – Cuộc đi bộ đường dài}
+    \begin{block}{Ẩn dụ: Quét dọn hành lang}
+        Mỗi mét hành lang là một phần tử ($n$). Bạn càng có nhiều mét hành lang, bạn càng tốn nhiều sức theo đúng tỉ lệ đó.
+    \end{block}
+
+    \begin{exampleblock}{Code minh họa}
+\begin{lstlisting}[language=C++]
+void in_day_so(int n) {
+    for (int i = 1; i <= n; i++) {
+        cout << i << " ";
+    }
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Kiểm tra nhanh (Quiz)}
+    \begin{alertblock}{Tình huống}
+        Bạn tìm bạn "An" trong danh sách $n$ học sinh bằng cách hỏi từng người từ đầu đến cuối.
+    \end{alertblock}
+    \begin{enumerate}
+        \item Đây là $O(1)$ hay $O(n)$? \pause $\rightarrow$ \textbf{$O(n)$}.
+        \item Nếu lớp có 400 bạn, bạn hỏi tối đa bao nhiêu lần? \pause $\rightarrow$ \textbf{400 lần}.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4: $O(n^2)$ – Thảm họa vòng lặp lồng nhau}
+    \begin{block}{Ẩn dụ: Diện tích hình vuông}
+        Nếu bạn tăng cạnh hình vuông lên gấp đôi, diện tích thực tế (công việc) tăng lên gấp \textbf{bốn} lần!
+    \end{block}
+
+    \begin{exampleblock}{Code minh họa}
+\begin{lstlisting}[language=C++]
+void in_hinh_vuong_sao(int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << "* ";
+        }
+        cout << endl;
+    }
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 5: $O(\log n)$ – Phép màu chia đôi}
+    \begin{block}{Ẩn dụ: Cuốn từ điển}
+        Mỗi bước bạn mở trang giữa, loại bỏ một nửa số trang không cần thiết. Thanh chocolate khổng lồ biến mất cực nhanh vì bạn liên tục bẻ đôi nó.
+    \end{block}
+
+    \begin{exampleblock}{Tìm kiếm nhị phân}
+\begin{lstlisting}[language=C++]
+int tim_kiem_nhi_phan(int mang[], int n, int x) {
+    int trai = 0, phai = n - 1;
+    while (trai <= phai) {
+        int giua = (trai + phai) / 2;
+        if (mang[giua] == x) return giua;
+        if (mang[giua] < x) trai = giua + 1;
+        else phai = giua - 1;
+    }
+    return -1;
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chương 6: Cách "nhìn code đoán Big O"}
+    \begin{block}{Quy tắc nhìn nhanh}
+        \begin{itemize}
+            \item \textbf{Không có vòng lặp phụ thuộc $n$}: $O(1)$.
+            \item \textbf{1 vòng lặp từ $0$ đến $n$}: $O(n)$.
+            \item \textbf{2 vòng lặp lồng nhau}: $O(n^2)$.
+            \item \textbf{Biến $i$ tăng gấp đôi/giảm một nửa}: $O(\log n)$.
+        \end{itemize}
+    \end{block}
+    
+    \begin{alertblock}{Quy tắc Bảng xếp hạng}
+        Trong Big O, chỉ quan tâm kẻ mạnh nhất (chạy chậm nhất):
+        $O(1) < O(\log n) < O(n) < O(n \log n) < O(n^2) < O(n^3) < O(2^n)$.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Bí kíp cho thi lập trình (Competitive Programming)}
+    Khi đọc giới hạn $n$, hãy ước lượng thuật toán:
+    \begin{itemize}
+        \item $n \le 500$: Có thể dùng $O(n^3)$.
+        \item $n \le 5000$: Có thể dùng $O(n^2)$.
+        \item $n \le 10^5$ hoặc $10^6$: Phải dùng $O(n \log n)$ hoặc $O(n)$.
+        \item $n \ge 10^9$: Chỉ có thể dùng $O(\log n)$ hoặc $O(1)$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chương Đặc Biệt: Phép Toán Log}
+    \begin{block}{Định nghĩa cho học sinh}
+        $\log_2(n)$ là: \textbf{"Số lần bạn cần chia $n$ cho 2 để kết quả bằng 1"}.
+    \end{block}
+
+    \begin{exampleblock}{Code minh họa tư duy Log}
+\begin{lstlisting}[language=C++]
+int dem_so_lan_chia_doi(int n) {
+    int count = 0;
+    while (n > 1) {
+        n = n / 2;
+        count++;
+    }
+    return count;
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    \begin{question}
+        Nếu bạn viết một chương trình có \textbf{3 vòng lặp for lồng nhau}, Big O là gì và nó tốt hay tệ?
+    \end{question}
+    \pause
+    \begin{block}{Đáp án}
+        Đó là $O(n^3)$. Đây là một thuật toán "nặng nề". Nếu $n = 1000$, bạn sẽ có \textbf{1 tỷ} phép tính, máy tính có thể mất 10 giây để xử lý!
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge \textcolor{blue}{Chúc bạn học tốt!}
+    
+    \vspace{1cm}
+    \normalsize Bạn có muốn thực hành "hô biến" code từ $O(n^2)$ sang $O(n \log n)$ không?
+\end{frame}
+
+\end{document}

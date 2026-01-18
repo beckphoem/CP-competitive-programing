@@ -1,0 +1,279 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Biến và Toán Tử]{Bài 2: Biến và Toán Tử \\ Những Chiếc Hộp Thần Kỳ}
+\subtitle{C++ Competitive Programming Series}
+\author{Học Cùng C++}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% 1. Variable Definition
+\begin{frame}{1. Biến (Variable) Là Gì?}
+  \begin{block}{Ẩn dụ: Chiếc Hộp Thần Kỳ}
+    Hãy tưởng tượng bộ nhớ máy tính là một \textbf{Kho Hàng Khổng Lồ}.
+    \begin{itemize}
+        \item \textbf{Biến} là những chiếc hộp để bạn cất giữ đồ đạc (thông tin).
+        \item Mỗi hộp chỉ chứa được \textbf{một giá trị} tại một thời điểm.
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+      \textit{Bỏ cái mới vào $\rightarrow$ Cái cũ biến mất!}
+  \end{center}
+
+  \begin{exampleblock}{Ví dụ}
+    \texttt{int a = 5;} \\
+    $\rightarrow$ Tạo hộp tên "a", bỏ số 5 vào.
+  \end{exampleblock}
+\end{frame}
+
+% 2. Naming Rules
+\begin{frame}{2. Quy Tắc Đặt Tên (Nhãn Dán)}
+  Giống như đặt tên cho \textbf{Thú Cưng}, phải tuân thủ luật lệ:
+
+  \begin{enumerate}
+      \item \textbf{Không dấu cách:} Phải viết liền. 
+      \begin{itemize}
+          \item \textcolor{red}{Sai:} \texttt{con meo}
+          \item \textcolor{blue}{Đúng:} \texttt{conMeo}, \texttt{con\_meo}
+      \end{itemize}
+      \item \textbf{Không bắt đầu bằng số:}
+      \begin{itemize}
+          \item \textcolor{red}{Sai:} \texttt{1conMeo}
+          \item \textcolor{blue}{Đúng:} \texttt{conMeo1}
+      \end{itemize}
+      \item \textbf{Không dùng ký tự lạ:} Chỉ dùng chữ, số, `\_`.
+      \item \textbf{Phân biệt hoa thường:} \texttt{Meo} $\neq$ \texttt{meo}.
+  \end{enumerate}
+\end{frame}
+
+% 3. Data Types (Int/Long Long)
+\begin{frame}[fragile]{3. Kiểu Dữ Liệu: Hình Dáng Chiếc Hộp (1)}
+  Không thể nhét con voi vào hộp diêm!
+
+  \begin{columns}
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{int} - Hộp Vuông Nhỏ}
+          \begin{itemize}
+              \item \textbf{Đựng:} Số nguyên (không dấu chấm).
+              \item \textbf{Ví dụ:} 1, 100, -5.
+              \item \textbf{Sức chứa:} $\approx$ 2 tỷ.
+          \end{itemize}
+      \end{block}
+
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{long long} - Container}
+          \begin{itemize}
+              \item \textbf{Đựng:} Số nguyên SIÊU TO.
+              \item \textbf{Dùng khi:} \texttt{int} không chứa nổi (tỷ phú, thiên văn).
+              \item \textbf{Ví dụ:} \texttt{9000000000LL}
+          \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% 4. Data Types (Float/Double)
+\begin{frame}{3. Kiểu Dữ Liệu: Hình Dáng Chiếc Hộp (2)}
+  \begin{block}{Số Thực - Những Chai Nước}
+      Dùng để đựng số có phần thập phân (3.14, 8.5).
+  \end{block}
+
+  \begin{description}
+      \item[\texttt{float}] Chai nhỏ, độ chính xác bình thường.
+      \item[\texttt{double}] Chai lớn, có "kính lúp" soi kỹ hơn. Độ chính xác cao gấp đôi.
+  \end{description}
+
+  \begin{alertblock}{Lời khuyên}
+      Luôn ưu tiên dùng \textbf{\texttt{double}} cho tính toán số thực để tránh sai số!
+  \end{alertblock}
+\end{frame}
+
+% 5. Data Types (Char/Bool)
+\begin{frame}{3. Kiểu Dữ Liệu: Hình Dáng Chiếc Hộp (3)}
+  \begin{columns}
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{char} - Hộp Đựng Nhẫn}
+          \begin{itemize}
+              \item Đựng đúng \textbf{1 ký tự}.
+              \item Phải để trong dấu nháy đơn \texttt{' '}.
+              \item Ví dụ: \texttt{'A'}, \texttt{'x'}.
+          \end{itemize}
+      \end{block}
+
+      \column{0.5\textwidth}
+      \begin{block}{\texttt{bool} - Công Tắc Đèn}
+          \begin{itemize}
+              \item Chỉ có 2 trạng thái.
+              \item \texttt{true} (Đúng/Bật).
+              \item \texttt{false} (Sai/Tắt).
+          \end{itemize}
+      \end{block}
+  \end{columns}
+\end{frame}
+
+% 6. Operators
+\begin{frame}{4. Toán Tử - Cỗ Máy Chế Biến}
+  \begin{itemize}
+      \item \textbf{Cơ bản:} \texttt{+} (Cộng), \texttt{-} (Trừ), \texttt{*} (Nhân).
+      \item \textbf{Phép Chia \texttt{/}:}
+      \begin{itemize}
+          \item Nguyên chia Nguyên = Nguyên (Làm tròn xuống!).
+          \item Ví dụ: $5 / 2 = 2$.
+          \item Muốn ra thập phân: $5.0 / 2 = 2.5$.
+      \end{itemize}
+      \item \textbf{Chiếc Đồng Hồ \texttt{\%}:}
+      \begin{itemize}
+          \item Phép chia lấy DƯ.
+          \item $5 \% 2 = 1$ (5 chia 2 dư 1).
+          \item Dùng để kiểm tra chẵn lẻ, tính chu kỳ.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% NEW SECTION: Type Casting
+\begin{frame}[fragile]{5. Phép "Biến Hình" (Ép Kiểu)}
+  \begin{block}{Ẩn dụ: Sang Chiết Chất Lỏng}
+    Đổ nước từ chai vào hộp, hoặc cắt gọt trái cây cho vừa hộp.
+  \end{block}
+
+  \begin{columns}
+    \column{0.5\textwidth}
+    \textbf{a. Tự Động (Implicit)} \\
+    \textit{"Đổ từ cốc nhỏ sang xô lớn"}
+    \begin{lstlisting}[language=C++]
+int a = 5;
+double b = a; 
+// @b là 5.0 (An toàn)@
+    \end{lstlisting}
+
+    \column{0.5\textwidth}
+    \textbf{b. Ép Buộc (Explicit)} \\
+    \textit{"Cắt gọt cho vừa hộp"}
+    \begin{lstlisting}[language=C++]
+double pi = 3.14;
+int n = (int)pi; 
+// @n là 3 (Mất phần đuôi)@
+    \end{lstlisting}
+  \end{columns}
+\end{frame}
+
+% NEW SECTION: Char Arithmetic
+\begin{frame}[fragile]{6. Cộng Trừ Ký Tự (Char Math)}
+  \begin{block}{Ẩn dụ: Cầu Thang Chữ Cái}
+    Mỗi ký tự đứng trên một bậc thang (ASCII). 
+    \begin{itemize}
+        \item 'A' đứng ở bậc 65.
+        \item 'B' đứng ở bậc 66.
+    \end{itemize}
+  \end{block}
+
+  \begin{lstlisting}[language=C++]
+char c = 'A';
+c = c + 1; // @Bước lên 1 bậc@
+cout << c; // @In ra: B@
+  \end{lstlisting}
+
+  \begin{alertblock}{Mẹo nhỏ}
+    Khoảng cách giữa chữ hoa và thường là 32 bậc.
+    \texttt{'a' - 32 = 'A'}
+  \end{alertblock}
+\end{frame}
+
+% NEW SECTION: Typeid
+\begin{frame}[fragile]{7. Kính Chiếu Yêu (typeid)}
+  \begin{itemize}
+      \item Dùng để xem "nguyên hình" của một biến.
+      \item Giống như máy quét mã vạch.
+  \end{itemize}
+
+  \begin{lstlisting}[language=C++]
+#include <typeinfo> // @Cần thư viện này@
+
+int x = 10;
+cout << typeid(x).name(); 
+// @In ra ký hiệu kiểu (ví dụ "i")@
+  \end{lstlisting}
+\end{frame}
+
+% 7. Example Code
+\begin{frame}[fragile]{Ví Dụ Tổng Hợp}
+Chương trình tính Chu vi và Diện tích Hình chữ nhật:
+
+\begin{lstlisting}[language=C++]
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){ 
+    // @1. Khai báo hộp (biến)@
+    int chieuDai = 10;
+    int chieuRong = 5;
+
+    // @2. Chế biến (Toán tử)@
+    int chuVi = (chieuDai + chieuRong) * 2;
+    int dienTich = chieuDai * chieuRong;
+
+    // @3. Xuất kho (In ra màn hình)@
+    cout << "Chu vi la: " << chuVi << endl;
+    cout << "Dien tich la: " << dienTich << endl;
+}
+\end{lstlisting}
+\end{frame}
+
+% 8. Challenge
+\begin{frame}{Thử Thách}
+  \begin{center}
+      \LARGE
+      Hãy viết chương trình tính tuổi của bạn vào năm \textbf{2050}!
+  \end{center}
+  
+  \vspace{1cm}
+  
+  \textbf{Gợi ý:}
+  \begin{enumerate}
+      \item Tạo biến \texttt{namSinh}.
+      \item Dùng phép toán trừ: $2050 - \texttt{namSinh}$.
+      \item In kết quả ra màn hình.
+  \end{enumerate}
+\end{frame}
+
+\end{document}

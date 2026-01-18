@@ -1,0 +1,5 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{1. Tiếp nhận \& Phẫu thuật}{3}{0}{1}
+\beamer@sectionintoc {2}{2. Chunk 1: Cặp đôi hoàn hảo}{4}{0}{2}
+\beamer@sectionintoc {3}{3. Chunk 2: Vét sạch kho}{6}{0}{3}
+\beamer@sectionintoc {4}{4. Tổng kết & Chốt thuật toán}{9}{0}{4}

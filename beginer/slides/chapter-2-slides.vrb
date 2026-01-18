@@ -1,0 +1,21 @@
+\frametitle{Ví Dụ Tổng Hợp}
+Chương trình tính Chu vi và Diện tích Hình chữ nhật:
+
+\begin{lstlisting}[language=C++]
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    // @1. Khai báo hộp (biến)@
+    int chieuDai = 10;
+    int chieuRong = 5;
+
+    // @2. Chế biến (Toán tử)@
+    int chuVi = (chieuDai + chieuRong) * 2;
+    int dienTich = chieuDai * chieuRong;
+
+    // @3. Xuất kho (In ra màn hình)@
+    cout << "Chu vi la: " << chuVi << endl;
+    cout << "Dien tich la: " << dienTich << endl;
+}
+\end{lstlisting}

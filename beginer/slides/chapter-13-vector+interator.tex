@@ -1,0 +1,360 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Định nghĩa màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình hiển thị code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title[Bí Kíp Luyện Rồng C++]{Bí Kíp Luyện Rồng C++: Vector \& Iterator}
+\subtitle{Khám phá Chiếc Túi Thần Kỳ và Người Soát Vé}
+\author{Slide Learning Cpp}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Lộ trình ---
+\begin{frame}{Bản Đồ Kho Báu C++ (Lộ trình học tập)}
+    \begin{block}{Hành trình 4 Chương}
+    \begin{itemize}
+        \item \textbf{Chương 1: Vector - Đoàn Tàu Co Giãn:} Tại sao cần Vector thay vì mảng thường?
+        \item \textbf{Chương 2: Iterator - Người Soát Vé Tận Tụy:} Hiểu về con trỏ thông minh.
+        \item \textbf{Chương 3: Hành Trình Điểm Danh:} Duyệt Vector bằng vòng lặp.
+        \item \textbf{Chương 4: Phép Thuật Algorithms:} Sắp xếp và Tìm kiếm.
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+% =========================================================================
+% CHƯƠNG 1
+% =========================================================================
+\section{Chương 1: Vector}
+
+\begin{frame}{Chương 1: Vector - Đoàn Tàu Co Giãn}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{alertblock}{Mảng (Array) Cũ Kỹ}
+            Giống như khay đựng trứng nhựa cứng.
+            \begin{itemize}
+                \item Cố định số lượng (VD: 6 lỗ).
+                \item Muốn thêm quả thứ 7? Phải mua khay mới!
+            \end{itemize}
+        \end{alertblock}
+
+        \column{0.5\textwidth}
+        \begin{exampleblock}{Vector (Mảng Động)}
+            Giống như Đoàn Tàu Phép Thuật.
+            \begin{itemize}
+                \item Tự động thêm toa khi có khách mới.
+                \item Có thể dài ra vô tận.
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+    
+    \vspace{0.5cm}
+    \textbf{Cốt lõi:} Vector là danh sách có thể \textbf{tự động co giãn} kích thước.
+\end{frame}
+
+\begin{frame}[fragile]{Câu thần chú: Triệu hồi Vector}
+    \begin{enumerate}
+        \item \textbf{Mở sách phép (Thư viện):}
+\begin{lstlisting}[language=C++]
+#include <vector> 
+using namespace std;
+\end{lstlisting}
+        
+        \item \textbf{Tạo đoàn tàu (Khai báo):}
+\begin{lstlisting}[language=C++]
+vector<string> vu_khi; // Doan tau rong
+\end{lstlisting}
+        
+        \item \textbf{Nối thêm toa (Push Back):}
+        Đẩy món đồ vào cửa sau (`back`) của đoàn tàu.
+\begin{lstlisting}[language=C++]
+vu_khi.push_back("Kiem Go");   // Toa 1
+vu_khi.push_back("Cung Ten");  // Toa 2 noi sau
+vu_khi.push_back("Khien Sat"); // Toa 3 noi tiep
+\end{lstlisting}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Quick Check)}
+    \begin{exampleblock}{Tình huống}
+        Đoàn tàu \texttt{vu\_khi} đang có 3 món: Kiếm, Cung, Khiên.
+        Bạn hô thần chú:
+        \begin{lstlisting}[language=C++]
+vu_khi.push_back("Mu Giap");
+        \end{lstlisting}
+    \end{exampleblock}
+
+    \textbf{Câu hỏi:} 
+    \begin{enumerate}
+        \item Món "Mũ Giáp" nằm ở vị trí nào? (Đầu, Giữa hay Cuối?)
+        \item Tổng cộng đoàn tàu có bao nhiêu toa?
+    \end{enumerate}
+
+    \pause
+    \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=Đáp án]
+        1. Người mới đến luôn xếp hàng ở \textbf{Cuối tàu}.\\
+        2. Tổng cộng có \textbf{4 toa}.
+    \end{tcolorbox}
+\end{frame}
+
+% =========================================================================
+% CHƯƠNG 2
+% =========================================================================
+\section{Chương 2: Iterator}
+
+\begin{frame}{Chương 2: Iterator - Người Soát Vé Tận Tụy}
+    Tại sao không dùng số thứ tự (Index) \texttt{vu\_khi[0]}?
+    \begin{itemize}
+        \item Index giống như dịch chuyển tức thời (nhanh nhưng dễ nhầm chỗ).
+        \item \textbf{Iterator} là Người Soát Vé đi bộ từng bước.
+    \end{itemize}
+
+    \begin{block}{Cách hoạt động}
+    \begin{itemize}
+        \item Bắt đầu từ đầu tàu.
+        \item Bước từng bước sang toa kế (`++`).
+        \item Biết chính xác khi nào hết đường ray (`end()`).
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Ba hành động của Người Soát Vé}
+    Khai báo: \texttt{vector<string>::iterator it;}
+    
+    \begin{enumerate}
+        \item \textbf{Bắt đầu hành trình (begin):}
+\begin{lstlisting}[language=C++]
+it = vu_khi.begin(); // Dung o cua toa dau tien
+\end{lstlisting}
+        
+        \item \textbf{Mở cửa kiểm tra (*it):}
+        Dùng dấu sao \texttt{*} để xem bên trong.
+\begin{lstlisting}[language=C++]
+cout << *it; // Hien ra "Kiem Go"
+\end{lstlisting}
+        
+        \item \textbf{Bước sang toa kế (it++):}
+\begin{lstlisting}[language=C++]
+it++; // Buoc sang toa "Cung Ten"
+\end{lstlisting}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Bí ẩn về điểm kết thúc (end)}
+    \begin{alertblock}{Cảnh báo quan trọng!}
+        \texttt{vu\_khi.end()} \textbf{KHÔNG PHẢI} là toa cuối cùng.
+    \end{alertblock}
+    
+    Hãy tưởng tượng:
+    \begin{itemize}
+        \item \texttt{begin()}: Bậc thềm toa 1.
+        \item \texttt{end()}: \textbf{Mặt đất sân ga}, ngay sau khi bước xuống khỏi toa cuối.
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    Khi \texttt{it == end()} nghĩa là "Chân đã chạm đất", đã đi hết tàu.
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Quick Check)}
+    Đoàn tàu: [Toa 1: Kiếm] [Toa 2: Cung] [Toa 3: Khiên] [Toa 4: Mũ]
+    
+\begin{lstlisting}[language=C++]
+vector<string>::iterator it = vu_khi.begin(); // (1)
+it++; // (2) Buoc 1
+it++; // (3) Buoc 2
+cout << *it; // (4) Mo cua
+\end{lstlisting}
+
+    \textbf{Câu hỏi:} Người soát vé đang đứng trước món đồ nào?
+    
+    \pause
+    \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,title=Đáp án]
+        Sau 2 lần bước, ông ấy đứng ở \textbf{Toa 3: Khiên Sắt}.
+    \end{tcolorbox}
+    
+    \pause
+    \textbf{Câu hỏi phụ:} Nếu bước thêm 2 bước nữa (\texttt{it++} 2 lần), ông ấy đứng ở đâu?
+    \pause
+    $\rightarrow$ Chạm đất (\texttt{end()}).
+\end{frame}
+
+% =========================================================================
+% CHƯƠNG 3
+% =========================================================================
+\section{Chương 3: Duyệt Vector}
+
+\begin{frame}[fragile]{Duyệt Vector: Cách 1 (While)}
+    \textbf{Quy tắc:} "Chừng nào chân ông chưa chạm đất (\texttt{!= end()}), thì cứ kiểm tra và đi tiếp."
+
+\begin{lstlisting}[language=C++]
+vector<string>::iterator it;
+it = vu_khi.begin();         // 1. Xuat phat
+
+while (it != vu_khi.end()) { // 2. Kiem tra: Chua cham dat?
+    cout << *it << endl;     // 3. Hanh dong: Doc ten
+    it++;                    // 4. Di chuyen: Buoc tiep
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Duyệt Vector: Cách 2 (For)}
+    Gói gọn 3 bước vào 1 dòng code (Băng chuyền tự động).
+
+\begin{lstlisting}[language=C++]
+// For (Khoi hanh ; Dieu kien dung ; Buoc di)
+for (it = vu_khi.begin(); it != vu_khi.end(); it++) {
+    cout << *it << endl;
+}
+\end{lstlisting}
+
+    \begin{itemize}
+        \item \textbf{Khởi hành:} \texttt{it = begin()}
+        \item \textbf{Điều kiện dừng:} \texttt{it != end()} (Chưa chạm đất)
+        \item \textbf{Bước đi:} \texttt{it++}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Thám tử tìm lỗi sai}
+    Đoạn code sau có một lỗi sai kinh điển trong thế giới Iterator:
+
+\begin{lstlisting}[language=C++]
+// Tim loi sai o dong nay:
+for (it = vu_khi.begin(); it < vu_khi.end(); it++) { 
+    cout << *it;
+}
+\end{lstlisting}
+
+    \textbf{Câu hỏi:} Tại sao dùng dấu bé hơn \texttt{<} là sai, mà phải dùng \texttt{!=}?
+
+    \pause
+    \begin{alertblock}{Giải thích}
+        Trong C++, các toa tàu của một số loại container (như List, Map) nằm rải rác, không thẳng hàng nên không so sánh "bé hơn" được.
+        \\
+        Chúng ta chỉ quan tâm: \textbf{"Đã đến đích chưa?"} (Khác đích hay bằng đích). Do đó luôn dùng \texttt{!=}.
+    \end{alertblock}
+\end{frame}
+
+% =========================================================================
+% CHƯƠNG 4
+% =========================================================================
+\section{Chương 4: Algorithms}
+
+\begin{frame}[fragile]{Chương 4: Phép Thuật Algorithms}
+    Thay vì tự viết vòng lặp, hãy dùng thư viện \texttt{algorithm}.
+    
+    \begin{block}{Quy tắc chung}
+        Phải chỉ rõ phạm vi tác động: Từ \textbf{Đầu tàu} đến \textbf{Cuối tàu}.
+    \end{block}
+    
+    \textbf{1. Phép thuật Sắp xếp (Sort):}
+\begin{lstlisting}[language=C++]
+#include <algorithm>
+// Sap xep tang dan (Be -> Lon, A -> Z)
+sort(vu_khi.begin(), vu_khi.end());
+\end{lstlisting}
+    Kết quả: \{\texttt{"Cung", "Khiên", "Kiếm"}\}
+\end{frame}
+
+\begin{frame}[fragile]{Phép thuật Tìm kiếm (Find)}
+    Thả "Chó săn phép thuật" đi tìm đồ.
+
+\begin{lstlisting}[language=C++]
+// Cu phap: find(Bat dau, Ket thuc, Vat can tim);
+auto ket_qua = find(vu_khi.begin(), vu_khi.end(), "Cung Ten");
+
+if (ket_qua != vu_khi.end()) {
+    cout << "Da tim thay!";
+} else {
+    cout << "Khong co trong balo!";
+}
+\end{lstlisting}
+
+    \begin{itemize}
+        \item \textbf{Tìm thấy:} \texttt{ket\_qua} trỏ vào toa chứa đồ.
+        \item \textbf{Không thấy:} \texttt{ket\_qua} chạy thẳng ra \texttt{end()}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Thử thách cuối cùng (The Final Boss)}
+    \textbf{Đề bài:} Có danh sách điểm: \texttt{vector<int> diem = \{7, 4, 9, 2\};}
+    
+    \textbf{Nhiệm vụ:}
+    \begin{enumerate}
+        \item Sắp xếp từ thấp đến cao.
+        \item In ra điểm thấp nhất và cao nhất.
+    \end{enumerate}
+    
+    \pause
+    \begin{exampleblock}{Lời giải}
+\begin{lstlisting}[language=C++]
+sort(diem.begin(), diem.end()); // 1. Sap xep: {2, 4, 7, 9}
+
+// 2. Diem thap nhat (Dau tau)
+cout << "Min: " << diem[0];     
+
+// 3. Diem cao nhat (Cuoi tau - 1) HOAC dung back()
+cout << "Max: " << diem.back(); 
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+% --- Tổng kết ---
+\begin{frame}{Tổng Kết Khóa Học}
+    \begin{table}[]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Vũ Khí} & \textbf{Ẩn Dụ} & \textbf{Tác Dụng} \\ \hline
+    Vector & Đoàn tàu co giãn & Mảng động, \texttt{push\_back} \\ \hline
+    Iterator & Người soát vé & Con trỏ thông minh (\texttt{begin, end}) \\ \hline
+    For/While & Băng chuyền & Duyệt qua vector \\ \hline
+    Algorithm & Phép thuật & \texttt{sort}, \texttt{find} \\ \hline
+    \end{tabular}
+    \end{table}
+    
+    \vspace{1cm}
+    \centering
+    \Large \textbf{Bạn đã sẵn sàng để viết code chưa?}
+\end{frame}
+
+\end{document}

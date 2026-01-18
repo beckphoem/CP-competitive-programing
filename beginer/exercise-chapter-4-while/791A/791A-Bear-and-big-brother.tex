@@ -1,0 +1,224 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Colors for code blocks
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Meta information
+\title{791A - Bear and Big Brother}
+\subtitle{Tư Duy Thuật Toán & Kỹ Năng Mô Phỏng}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% Slide 1: Title
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 2: Introduction
+\begin{frame}{Giới thiệu bài toán}
+    \begin{block}{Tổng quan}
+        Đây là bài toán nhập môn kinh điển về dạng \textbf{"Mô phỏng" (Simulation)}.
+        \begin{itemize}
+            \item \textbf{Mục tiêu:} Rèn luyện thói quen tư duy chuẩn xác.
+            \item \textbf{Phương pháp:} Phẫu thuật \& Dẫn dắt (Step-by-step).
+        \end{itemize}
+    \end{block}
+
+    \begin{alertblock}{Lưu ý}
+        Đừng để tiêu đề "nhẹ nhàng" đánh lừa. Hãy nhìn bài toán dưới lăng kính logic trần trụi.
+    \end{alertblock}
+\end{frame}
+
+% Slide 3: Step 1 - Briefing
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \textbf{Tóm tắt đề bài (Ngôn ngữ lập trình):}
+    
+    \begin{itemize}
+        \item \textbf{Biến số:} $a$ (Limak), $b$ (Bob).
+        \item \textbf{Ban đầu:} $a \le b$.
+        \item \textbf{Quy luật tăng trưởng (mỗi năm):}
+        \begin{itemize}
+            \item Limak: $a = a \times 3$
+            \item Bob: $b = b \times 2$
+        \end{itemize}
+        \item \textbf{Mục tiêu:} Tìm số năm nhỏ nhất để $a > b$ (Lớn hơn hẳn).
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Lộ trình tư duy (3 Micro-Chunks):}
+    \begin{enumerate}
+        \item Cơ chế tăng trưởng.
+        \item Điểm gãy (Điều kiện dừng).
+        \item Tư duy biên (Edge Cases).
+    \end{enumerate}
+\end{frame}
+
+% Slide 4: Chunk 1 - The Growth
+\begin{frame}{Chunk 1: Cơ chế tăng trưởng}
+    \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Logic Mô Phỏng]
+        Hãy tưởng tượng một cuộc đua xe:
+        \begin{itemize}
+            \item \textbf{Xe Limak:} Xuất phát sau nhưng động cơ tên lửa ($\times 3$).
+            \item \textbf{Xe Bob:} Xuất phát trước nhưng chạy chậm hơn ($\times 2$).
+        \end{itemize}
+    \end{tcolorbox}
+
+    \textbf{Phương pháp:} 
+    Không dùng công thức toán phức tạp. Hãy để máy tính đóng vai trọng tài, đếm từng năm trôi qua.
+    
+    \begin{alertblock}{Bẫy tư duy (Trap)}
+        Đừng tính khoảng cách chênh lệch (1.5 lần). Hãy nghĩ đơn giản: \textbf{Sau 1 năm, giá trị cũ bị thay thế bởi giá trị mới.}
+    \end{alertblock}
+\end{frame}
+
+% Slide 5: Mental Check - Example 1
+\begin{frame}{Thử thách tư duy: Ví dụ mẫu}
+    \textbf{Giả sử ban đầu:} $a = 4$ (Limak), $b = 7$ (Bob).
+    
+    \vspace{0.5cm}
+    
+    \textbf{Sau Năm thứ 1:}
+    \begin{itemize}
+        \item $a_{new} = 4 \times 3 = 12$
+        \item $b_{new} = 7 \times 2 = 14$
+    \end{itemize}
+    
+    \vspace{0.2cm}
+    $\rightarrow$ So sánh: $12 \le 14$ (Limak vẫn thua).
+    
+    \vspace{0.2cm}
+    \textbf{Kết luận:} Cuộc đua chưa kết thúc. Tiếp tục sang năm sau.
+\end{frame}
+
+% Slide 6: Chunk 2 - Loop Condition
+\begin{frame}{Chunk 2: Điều kiện dừng (The Break Point)}
+    \begin{tcolorbox}[title=Tư duy Vòng lặp (While Loop)]
+        Sử dụng chiến thuật: \textbf{"Lặp cho đến khi..."}
+        \begin{enumerate}
+            \item Kiểm tra: Limak có thắng chưa?
+            \item Nếu chưa ($a \le b$): Tăng biến đếm `nam`, cập nhật cân nặng.
+            \item Nếu rồi ($a > b$): \textbf{DỪNG NGAY}.
+        \end{enumerate}
+    \end{tcolorbox}
+
+    \begin{alertblock}{Lỗi phổ biến nhất}
+        Điều kiện dừng là $a > b$.
+        Nếu $a = b$, cuộc đua vẫn \textbf{PHẢI TIẾP TỤC}.
+    \end{alertblock}
+\end{frame}
+
+% Slide 7: Mental Check - Example 2
+\begin{frame}{Thử thách tư duy: Tiếp tục ví dụ}
+    Tiếp tục với $a = 12, b = 14$ (Sau năm 1).
+    
+    \vspace{0.5cm}
+    \textbf{Sau Năm thứ 2:}
+    \begin{itemize}
+        \item $a_{new} = 12 \times 3 = 36$
+        \item $b_{new} = 14 \times 2 = 28$
+    \end{itemize}
+    
+    \vspace{0.2cm}
+    $\rightarrow$ So sánh: $36 > 28$.
+    
+    \vspace{0.2cm}
+    \textbf{Quyết định:} 
+    \begin{itemize}
+        \item Limak đã lớn hơn hẳn Bob.
+        \item Dừng vòng lặp.
+        \item Kết quả: \textbf{2 năm}.
+    \end{itemize}
+\end{frame}
+
+% Slide 8: Chunk 3 - Edge Cases
+\begin{frame}{Chunk 3: Tư duy biên (Edge Cases)}
+    \textbf{Trường hợp "nguy hiểm":} Hai bạn bằng cân nhau ngay từ đầu.
+    
+    \vspace{0.2cm}
+    \textbf{Input:} \texttt{1 1} ($a=1, b=1$)
+    
+    \begin{block}{Phân tích}
+        \begin{itemize}
+            \item Ban đầu: $1 = 1 \rightarrow$ Chưa thỏa mãn điều kiện $a > b$.
+            \item Vòng lặp chạy lần 1:
+            \begin{itemize}
+                \item $a = 1 \times 3 = 3$
+                \item $b = 1 \times 2 = 2$
+            \end{itemize}
+            \item Kiểm tra: $3 > 2 \rightarrow$ \textbf{Thỏa mãn}.
+        \end{itemize}
+    \end{block}
+    
+    $\Rightarrow$ Kết quả là \textbf{1 năm} (Không phải 0).
+\end{frame}
+
+% Slide 9: Algorithm Recipe
+\begin{frame}[fragile]{Tổng kết thuật toán (Algorithm Recipe)}
+    Đây là "bản thiết kế" trước khi viết code:
+    
+    \begin{enumerate}
+        \item \textbf{Đầu vào:} Nhập 2 số $a, b$.
+        \item \textbf{Khởi tạo:} Biến đếm \texttt{nam = 0}.
+        \item \textbf{Vòng lặp (While Loop):}
+            \begin{lstlisting}[language=C++]
+while (a <= b) {
+    nam++;      // Tang nam
+    a = a * 3;  // Limak tang truong
+    b = b * 2;  // Bob tang truong
+}
+            \end{lstlisting}
+        \item \textbf{Kết thúc:} In ra giá trị \texttt{nam}.
+    \end{enumerate}
+\end{frame}
+
+% Slide 10: Next Steps
+\begin{frame}{Bước tiếp theo: Hiện thực hóa}
+    Bạn đã nắm vững thuật toán. Hãy chọn bước tiếp theo:
+    
+    \begin{itemize}
+        \item[1.] \textbf{Tự viết code:} Code bằng C++/Python và tự kiểm tra.
+        \item[2.] \textbf{Code khung sườn:} Điền vào chỗ trống.
+        \item[3.] \textbf{Xem đáp án mẫu:} Tham khảo cách viết chuẩn (Clean Code).
+    \end{itemize}
+    
+    \vspace{1cm}
+    \centering
+    \textit{"Code is logic made tangible."}
+\end{frame}
+
+\end{document}

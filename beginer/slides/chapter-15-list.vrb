@@ -1,0 +1,24 @@
+\frametitle{Nâng Cao: Sắp Xếp Giảm Dần}
+Muốn xếp từ Lớn về Bé, ta dùng \texttt{sort(greater...)}.
+
+    \begin{alertblock}{Lưu ý về cú pháp}
+        Viết \texttt{greater<auto>()} $\rightarrow$ \textbf{SAI Cú pháp}.
+    \end{alertblock}
+
+    \begin{exampleblock}{Giải pháp: Transparent Operator (C++14)}
+        Dùng \texttt{greater<>()} (Bỏ trống ngoặc nhọn). Đây là chiếc găng tay "Free Size".
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++]
+#include <functional> // Bat buoc
+
+list<int> diem = {5, 1, 9, 3};
+
+// Cach cu (Phai chi dinh kieu):
+// diem.sort(greater<int>());
+
+// CACH MOI (Khuyen dung, ngan gon):
+diem.sort(greater<>());
+
+// Ket qua: 9, 5, 3, 1
+\end{lstlisting}

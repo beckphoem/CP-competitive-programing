@@ -1,0 +1,5 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Tiếp nhận & Phẫu thuật}{3}{0}{1}
+\beamer@sectionintoc {2}{Chunk 1: Cơ chế ví tiền}{5}{0}{2}
+\beamer@sectionintoc {3}{Chunk 2: Chiến thuật truy tìm}{7}{0}{3}
+\beamer@sectionintoc {4}{Chunk 3: Tổng kết & Mã giả}{9}{0}{4}

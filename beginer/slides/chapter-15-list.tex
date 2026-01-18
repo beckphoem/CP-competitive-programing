@@ -1,0 +1,361 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin slide
+\title[Làm chủ C++ List]{Lộ Trình Khám Phá: Làm Chủ C++ List}
+\subtitle{Từ Kệ Sách đến Đoàn Tàu Hỏa}
+\author{Người Đồng Hành Learning How to Learn}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Giới thiệu & Lộ trình
+\begin{frame}{Lộ Trình Khám Phá}
+    Chào bạn! Hôm nay chúng ta sẽ học cách làm "trưởng tàu" với \texttt{std::list}.
+    
+    \begin{block}{Lộ Trình: Làm Chủ C++ List}
+        \begin{itemize}
+            \item \textbf{Chương 1: Cuộc Đối Đầu Giữa Đoàn Tàu và Kệ Sách} \\
+            Hiểu bản chất \texttt{std::list} vs \texttt{std::vector}.
+            
+            \item \textbf{Chương 2: Người Dẫn Đường Tự Động} \\
+            Làm quen với \texttt{iterator} và \texttt{auto}.
+            
+            \item \textbf{Chương 3: Hành Trình Kiểm Tra Từng Toa Tàu} \\
+            Duyệt danh sách bằng \texttt{while} và \texttt{for}.
+            
+            \item \textbf{Chương 4: Những Câu Thần Chú Của Trưởng Tàu} \\
+            Các thuật toán: \texttt{sort}, \texttt{merge}, \texttt{reverse},...
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- CHƯƠNG 1 ---
+\begin{frame}{Chương 1: Cuộc Đối Đầu Giữa Đoàn Tàu và Kệ Sách}
+    Hãy tưởng tượng bộ nhớ máy tính là một sân chơi.
+    
+    \begin{block}{1. Vector: Chiếc Kệ Sách Gỗ Cố Định}
+        \begin{itemize}
+            \item \textbf{Đặc điểm:} Các ô sách dính liền thành một khối.
+            \item \textbf{Điểm mạnh:} Truy cập ngẫu nhiên siêu nhanh (Lấy ngay ô số 5).
+            \item \textbf{Điểm yếu:} Chèn vào giữa rất mệt (Phải đẩy toàn bộ sách phía sau lùi lại).
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{2. List: Đoàn Tàu Hỏa Nối Đuôi Nhau}
+        Trong C++, nó là \textit{Doubly Linked List}.
+        \begin{itemize}
+            \item \textbf{Toa tàu (Node):} Chứa dữ liệu.
+            \item \textbf{Móc nối (Pointer):} Các toa nối với nhau bằng móc xích.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Tại sao "Đoàn Tàu" (List) thắng "Kệ Sách" (Vector)?}
+    \begin{block}{Sự linh hoạt}
+        Khi chèn một toa mới vào giữa:
+        \begin{enumerate}
+            \item Tháo móc xích giữa hai toa cũ.
+            \item Móc toa mới vào giữa.
+            \item Xong! Không cần di chuyển các toa khác.
+        \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Cái giá phải trả}
+        \begin{itemize}
+            \item \textbf{Vector:} Nhanh khi tìm, chậm khi sửa đổi.
+            \item \textbf{List:} Chậm khi tìm (phải đi bộ từ đầu tàu), siêu nhanh khi sửa đổi.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Câu Hỏi Kiểm Tra Tư Duy}
+    \begin{exampleblock}{Bài toán Playlist Nhạc}
+        Bạn viết ứng dụng nghe nhạc. Người dùng hay kéo bài hát từ cuối lên đầu, hoặc chèn bài mới vào giữa.
+        Bạn chọn \textbf{Vector} hay \textbf{List}?
+    \end{exampleblock}
+
+    \pause
+    \vspace{1cm}
+    
+    \textbf{Đáp án:} \texttt{std::list} (Đoàn tàu).
+    
+    \textit{Giải thích:} Việc đổi thứ tự bài hát chỉ đơn giản là tháo móc toa này gắn vào toa kia. Không cần bê vác nặng nhọc như vector.
+\end{frame}
+
+% --- CHƯƠNG 2 ---
+\begin{frame}[fragile]{Chương 2: Người Dẫn Đường Tự Động}
+    Với List, bạn không thể gọi "Toa số 5". Bạn cần một \textbf{Iterator} (Người Soát Vé).
+
+    \begin{itemize}
+        \item Bắt đầu tại \texttt{begin()}.
+        \item Bước sang toa kế tiếp bằng \texttt{++}.
+        \item Soi đèn lấy dữ liệu bằng \texttt{*iterator}.
+        \item Dừng lại tại \texttt{end()} (khoảng không sau toa cuối).
+    \end{itemize}
+
+    \begin{block}{Sức mạnh của \texttt{auto}}
+        Thay vì viết tên kiểu dài dòng, hãy dùng thẻ tên vạn năng.
+    \end{block}
+
+\begin{lstlisting}[language=C++]
+// Cach cu: Dai dong
+std::list<int>::iterator nguoi_soat_ve = my_list.begin();
+
+// Cach moi: Ngan gon, sanh dieu
+auto nguoi_soat_ve = my_list.begin();
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Ví dụ Minh Họa: Iterator}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <list>
+using namespace std;
+
+int main() {
+    // 1. Tao doan tau (List)
+    list<int> doan_tau = {10, 20, 30};
+
+    // 2. Thue nguoi soat ve (Iterator) dung auto
+    // Ong ay dang dung o toa dau tien (so 10)
+    auto nguoi_soat_ve = doan_tau.begin();
+
+    // 3. Soi den pin xem trong toa co gi (* de lay gia tri)
+    // In ra: Toa dau tien cho: 10
+    cout << "Toa dau tien cho: " << *nguoi_soat_ve << endl; 
+
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Câu Hỏi Kiểm Tra Tư Duy}
+    \begin{exampleblock}{Câu hỏi}
+        Người Soát Vé đang đứng yên ở đầu tàu. Để ông ấy đi từ toa này sang toa kế tiếp, chúng ta dùng phép toán nào?
+    \end{exampleblock}
+
+    \pause
+    \vspace{1cm}
+    
+    \textbf{Đáp án:} Phép toán \texttt{++} (Increment).
+    
+    Bạn ra lệnh \texttt{it++}, Người Soát Vé sẽ bước sang toa kế tiếp ngay lập tức.
+\end{frame}
+
+% --- CHƯƠNG 3 ---
+\begin{frame}[fragile]{Chương 3: Hành Trình Kiểm Tra Từng Toa Tàu}
+    \textbf{Cách 1: Thủ Công (While)} - Hiểu rõ từng bước chân.
+
+\begin{lstlisting}[language=C++]
+list<int> diem_so = {8, 9, 10};
+auto it = diem_so.begin(); // Dung o dau tau
+
+while (it != diem_so.end()) { // Chung nao chua rot khoi tau
+    cout << *it << " ";       // 1. Soi den pin
+    it++;                     // 2. Buoc sang toa ke tiep
+}
+\end{lstlisting}
+
+    \vspace{0.5cm}
+    \textbf{Cách 2: Tự Động (Range-based for loop)} - Băng chuyền siêu tốc.
+
+\begin{lstlisting}[language=C++]
+// Voi moi 'x' nam TRONG 'diem_so'
+for (auto x : diem_so) {
+    cout << x << " ";
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Nguy Hiểm: Xóa Toa Tàu (Erase)}
+    \begin{alertblock}{CẢNH BÁO CRASH}
+        Nếu bạn xóa toa tàu hiện tại (\texttt{erase(it)}) nhưng vòng lặp \texttt{for} vẫn tự động \texttt{it++}, chương trình sẽ sập vì iterator bị treo lơ lửng.
+    \end{alertblock}
+
+    \textbf{Kỹ thuật "Nhảy tàu" (Safe Erase):}
+    Hàm \texttt{erase()} trả về địa chỉ toa kế tiếp. Hãy bám lấy nó!
+
+\begin{lstlisting}[language=C++]
+list<int> doan_tau = {1, 5, 9, 5, 10};
+
+// Phan 'buoc di' trong for de TRONG
+for (auto it = doan_tau.begin(); it != doan_tau.end(); /* TRONG */ ) {
+    
+    if (*it == 5) {
+        // Ky thuat "Nhay tau":
+        // Xoa toa hien tai va nhay sang toa ke tiep
+        it = doan_tau.erase(it); 
+    } 
+    else {
+        // Neu khong xoa, moi di bo
+        it++; 
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Câu Hỏi Kiểm Tra "Trưởng Tàu"}
+    \begin{exampleblock}{Tình huống}
+        Danh sách: \texttt{\{2, 4, 6\}}.
+        Bạn xóa số \textbf{6} (toa cuối) bằng lệnh \texttt{it = erase(it)}.
+        Lúc này ông Soát Vé sẽ đứng ở đâu?
+    \end{exampleblock}
+
+    \pause
+    \vspace{1cm}
+    
+    \textbf{Đáp án:} Ông ấy đứng ở \texttt{end()}.
+    
+    Hàm \texttt{erase} trả về \texttt{end()} khi xóa phần tử cuối cùng. Vòng lặp kiểm tra thấy \texttt{it == end()} nên dừng lại an toàn.
+\end{frame}
+
+% --- CHƯƠNG 4 ---
+\begin{frame}[fragile]{Chương 4: Những Câu Thần Chú Của Trưởng Tàu}
+    \begin{alertblock}{Cái Bẫy Sắp Xếp (Sorting Trap)}
+        \texttt{std::sort(list.begin(), list.end())} $\rightarrow$ \textbf{LỖI!}
+        Lý do: List không hỗ trợ truy cập ngẫu nhiên.
+    \end{alertblock}
+
+    \begin{block}{Giải pháp: Dùng hàm thành viên}
+        \texttt{my\_list.sort();}
+    \end{block}
+
+    \textbf{Bộ Ba Phép Thuật:}
+    \begin{itemize}
+        \item \textbf{Sắp xếp:} \texttt{my\_list.sort();} (Bé $\rightarrow$ Lớn).
+        \item \textbf{Đảo ngược:} \texttt{my\_list.reverse();} (Đầu $\leftrightarrow$ Đuôi).
+        \item \textbf{Lọc trùng:} \texttt{my\_list.unique();} (Chỉ lọc 2 toa \textbf{đứng cạnh nhau}).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ví dụ Tổng Hợp Sức Mạnh}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <list>
+using namespace std;
+
+int main() {
+    list<int> tau = {4, 2, 2, 5, 1, 5};
+
+    // 1. Sap xep truoc
+    tau.sort(); 
+    // Tau thanh: {1, 2, 2, 4, 5, 5}
+
+    // 2. Loai bo toa trung nhau (khi da xep ke nhau)
+    tau.unique();
+    // Tau thanh: {1, 2, 4, 5}
+
+    // 3. Dao nguoc lai
+    tau.reverse();
+    // Tau thanh: {5, 4, 2, 1}
+
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Câu Hỏi Tốt Nghiệp (Final Boss)}
+    \begin{exampleblock}{Thử thách Unique}
+        Danh sách: \texttt{list<int> my\_list = \{1, 2, 1, 2\};}
+        Chạy ngay: \texttt{my\_list.unique();} (KHÔNG sort trước).
+        Kết quả là gì?
+        \begin{enumerate}[A.]
+            \item \texttt{\{1, 2\}}
+            \item \texttt{\{1, 2, 1, 2\}}
+        \end{enumerate}
+    \end{exampleblock}
+
+    \pause
+    \vspace{0.5cm}
+    
+    \textbf{Đáp án: B. \{1, 2, 1, 2\}}
+    
+    \textit{Lý do:} \texttt{unique()} bị "cận thị", chỉ lọc được các phần tử đứng sát cạnh nhau.
+    \textbf{Quy tắc vàng:} Luôn \texttt{sort} trước khi \texttt{unique}.
+\end{frame}
+
+% --- Bonus: Greater ---
+\begin{frame}[fragile]{Nâng Cao: Sắp Xếp Giảm Dần}
+    Muốn xếp từ Lớn về Bé, ta dùng \texttt{sort(greater...)}.
+
+    \begin{alertblock}{Lưu ý về cú pháp}
+        Viết \texttt{greater<auto>()} $\rightarrow$ \textbf{SAI Cú pháp}.
+    \end{alertblock}
+
+    \begin{exampleblock}{Giải pháp: Transparent Operator (C++14)}
+        Dùng \texttt{greater<>()} (Bỏ trống ngoặc nhọn). Đây là chiếc găng tay "Free Size".
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++]
+#include <functional> // Bat buoc
+
+list<int> diem = {5, 1, 9, 3};
+
+// Cach cu (Phai chi dinh kieu):
+// diem.sort(greater<int>()); 
+
+// CACH MOI (Khuyen dung, ngan gon):
+diem.sort(greater<>()); 
+
+// Ket qua: 9, 5, 3, 1
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng Kết Hành Trình}
+    Chúc mừng bạn đã hoàn thành khóa học cấp tốc về \texttt{std::list}!
+
+    \begin{block}{Tóm tắt kho báu}
+        \begin{enumerate}
+            \item \textbf{Bản chất:} Đoàn tàu móc xích. Thêm/Xóa nhanh, Tìm kiếm chậm.
+            \item \textbf{Duyệt:} Dùng \texttt{for(auto x : list)} hoặc Iterator.
+            \item \textbf{Thao tác:} Nhớ kỹ thuật "Nhảy tàu" \texttt{it = erase(it)} để xóa an toàn.
+            \item \textbf{Thuật toán:} Dùng đồ "chính chủ": \texttt{sort()}, \texttt{reverse()}, \texttt{unique()}.
+        \end{enumerate}
+    \end{block}
+
+    \centering
+    \vspace{1cm}
+    \Large \textbf{Bạn đã sẵn sàng cho bài tập thực hành chưa?}
+\end{frame}
+
+\end{document}

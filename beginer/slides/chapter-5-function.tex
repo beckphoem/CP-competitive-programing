@@ -1,0 +1,305 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Cấu hình màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình style cho listings
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@,
+    language=C++
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title[C++ Functions]{Functions (Hàm): Phép Thuật và Những Câu Thần Chú}
+\subtitle{Chương 5: Khám phá quyền năng của C++}
+\author{Lớp học lập trình đặc biệt}
+\date{\today}
+
+\begin{document}
+
+% Slide tiêu đề
+\frame{\titlepage}
+
+% Slide giới thiệu
+\begin{frame}{Lời chào mừng}
+    Chào mừng em gia nhập lớp học lập trình đặc biệt này!
+    
+    \vspace{0.5cm}
+    Chúng ta sẽ cùng khám phá một trong những "quyền năng" mạnh mẽ nhất của thế giới C++: \textbf{Functions (Hàm)}.
+    
+    \begin{block}{Định nghĩa theo phong cách Phép thuật}
+        Nếu lập trình là việc em ra lệnh cho máy tính, thì \textbf{Function (Hàm)} chính là cách em dạy máy tính những "tuyệt chiêu" đặc biệt để dùng đi dùng lại mà không cần dạy lại từ đầu.
+    \end{block}
+\end{frame}
+
+% Slide Lộ trình
+\begin{frame}{Bản đồ kho báu: Chinh phục C++ Functions}
+    \begin{block}{Lộ trình Khám phá}
+        \begin{enumerate}
+            \item \textbf{Chương 1: Cuốn Sách Phép Thuật (Create a Function)}
+            \begin{itemize}
+                \item Cách tạo ra một "câu thần chú" và gói ghém hành động.
+            \end{itemize}
+            
+            \item \textbf{Chương 2: Hô Vang Câu Thần Chú (Call a Function)}
+            \begin{itemize}
+                \item Cách kích hoạt sức mạnh để máy tính thực thi.
+            \end{itemize}
+            
+            \item \textbf{Chương 3: Sức Mạnh Của Sự Tái Sử Dụng}
+            \begin{itemize}
+                \item Tại sao viết code một lần nhưng dùng được cả ngàn lần?
+            \end{itemize}
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% --- CHƯƠNG 1 ---
+\section{Chương 1: Tạo Hàm}
+
+\begin{frame}{Chương 1: Cuốn Sách Phép Thuật}
+    \begin{block}{Tại sao phải tạo Hàm?}
+        Hãy tưởng tượng em chỉ huy Robot pha mì tôm. Quy trình gồm 5 bước:
+        \begin{enumerate}
+            \item Lấy bát.
+            \item Xé gói mì.
+            \item Đổ nước sôi.
+            \item Đậy nắp.
+            \item Chờ 3 phút.
+        \end{enumerate}
+    \end{block}
+    
+    \textbf{Vấn đề:} Pha cho 40 người = Viết lại 5 dòng x 40 lần = 200 dòng lệnh (Chán ngắt!).
+    
+    \textbf{Giải pháp:} Viết 5 bước vào một cái hộp, dán nhãn \texttt{PhaMi}. Em đã tạo ra một \textbf{"Khối kiến thức" (Chunk)}.
+\end{frame}
+
+\begin{frame}[fragile]{Giải phẫu một câu thần chú}
+    Trong C++, cú pháp để "dạy" máy tính kỹ năng mới:
+
+\begin{lstlisting}
+void tenHam() {
+  // Nhung hanh dong cu the nam o day
+}
+\end{lstlisting}
+
+    \begin{itemize}
+        \item \textbf{\texttt{void} (Hư không):} Nghĩa là "trống rỗng". Hàm thực hiện xong là nghỉ, không cần trả lại kết quả (giá trị) cho chương trình chính.
+        \item \textbf{\texttt{tenHam} (Tên hàm):} Nhãn dán trên hộp (Ví dụ: \texttt{PhaMi}, \texttt{XinChao}). \textit{Lưu ý: Viết dính liền, không dấu cách.}
+        \item \textbf{\texttt{()}:} Nơi chứa nguyên liệu đầu vào (Hiện tại đang để trống).
+        \item \textbf{\texttt{\{ ... \}} (Căn Phòng Bí Mật):} Nơi chứa mã lệnh tuyệt chiêu.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ví dụ thực tế}
+    Tạo một câu thần chú tên là \texttt{myFunction} để in ra dòng chữ:
+    
+\begin{lstlisting}
+void myFunction() {
+  cout << "I just got executed!";
+}
+\end{lstlisting}
+
+    \pause
+    \begin{alertblock}{KHOAN ĐÃ! MỘT SỰ THẬT BẤT NGỜ}
+        Nếu em chỉ viết đoạn code trên và bấm "Chạy" (Run), \textbf{sẽ KHÔNG CÓ GÌ XẢY RA cả!}
+        
+        \vspace{0.2cm}
+        \textit{Lý do:} Em mới chỉ \textbf{VIẾT} câu thần chú vào sách. Em \textbf{CHƯA ĐỌC} nó lên! 
+        (Súng đã chế tạo nhưng chưa ai bóp cò).
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Check-point)}
+    \begin{exampleblock}{Câu hỏi}
+        Trong đoạn code dưới đây, đâu là "Căn phòng bí mật" chứa hành động, và đâu là "Cái nhãn tên"?
+    \end{exampleblock}
+
+\begin{lstlisting}
+void chemHoaQua() {
+  cout << "Chem dua hau!";
+  cout << "Chem dua!";
+}
+\end{lstlisting}
+
+    \pause
+    \begin{block}{Đáp án}
+        \begin{itemize}
+            \item \textbf{Tên hàm (Nhãn):} \texttt{chemHoaQua}
+            \item \textbf{Căn phòng bí mật:} Cặp ngoặc nhọn \texttt{\{ \}} và nội dung bên trong.
+        \end{itemize}
+        Cặp \texttt{()} giống như công tắc để bật cái tên đó lên.
+    \end{block}
+\end{frame}
+
+% --- CHƯƠNG 2 ---
+\section{Chương 2: Gọi Hàm}
+
+\begin{frame}[fragile]{Chương 2: Hô Vang Câu Thần Chú}
+    \begin{block}{Sân Khấu Chính: \texttt{main()}}
+        \begin{itemize}
+            \item \textbf{Hàm \texttt{main()}}: Sân Khấu Trung Tâm. Chương trình luôn bắt đầu từ đây.
+            \item \textbf{Hàm của em (\texttt{myFunction})}: Ca sĩ đứng trong cánh gà.
+        \end{itemize}
+    \end{block}
+
+    Để kích hoạt, em phải viết tên hàm kèm dấu \texttt{();} bên trong \texttt{main()}. Đây là \textbf{Calling a function}.
+
+\begin{lstlisting}
+// 1. CANH GA (Dinh nghia)
+void xinChao() {
+  cout << "Xin chao cac ban!";
+}
+
+// 2. SAN KHAU CHINH (Chay)
+int main() {
+  xinChao(); // <--- HO THAN CHU!
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Sức mạnh của việc gọi nhiều lần}
+    Trong \texttt{main()}, em có thể hô câu thần chú bao nhiêu lần tùy thích (giống như nút Replay).
+
+\begin{lstlisting}
+int main() {
+  xinChao();
+  xinChao();
+  xinChao();
+  return 0;
+}
+\end{lstlisting}
+    
+    Thay vì viết lại lệnh \texttt{cout} 3 lần, em chỉ cần gọi tên hàm 3 lần.
+\end{frame}
+
+\begin{frame}[fragile]{Thử thách tư duy (Mind Challenge)}
+    \begin{exampleblock}{Tình huống}
+        Màn hình sẽ in ra chính xác những gì? Hãy đóng vai robot và chạy từng dòng lệnh.
+    \end{exampleblock}
+
+\begin{lstlisting}
+void voTay() {
+  cout << "Bop! ";
+}
+
+int main() {
+  cout << "Bat dau: ";
+  voTay();
+  voTay();
+  cout << "Het bai.";
+  return 0;
+}
+\end{lstlisting}
+
+    \pause
+    \begin{block}{Kết quả}
+        \textbf{"Bắt đầu: Bốp! Bốp! Hết bài."}
+        \begin{enumerate}
+            \item In "Bắt đầu: "
+            \item Nhảy vào \texttt{voTay()} lần 1 $\rightarrow$ in "Bốp! "
+            \item Nhảy vào \texttt{voTay()} lần 2 $\rightarrow$ in "Bốp! "
+            \item Quay về in "Hết bài."
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% --- CHƯƠNG 3 ---
+\section{Chương 3: Tại sao dùng Hàm?}
+
+\begin{frame}{Chương 3: Sức Mạnh Của Sự Tái Sử Dụng}
+    \begin{quote}
+        "Tôi chọn người lười để làm việc khó, vì họ sẽ tìm ra cách dễ nhất để làm nó." - Bill Gates
+    \end{quote}
+    
+    Hàm là công cụ giúp lập trình viên "lười một cách vĩ đại".
+    
+    \begin{block}{Năng lực 1: Bảo Trì (Sửa 1 được 100)}
+        Ví dụ: Chuỗi 100 cửa hàng trà sữa. Đổi công thức từ "trân châu đen" sang "trân châu trắng".
+        \begin{itemize}
+            \item \textbf{Không dùng hàm:} Phải sửa code ở 100 nơi (Copy/Paste).
+            \item \textbf{Dùng hàm:} Chỉ sửa trong hàm \texttt{PhaTraSua} tại trụ sở chính. 100 cửa hàng tự động cập nhật.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Năng lực 2: Sự Gọn Gàng (Chia để trị)}
+    Thay vì viết 1000 dòng code lộn xộn trong \texttt{main()}, chúng ta chia nhỏ vấn đề:
+
+\begin{lstlisting}
+int main() {
+   xayMongNha();   // Ham xay mong
+   dungCotNha();   // Ham dung cot
+   lopMaiNha();    // Ham lop mai
+   sonTuong();     // Ham son tuong
+   return 0;
+}
+\end{lstlisting}
+
+    Nhìn vào đây, ai cũng hiểu quy trình xây nhà mà không cần biết chi tiết trát vôi vữa thế nào (Tư duy trừu tượng hóa).
+\end{frame}
+
+\begin{frame}{Tổng kết hành trình}
+    Chúc mừng em đã hoàn thành khóa học cấp tốc về Functions!
+    
+    \begin{enumerate}
+        \item \textbf{Tạo Hàm (\texttt{void tenHam() \{...\}}):} Gói ghém hành động vào hộp bí mật.
+        \item \textbf{Gọi Hàm (\texttt{tenHam();}):} Hô thần chú để kích hoạt từ \texttt{main()}.
+        \item \textbf{Tại sao dùng Hàm:} Tái sử dụng code, dễ sửa lỗi (Sửa 1 được 100), code gọn gàng.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Bài tập cuối khóa (Final Boss)}
+    \begin{exampleblock}{Tình huống Game Bắn Súng}
+        \begin{itemize}
+            \item Em có hàm \texttt{banSung()} chứa 5 dòng lệnh tính toán đạn bay.
+            \item Nhân vật bắn 500 lần trong game.
+            \item Đột nhiên phát hiện công thức sai.
+        \end{itemize}
+        \textbf{Câu hỏi:} 
+        \begin{enumerate}
+            \item Nếu KHÔNG dùng hàm (Copy-Paste): Phải sửa bao nhiêu dòng code?
+            \item Nếu DÙNG hàm: Phải sửa bao nhiêu chỗ?
+        \end{enumerate}
+    \end{exampleblock}
+
+    \pause
+    \begin{alertblock}{Đáp án}
+        \begin{enumerate}
+            \item \textbf{Không dùng hàm:} Phải sửa 500 chỗ khác nhau (tương đương tìm và sửa 2500 dòng lệnh). Rất dễ sót lỗi!
+            \item \textbf{Dùng hàm:} Chỉ cần sửa đúng \textbf{1 chỗ} duy nhất (trong định nghĩa hàm \texttt{banSung}).
+        \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+\end{document}

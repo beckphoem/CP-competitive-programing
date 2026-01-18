@@ -1,0 +1,300 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin slide
+\title{Khám phá Đệ quy (Recursion)}
+\subtitle{Hành trình chinh phục tri thức C++}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+% Slide tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 1: Giới thiệu
+\begin{frame}{Bức tranh toàn cảnh: Đệ quy là gì?}
+    \begin{block}{Khái niệm}
+        Trong lập trình, \textbf{Đệ quy (Recursion)} đơn giản là việc một hàm tự gọi lại chính nó để giải quyết một vấn đề lớn bằng cách chia nhỏ nó thành các vấn đề tương tự nhưng có quy mô nhỏ hơn.
+    \end{block}
+
+    \begin{exampleblock}{Phép ẩn dụ: Búp bê Nga (Matryoshka)}
+        \begin{itemize}
+            \item Để lấy được con búp bê nhỏ nhất, bạn phải mở con búp bê lớn nhất.
+            \item Bên trong là một con búp bê y hệt nhưng nhỏ hơn.
+            \item Lặp lại cho đến khi chạm đến con búp bê cuối cùng không thể mở được nữa.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Slide 2: Cấu trúc hàm đệ quy
+\begin{frame}{Cấu trúc của một hàm Đệ quy}
+    Mọi hàm đệ quy cần 2 phần quan trọng để tránh lặp vô tận:
+
+    \begin{alertblock}{1. Điểm dừng (Base Case)}
+        Đây là con búp bê nhỏ nhất. Khi chạm đến đây, hàm sẽ dừng lại và không gọi chính nó nữa.
+    \end{alertblock}
+
+    \begin{block}{2. Bước đệ quy (Recursive Step)}
+        Hành động mở con búp bê hiện tại để tìm con búp bê nhỏ hơn. Đưa bài toán về phiên bản nhỏ hơn của chính nó.
+    \end{block}
+\end{frame}
+
+% Slide 3: Ví dụ Giai thừa
+\begin{frame}[fragile]{Ví dụ minh họa: Tính Giai thừa (Factorial)}
+    Giai thừa của $n$ (ký hiệu $n!$) là tích các số từ 1 đến $n$.
+    Ví dụ: $4! = 4 \times 3 \times 2 \times 1 = 24$.
+    
+    Công thức đệ quy: $n! = n \times (n-1)!$
+
+    \begin{lstlisting}[language=C++, caption={Tính giai thừa bằng C++}]
+int tinhGiaiThua(int n) {
+    // 1. Diem dung
+    if (n <= 1) {
+        return 1;
+    }
+    
+    // 2. Buoc de quy
+    return n * tinhGiaiThua(n - 1);
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 4: Stack Overflow
+\begin{frame}{Cảnh báo: Nếu quên Điểm dừng?}
+    \begin{block}{Câu hỏi}
+        Nếu một hàm đệ quy không có "Điểm dừng" (Base Case), điều gì sẽ xảy ra?
+    \end{block}
+    
+    \pause
+    
+    \begin{alertblock}{Hậu quả: Stack Overflow}
+        \begin{itemize}
+            \item Hàm sẽ gọi chính nó mãi mãi (lặp vô tận).
+            \item Bộ nhớ máy tính (Stack) bị đầy vì phải ghi nhớ các lần gọi hàm.
+            \item Chương trình bị "treo" hoặc tắt đột ngột (Crash).
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% Slide 5: Cơ chế hoạt động
+\begin{frame}{Cơ chế hoạt động bên trong: Ngăn xếp (Stack)}
+    Tưởng tượng việc gọi hàm đệ quy giống như leo xuống cầu thang xoắn ốc.
+    
+    \begin{enumerate}
+        \item \textbf{Giai đoạn Đi xuống (Winding):} 
+        Các hàm liên tục gọi nhau và "chồng" ghi chú vào ngăn xếp cho đến khi chạm \textbf{Điểm dừng}.
+        
+        \item \textbf{Giai đoạn Quay ngược (Unwinding):} 
+        Khi có kết quả từ điểm dừng, máy tính gỡ từng ghi chú từ trên xuống dưới để tính kết quả cuối cùng.
+    \end{enumerate}
+\end{frame}
+
+% Slide 6: Tìm kiếm nhị phân - Logic
+\begin{frame}{Ứng dụng: Tìm kiếm Nhị phân (Binary Search)}
+    Thay vì kiểm tra từng số (tuần tự), đệ quy giúp tìm kiếm nhanh hơn trên dãy đã sắp xếp:
+    
+    \begin{itemize}
+        \item Nhìn vào số ở \textbf{giữa} dãy.
+        \item Nếu số ở giữa > số cần tìm $\rightarrow$ Đệ quy tìm ở nửa bên \textbf{trái}.
+        \item Nếu số ở giữa < số cần tìm $\rightarrow$ Đệ quy tìm ở nửa bên \textbf{phải}.
+    \end{itemize}
+    
+    \begin{block}{Điểm dừng của Binary Search là gì?}
+        \begin{enumerate}
+            \item Khi tìm thấy số cần tìm ($mid == x$).
+            \item Khi khoảng tìm kiếm trống rỗng ($left > right$) $\rightarrow$ Không tìm thấy.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% Slide 7: Tìm kiếm nhị phân - Code
+\begin{frame}[fragile]{Code: Tìm kiếm Nhị phân Đệ quy}
+\begin{lstlisting}[language=C++]
+int timKiemNhiPhan(int mang[], int trai, int phai, int x) {
+    // Diem dung 1: Khong tim thay
+    if (trai > phai) return -1;
+
+    int giua = trai + (phai - trai) / 2;
+
+    // Diem dung 2: Tim thay
+    if (mang[giua] == x) return giua;
+
+    // Buoc de quy: Tim ben trai
+    if (mang[giua] > x) 
+        return timKiemNhiPhan(mang, trai, giua - 1, x);
+
+    // Buoc de quy: Tim ben phai
+    return timKiemNhiPhan(mang, giua + 1, phai, x);
+}
+\end{lstlisting}
+\end{frame}
+
+% Slide 8: Nghệ thuật Fractal
+\begin{frame}{Đệ quy trong nghệ thuật: Fractal}
+    Đệ quy tạo ra các hình ảnh tự đồng dạng (phân thân) như bông tuyết, cành cây.
+    
+    \begin{exampleblock}{Quy tắc vẽ cây}
+        \begin{enumerate}
+            \item Vẽ thân cây.
+            \item Tại ngọn, rẽ hai nhánh con.
+            \item \textbf{Đệ quy:} Lặp lại quy trình với nhánh con.
+        \end{enumerate}
+    \end{exampleblock}
+
+    \textbf{Điểm dừng:} Khi chiều dài cành cây nhỏ hơn một mức nhất định (ví dụ $< 10$) để tránh vẽ vô tận.
+\end{frame}
+
+% Slide 9: Fibonacci
+\begin{frame}[fragile]{Dãy số Fibonacci}
+    Dãy số: 0, 1, 1, 2, 3, 5, 8, 13... \\
+    Quy luật: Số sau bằng tổng hai số trước đó.
+    
+    \begin{lstlisting}[language=C++, caption={Fibonacci Đệ quy}]
+int fibonacci(int n) {
+    // 1. Diem dung
+    if (n == 0) return 0;
+    if (n == 1) return 1;
+
+    // 2. Buoc de quy: Goi lai chinh no 2 lan!
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+    \end{lstlisting}
+    
+    \begin{alertblock}{Lưu ý hiệu năng}
+        Hàm này gọi lại chính nó 2 lần mỗi bước, dẫn đến số lượng tính toán khổng lồ khi $n$ lớn. Cần kỹ thuật "Ghi nhớ" (Memoization) để tối ưu.
+    \end{alertblock}
+\end{frame}
+
+% Slide 10: Đảo ngược chuỗi
+\begin{frame}[fragile]{Bài tập: Đảo ngược chuỗi}
+    Sử dụng tính chất của Stack: "Vào trước, Ra sau".
+    
+    \begin{lstlisting}[language=C++]
+void daoNguoc(string s) {
+    // 1. Diem dung
+    if (s.length() <= 1) {
+        cout << s;
+        return;
+    }
+
+    // 2. Buoc de quy: cat chuoi tu vi tri 1 den het
+    daoNguoc(s.substr(1));
+
+    // 3. In ky tu dau tien SAU KHI de quy xong
+    cout << s[0];
+}
+    \end{lstlisting}
+    
+    Nếu `cout` đặt \textbf{trước} lời gọi đệ quy, chuỗi sẽ in xuôi. Nếu đặt \textbf{sau}, máy tính phải "leo" xuống hết đáy rồi mới in khi quay ngược lên $\rightarrow$ Chuỗi đảo ngược.
+\end{frame}
+
+% Slide 11: Tính tổng chữ số
+\begin{frame}[fragile]{Bài tập: Tính tổng các chữ số}
+    Ví dụ: $123 \rightarrow 1 + 2 + 3 = 6$.
+    Công cụ: Phép chia lấy dư (`%`) và chia nguyên (`/`).
+    
+    \begin{lstlisting}[language=C++]
+int tinhTongChuSo(int n) {
+    // 1. Diem dung: Neu n chi con 1 chu so
+    if (n < 10) {
+        return n;
+    }
+
+    // 2. Buoc de quy
+    return (n % 10) + tinhTongChuSo(n / 10);
+}
+    \end{lstlisting}
+    
+    \textbf{Luồng chạy với n = 123:}
+    \begin{itemize}
+        \item Bước 1: $3 + \text{tong}(12)$
+        \item Bước 2: $3 + (2 + \text{tong}(1))$
+        \item Bước 3 (Base Case): $3 + (2 + 1) = 6$
+    \end{itemize}
+\end{frame}
+
+% Slide 12: So sánh
+\begin{frame}{So sánh: Đệ quy vs. Vòng lặp}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}lll@{}}
+            \toprule
+            \textbf{Đặc điểm} & \textbf{Đệ quy (Recursion)} & \textbf{Vòng lặp (Iteration)} \\ \midrule
+            Cách viết & Ngắn gọn, giống toán học & Dài hơn, rõ ràng từng bước \\
+            Bộ nhớ & Tốn hơn (do Stack) & Tiết kiệm hơn \\
+            Tốc độ & Có thể chậm nếu không tối ưu & Thường nhanh hơn \\
+            Ứng dụng & Cấu trúc cây, Fractal, Sort & Xử lý danh sách đơn giản \\ \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+% Slide 13: Quiz
+\begin{frame}{Kiểm tra cuối khóa}
+    \begin{block}{Câu hỏi tư duy}
+        Trong hàm tính giai thừa $n!$, nếu ta đổi Điểm dừng thành:
+        \texttt{if (n == 0) return 0;} (thay vì \texttt{return 1})
+        
+        Thì kết quả của phép tính giai thừa (ví dụ $4!$) sẽ là bao nhiêu?
+    \end{block}
+    
+    \pause
+    
+    \begin{exampleblock}{Đáp án: 0}
+        Vì đệ quy là chuỗi phép nhân liên tiếp. Nếu điểm dừng trả về 0, nó sẽ nhân với tất cả các kết quả trước đó. 
+        $4 \times 3 \times 2 \times 1 \times 0 = 0$.
+        \\ \textbf{Bài học:} Điểm dừng đóng góp giá trị khởi đầu cho quá trình quay ngược.
+    \end{exampleblock}
+\end{frame}
+
+% Slide 14: Tổng kết
+\begin{frame}{Tổng kết hành trình}
+    \begin{itemize}
+        \item \textbf{Bản chất:} Chia nhỏ vấn đề (Búp bê Nga).
+        \item \textbf{Cốt lõi:} Phải luôn có \textbf{Điểm dừng} và \textbf{Bước đệ quy}.
+        \item \textbf{Cơ chế:} Sử dụng Ngăn xếp (Stack) để ghi nhớ và quay ngược.
+    \end{itemize}
+
+    \vspace{1cm}
+    \begin{center}
+        \Large Chúc bạn áp dụng thành công tư duy Đệ quy vào các bài toán phức tạp!
+    \end{center}
+\end{frame}
+
+\end{document}

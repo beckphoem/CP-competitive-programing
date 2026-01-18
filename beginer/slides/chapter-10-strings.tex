@@ -1,0 +1,399 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title[C++ Strings]{C++ Strings: Phép thuật của Ngôn ngữ}
+\subtitle{Hành trình qua 5 Trạm dừng chân}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Giới thiệu
+\begin{frame}{Lời chào từ thế giới Lập trình}
+    \begin{block}{String là gì?}
+        Nếu máy tính chỉ biết đến những con số 0 và 1 khô khan (`int`, `float`), thì \textbf{String} (Chuỗi ký tự) chính là "phép thuật" giúp máy tính hiểu và nói được ngôn ngữ con người.
+    \end{block}
+
+    \begin{itemize}
+        \item Hãy tưởng tượng \texttt{string} giống như một \textbf{xâu chuỗi hạt}.
+        \item Mỗi chữ cái (`char`) là một hạt cườm lấp lánh trên đó.
+    \end{itemize}
+\end{frame}
+
+% Slide Lộ trình
+\begin{frame}{Bản đồ kho báu String (Lộ trình học tập)}
+    Chúng ta sẽ đi qua 5 trạm dừng chân thú vị:
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Trạm 1:} Tạo tác Xâu Chuỗi (C++ Strings Basic)
+        \item \textbf{Trạm 2:} Phép thuật Nối Dây (Concatenation)
+        \item \textbf{Trạm 3:} Thước đo thần kỳ (Length)
+        \item \textbf{Trạm 4:} Kỹ thuật "Gắp Hạt" \& "Đổi Màu" (Access \& Change)
+        \item \textbf{Trạm 5:} Chiếc Hộp Thần Kỳ (User Input)
+    \end{enumerate}
+\end{frame}
+
+% --- TRẠM 1 ---
+\section{Trạm 1: Basic}
+
+\begin{frame}{Trạm 1: Tạo tác Xâu Chuỗi}
+    \begin{block}{Bức tranh toàn cảnh: Hộp Đựng Chữ}
+        Bộ nhớ máy tính giống như một cái tủ đựng đồ:
+        \begin{itemize}
+            \item \texttt{int}: Ngăn đựng số (5, 10, 100).
+            \item \texttt{string}: Ngăn đựng văn bản (Tên, câu chuyện, lời bài hát).
+        \end{itemize}
+    \end{block}
+
+    \begin{alertblock}{Hộp công cụ bí mật}
+        Để dùng string, bắt buộc phải khai báo thư viện:
+        \texttt{\#include <string>}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Cú pháp \& Ví dụ}
+    \begin{exampleblock}{Quy tắc vàng}
+        Giá trị của chuỗi phải luôn nằm trong \textbf{dấu ngoặc kép} (\texttt{" "}).
+        \begin{itemize}
+            \item Đúng: \texttt{"Xin chao"}
+            \item Sai: \texttt{'Xin chao'} (Dấu nháy đơn chỉ dành cho \texttt{char}).
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string> // Hop cong cu can thiet
+using namespace std;
+
+int main() {
+  // Tao mot bien string
+  string loiChao = "Xin chao! To la lap trinh vien.";
+  
+  // In chuoi ra man hinh
+  cout << loiChao;
+  return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Check-up 1)}
+    \textbf{Câu hỏi:} Nếu viết code thế này thì máy tính có hiểu không? Tại sao?
+
+    \begin{lstlisting}[language=C++]
+string tenCuaBan = 'Nam'; 
+    \end{lstlisting}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{alertblock}{Đáp án: Báo lỗi!}
+        Máy tính sẽ "dỗi" ngay lập tức.
+        \begin{itemize}
+            \item Dấu nháy đơn \texttt{' '} chỉ dành cho một hạt cườm (\texttt{char}).
+            \item Dấu nháy kép \texttt{" "} mới dành cho cả xâu chuỗi (\texttt{string}).
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% --- TRẠM 2 ---
+\section{Trạm 2: Concatenation}
+
+\begin{frame}{Trạm 2: Phép thuật Nối Dây}
+    Hãy tưởng tượng mỗi biến \texttt{string} là một \textbf{toa tàu}.
+    
+    \begin{block}{Dấu Cộng (+) thần thánh}
+        Trong thế giới String, dấu \texttt{+} không phải là cộng giá trị toán học, mà là \textbf{dán dính} các toa tàu lại.
+    \end{block}
+    
+    Ví dụ:
+    \texttt{"Nguyen"} + \texttt{"An"} = \texttt{"NguyenAn"}
+    
+    \vspace{0.3cm}
+    \textbf{Lưu ý:} Máy tính không tự thêm dấu cách. Ta phải tự chèn một "toa tàu rỗng" vào giữa.
+\end{frame}
+
+\begin{frame}[fragile]{Ví dụ Nối chuỗi}
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+  string ho = "Nguyen";
+  string ten = "An";
+  
+  // Cach 1: Dinh chum (Xau)
+  // string hoVaTen = ho + ten; -> "NguyenAn"
+  
+  // Cach 2: Co them dau cach " " (Dep)
+  string hoVaTen = ho + " " + ten;
+  
+  cout << hoVaTen; // In ra: Nguyen An
+  return 0;
+}
+    \end{lstlisting}
+    
+    \begin{block}{Góc chuyên gia}
+        Có thể dùng hàm \texttt{append()} để nối đuôi, nhưng dùng \texttt{+} sẽ tự nhiên hơn.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Check-up 2)}
+    \textbf{Câu hỏi:} Kết quả của đoạn code sau là gì?
+    
+    \begin{lstlisting}[language=C++]
+string x = "10";
+string y = "20";
+string z = x + y;
+cout << z;
+    \end{lstlisting}
+
+    A. 30 \\
+    B. 1020 \\
+    C. Báo lỗi
+
+    \pause
+    \vspace{0.3cm}
+    \begin{exampleblock}{Đáp án: B (1020)}
+        Vì \texttt{x} và \texttt{y} nằm trong dấu ngoặc kép, máy tính coi chúng là \textbf{văn bản}, không phải con số. Nó sẽ dán số "10" bên cạnh số "20".
+    \end{exampleblock}
+\end{frame}
+
+% --- TRẠM 3 ---
+\section{Trạm 3: Length}
+
+\begin{frame}[fragile]{Trạm 3: Thước đo thần kỳ}
+    Để đếm số lượng ký tự trong chuỗi (ví dụ kiểm tra độ dài mật khẩu), ta dùng hàm \texttt{.length()}.
+    
+    \begin{lstlisting}[language=C++]
+string bangChuCai = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+cout << bangChuCai.length(); 
+// Ket qua: 26
+    \end{lstlisting}
+    
+    \begin{alertblock}{Bí mật của "Khoảng trắng"}
+        Máy tính đếm tất cả mọi thứ trong dấu ngoặc kép, bao gồm cả \textbf{dấu cách (space)}.
+        
+        Ví dụ: \texttt{"Xin chao"} có độ dài là \textbf{8} (chứ không phải 7).
+    \end{alertblock}
+    
+    \textit{Lưu ý: \texttt{.size()} và \texttt{.length()} trong C++ String tương đương nhau.}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Check-up 3)}
+    \textbf{Câu hỏi:} Đoạn code sau in ra số mấy?
+    
+    \begin{lstlisting}[language=C++]
+string biMat = "A B C";
+cout << biMat.length();
+    \end{lstlisting}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án: 5}
+        Hãy đếm kỹ:
+        \begin{enumerate}
+            \item A
+            \item (dấu cách)
+            \item B
+            \item (dấu cách)
+            \item C
+        \end{enumerate}
+        Tổng cộng là 5 ký tự.
+    \end{exampleblock}
+\end{frame}
+
+% --- TRẠM 4 ---
+\section{Trạm 4: Access \& Change}
+
+\begin{frame}{Trạm 4: Kỹ thuật "Gắp Hạt" \& "Đổi Màu"}
+    Biến \texttt{string} giống như dãy tủ khóa. Để lấy đồ, bạn cần biết số thứ tự (index).
+    
+    \begin{alertblock}{Quy tắc Số 0}
+        Máy tính bắt đầu đếm từ số \textbf{0}, không phải số 1.
+    \end{alertblock}
+    
+    Ví dụ chuỗi \textbf{"Hello"}:
+    
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        H & e & l & l & o \\ \hline
+        \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} \\ \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Thay đổi ký tự}
+    Bạn có thể thay đổi nội dung từng "ngăn tủ".
+    
+    \begin{lstlisting}[language=C++]
+string monAn = "Hello";
+
+// 1. Truy cap (Lay ra)
+cout << monAn[0]; // In ra: H
+
+// 2. Thay doi (Doi mau)
+monAn[0] = 'J'; 
+
+cout << monAn; // In ra: Jello
+    \end{lstlisting}
+    
+    \begin{alertblock}{Cảnh báo quan trọng}
+        Khi làm việc với từng ký tự đơn lẻ (\texttt{monAn[0]}), bắt buộc dùng \textbf{dấu nháy đơn} \texttt{' '}.
+        \begin{itemize}
+            \item Đúng: \texttt{monAn[0] = 'J';}
+            \item Sai: \texttt{monAn[0] = "J";}
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra nhanh (Check-up 4)}
+    \textbf{Câu hỏi:} Chữ cái nào sẽ hiện lên màn hình?
+    
+    \begin{lstlisting}[language=C++]
+string ten = "VIETNAM";
+cout << ten[4];
+    \end{lstlisting}
+
+    A. T \hspace{1cm} B. N \hspace{1cm} C. A
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án: B (Chữ N)}
+        Đếm từ 0:
+        V(0) - I(1) - E(2) - T(3) - \textbf{N(4)}.
+    \end{exampleblock}
+\end{frame}
+
+% --- TRẠM 5 ---
+\section{Trạm 5: User Input}
+
+\begin{frame}[fragile]{Trạm 5: Chiếc Hộp Thần Kỳ}
+    \begin{block}{Vấn đề của \texttt{cin}}
+        \texttt{cin} giống như người đưa thư lười biếng. Nó dừng lại ngay khi gặp dấu cách.
+        Nếu nhập "Tran Hung", \texttt{cin} chỉ lấy được "Tran".
+    \end{block}
+    
+    \begin{exampleblock}{Giải pháp: \texttt{getline()}}
+        Dùng "máy hút bụi" \texttt{getline} để lấy cả dòng.
+        Cú pháp: \texttt{getline(cin, TenBien);}
+    \end{exampleblock}
+
+    \begin{lstlisting}[language=C++]
+string hoVaTen;
+cout << "Nhap ten day du: ";
+// cin >> hoVaTen; -> Loi neu co dau cach
+getline(cin, hoVaTen); // -> Lay tron ven ca dong
+cout << "Xin chao: " << hoVaTen;
+    \end{lstlisting}
+\end{frame}
+
+% --- TỔNG KẾT & BÀI TẬP ---
+\section{Tổng kết}
+
+\begin{frame}{Tổng kết hành trình}
+    Chúng ta đã thu được các chiến lợi phẩm:
+    \begin{enumerate}
+        \item \textbf{Khởi tạo:} \texttt{\#include <string>} và dùng \texttt{" "}.
+        \item \textbf{Nối chuỗi:} Dùng dấu \texttt{+} để dính các toa tàu.
+        \item \textbf{Độ dài:} Dùng \texttt{.length()} (đếm cả dấu cách).
+        \item \textbf{Truy cập:} Dùng \texttt{[ ]} và đếm từ \textbf{0}.
+        \item \textbf{Nhập liệu:} Dùng \texttt{getline(cin, bien)} để nhập cả câu.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Bài tập về nhà (Challenge)}
+    \begin{block}{Đề bài}
+        Viết chương trình thực hiện 3 việc:
+        \begin{enumerate}
+            \item Nhập vào \textbf{tên đầy đủ} (Ví dụ: "Le Loi").
+            \item In ra \textbf{chữ cái đầu tiên}.
+            \item In ra \textbf{độ dài} của tên.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Lời giải tham khảo}
+    Đây là đoạn code giải quyết thử thách trên:
+
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string name;
+    
+    cout << "Nhap ten cua ban: ";
+    // Dung getline de nhap ten co dau cach
+    getline(cin, name);
+    
+    cout << "Chu cai dau tien: " << name[0] << endl;
+    
+    // Dung .size() hoac .length() deu duoc
+    cout << "Do dai ten ban: " << name.size() << endl;
+
+    return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách nâng cao (Bonus Stage)}
+    \begin{exampleblock}{Đề bài khó}
+        Viết chương trình nhập tên, in ra chữ cái \textbf{CUỐI CÙNG} trong tên.
+    \end{exampleblock}
+
+    \textbf{Gợi ý tư duy:}
+    \begin{itemize}
+        \item Tên "NAM" (độ dài 3), chữ cuối 'M' ở vị trí số 2.
+        \item Tên "TUAN" (độ dài 4), chữ cuối 'N' ở vị trí số 3.
+        \item Quy luật: \texttt{Vị trí cuối = Độ dài - 1}
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \centering
+    \textit{Chúc các bạn thành công trên con đường lập trình C++!}
+\end{frame}
+
+\end{document}

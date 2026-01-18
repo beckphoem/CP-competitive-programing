@@ -1,0 +1,13 @@
+\frametitle{Tổng Kết}
+Hãy cùng ghép lại bức tranh:
+
+  \begin{enumerate}
+    \item \textbf{\texttt{\#include}}: Lấy \textbf{Hộp đồ nghề} ra.
+    \item \textbf{\texttt{using namespace}}: Gọi \textbf{Tên thân mật}.
+    \item \textbf{\texttt{main()}}: Bấm \textbf{Nút Start}, vào vùng làm việc \texttt{\{ \}}.
+    \item \textbf{\texttt{cout <<}}: Dùng \textbf{Loa} nói lời thoại ra màn hình.
+  \end{enumerate}
+
+  \begin{center}
+    \Large \textbf{Bạn đã sẵn sàng để viết dòng code đầu tiên chưa?}
+  \end{center}

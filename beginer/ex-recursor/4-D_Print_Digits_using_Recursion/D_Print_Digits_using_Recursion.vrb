@@ -1,0 +1,21 @@
+\frametitle{Bước 3: Tổng kết Thuật toán}
+\begin{block}{Hàm đệ quy \texttt{solve(n)}}
+        \begin{itemize}
+            \item \textbf{Bước dừng}: Nếu $n < 10$, in $n$ và kết thúc.
+            \item \textbf{Bước đệ quy}:
+            \begin{enumerate}
+                \item Gọi \texttt{solve(n / 10)} để xử lý các số phía trước.
+                \item Sau khi hàm con kết thúc, in một dấu cách.
+                \item In chữ số cuối cùng: \texttt{n \% 10}.
+            \end{enumerate}
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Ví dụ với $n=39$}
+        \begin{itemize}
+            \item \texttt{solve(39)} gọi \texttt{solve(3)}.
+            \item \texttt{solve(3)} in \textbf{3}.
+            \item \texttt{solve(39)} tiếp tục: in \textbf{dấu cách}, sau đó in \textbf{9}.
+            \item Kết quả: \texttt{3 9}
+        \end{itemize}
+    \end{exampleblock}

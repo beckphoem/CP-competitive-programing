@@ -1,0 +1,300 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Cấu hình màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title{C++ References (Tham chiếu)}
+\subtitle{Chương 6: Bí mật về những "Biệt danh"}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+% 1. Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% 2. Giới thiệu mở đầu
+\begin{frame}{Khởi động: Bức tranh toàn cảnh}
+    Chào mừng bạn đến với thế giới của References!
+    
+    \begin{exampleblock}{Ví dụ: Nguyễn Văn An và Tí}
+        Hãy tưởng tượng bạn có một người bạn tên là \textbf{"Nguyễn Văn An"}. 
+        Ở nhà, bố mẹ gọi bạn ấy là \textbf{"Tí"}.
+        
+        \begin{itemize}
+            \item Dù gọi là "An" hay "Tí", thì \textbf{người đó vẫn là một}.
+            \item Nếu "Tí" bị dính mực, áo của "An" cũng bị dính mực.
+        \end{itemize}
+    \end{exampleblock}
+
+    \vspace{0.5cm}
+    Trong C++, \textbf{Biến chính} là tên khai sinh, còn \textbf{Reference} chính là biệt danh.
+\end{frame}
+
+% 3. Lộ trình
+\begin{frame}{Lộ trình khám phá}
+    Chúng ta sẽ đi qua 3 phần chính:
+    \begin{enumerate}
+        \item \textbf{Chương 1: Tạo ra "Biệt danh" (Creating References)}
+        \item \textbf{Chương 2: Phép thuật "Tuy hai mà một" (How it works)}
+        \item \textbf{Chương 3: Phân biệt "Biệt danh" và "Địa chỉ nhà" (Reference vs. Memory Address)}
+    \end{enumerate}
+\end{frame}
+
+% --- CHƯƠNG 1 ---
+
+\begin{frame}{Chương 1: Tạo ra "Biệt danh"}
+    \begin{block}{Ẩn dụ: Nhãn dán trên chiếc hộp}
+        \begin{enumerate}
+            \item Bạn có một chiếc hộp đựng \textbf{Pizza} dán nhãn \texttt{mon\_an}.
+            \item Bạn dán thêm nhãn thứ hai lên \textbf{chính hộp đó} tên là \texttt{mon\_phu}.
+        \end{enumerate}
+        $\rightarrow$ Lấy đồ từ hộp nào cũng ra cùng một chiếc Pizza.
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{Cú pháp C++:} Dùng ký hiệu \textbf{\&} (dấu và).
+    
+    $$ \texttt{kieu\_du\_lieu \&ten\_biet\_danh = ten\_bien\_goc;} $$
+\end{frame}
+
+\begin{frame}[fragile]{Code ví dụ: Tạo Reference}
+    Hãy xem cách máy tính xử lý "biệt danh":
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+  // 1. Tao bien goc (Cai nhan thu nhat)
+  string mon_an = "Pizza";
+
+  // 2. Tao bien tham chieu (Cai nhan thu hai)
+  // Chu y dau & o day nhe!
+  string &bua_trua = mon_an;
+
+  cout << "Ten bien goc: " << mon_an << "\n";
+  cout << "Ten biet danh: " << bua_trua << "\n";
+
+  return 0;
+}
+\end{lstlisting}
+
+    \textbf{Kết quả:} Cả hai đều in ra "Pizza".
+\end{frame}
+
+\begin{frame}{Góc kiểm tra nhanh}
+    \begin{alertblock}{Câu đố}
+        Nếu trong đoạn code trước, mình thay đổi giá trị của \texttt{mon\_an} thành \textbf{"Banh Mi"}.
+        
+        Lúc đó in \texttt{bua\_trua} ra, nó sẽ là "Pizza" (cũ) hay "Banh Mi" (mới)?
+    \end{alertblock}
+
+    \pause
+    \vspace{1cm}
+    
+    \begin{exampleblock}{Đáp án: Banh Mi!}
+        Chính xác! Vì chúng cùng dán trên một chiếc hộp, nên thay ruột hộp thì nhãn nào cũng "đọc" ra món mới cả.
+    \end{exampleblock}
+\end{frame}
+
+% --- CHƯƠNG 2 ---
+
+\begin{frame}{Chương 2: Phép thuật "Tuy hai mà một"}
+    \begin{block}{Ẩn dụ: Chiếc TV và hai cái điều khiển}
+        Hãy tưởng tượng biến trong C++ như một chiếc TV.
+        \begin{itemize}
+            \item \textbf{Biến gốc (\texttt{mon\_an}):} Điều khiển màu Đỏ.
+            \item \textbf{Tham chiếu (\texttt{bua\_trua}):} Điều khiển màu Xanh.
+        \end{itemize}
+        Cả hai cùng kết nối tới \textbf{MỘT} chiếc TV.
+    \end{block}
+    
+    Nếu bố dùng điều khiển Xanh bật "Bún Chả", bạn nhìn màn hình cũng sẽ thấy "Bún Chả".
+\end{frame}
+
+\begin{frame}[fragile]{Code thử nghiệm: Thay đổi giá trị}
+    Sức mạnh của Reference: Can thiệp trực tiếp vào biến gốc.
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+  string mon_an = "Pizza";      // Man hinh dang chieu Pizza
+  string &bua_trua = mon_an;    // Ket noi them dieu khien 2
+
+  // Thay doi gia tri thong qua "Biet danh"
+  bua_trua = "Bun Cha";
+
+  // Kiem tra lai bien goc
+  cout << "Mon an bay gio la: " << mon_an << "\n";
+  
+  return 0;
+}
+\end{lstlisting}
+
+    \begin{block}{Kết quả}
+    Mon an bay gio la: Bun Cha
+    \end{block}
+\end{frame}
+
+\begin{frame}{Trạm dừng chân suy ngẫm}
+    \begin{alertblock}{Câu hỏi quan trọng}
+        Trong ví dụ trên, biến \texttt{mon\_an} và biến \texttt{bua\_trua} có phải là 2 biến khác nhau chiếm 2 chỗ trong bộ nhớ không? Hay chỉ 1 chỗ?
+    \end{alertblock}
+
+    \pause
+    \vspace{0.5cm}
+
+    \begin{exampleblock}{Đáp án: Chỉ 1 chỗ!}
+        \begin{itemize}
+            \item Chúng dùng chung vùng nhớ.
+            \item \textbf{Lợi ích:} Giúp chương trình chạy nhanh hơn vì không phải copy dữ liệu.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% --- CHƯƠNG 3 ---
+
+\begin{frame}{Chương 3: Phân biệt "Biệt danh" và "Địa chỉ"}
+    Ký hiệu \textbf{\&} đóng 2 vai khác nhau tùy ngữ cảnh:
+
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Vai 1: Reference}
+            \begin{itemize}
+                \item Xuất hiện khi \textbf{khai báo biến mới}.
+                \item Cú pháp: \texttt{string \&x = ...}
+                \item Ý nghĩa: Tạo biệt danh.
+                \item \textit{Ví dụ: Tấm biển tên trước cổng.}
+            \end{itemize}
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{Vai 2: Address Operator}
+            \begin{itemize}
+                \item Đứng trước biến \textbf{đã tồn tại}.
+                \item Cú pháp: \texttt{\&x}
+                \item Ý nghĩa: Lấy địa chỉ bộ nhớ.
+                \item \textit{Ví dụ: Số nhà (123 đường ABC).}
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Chứng minh: Hai tên gọi, Một địa chỉ}
+\begin{lstlisting}[language=C++]
+int main() {
+  string mon_an = "Pizza";
+  string &bua_trua = mon_an; // Dung & de tao biet danh
+
+  // 1. In ra gia tri
+  cout << "Gia tri: " << mon_an << "\n";
+  
+  // 2. In ra dia chi (Dung & truoc ten bien)
+  cout << "Dia chi mon_an:   " << &mon_an << "\n";
+  cout << "Dia chi bua_trua: " << &bua_trua << "\n";
+
+  return 0;
+}
+\end{lstlisting}
+    
+    \begin{block}{Kết quả (Minh họa)}
+    Gia tri: Pizza\\
+    Dia chi mon\_an:   0x6dfed4\\
+    Dia chi bua\_trua: 0x6dfed4
+    \end{block}
+    \textit{Địa chỉ giống hệt nhau $\rightarrow$ Cùng một vị trí bộ nhớ.}
+\end{frame}
+
+% --- TỔNG KẾT & BÀI TẬP ---
+
+\begin{frame}{Tổng kết hành trình}
+    \begin{enumerate}
+        \item \textbf{Reference là gì?} Là "biệt danh" cho một biến đã có.
+        \item \textbf{Đặc điểm:} Không tạo bản copy, dùng chung vùng nhớ. Thay đổi một, ảnh hưởng tất cả.
+        \item \textbf{Phân biệt ký hiệu \&:}
+        \begin{itemize}
+            \item \texttt{int \&x}: Khai báo tham chiếu.
+            \item \texttt{\&x}: Lấy địa chỉ bộ nhớ.
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Thử thách Code nhỏ}
+    \begin{alertblock}{Đề bài}
+        Viết đoạn code ngắn:
+        \begin{enumerate}
+            \item Tạo biến \texttt{diem\_so} bằng 10.
+            \item Tạo tham chiếu \texttt{ket\_qua} trỏ tới \texttt{diem\_so}.
+            \item Thay đổi \texttt{ket\_qua} thành 100.
+            \item In ra \texttt{diem\_so}.
+        \end{enumerate}
+    \end{alertblock}
+
+    \pause
+    \begin{exampleblock}{Đáp án (Chuẩn ngữ pháp)}
+\begin{lstlisting}[language=C++]
+int diem_so = 10;
+int &ket_qua = diem_so;
+ket_qua = 100;
+
+// Ket qua in ra se la 100
+cout << diem_so; 
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bước tiếp theo: Trùm cuối xuất hiện}
+    Bạn đã làm chủ được References (Biệt danh).
+    
+    \vspace{1cm}
+    
+    \begin{block}{Next Step: POINTERS (CON TRỎ)}
+        Nếu Reference là "Biệt danh", thì Pointers là làm việc trực tiếp với "Địa chỉ nhà" (\texttt{0x...}) mà chúng ta vừa thấy.
+        
+        \vspace{0.2cm}
+        \textit{Bạn đã sẵn sàng để gặp "Trùm cuối" chưa?}
+    \end{block}
+\end{frame}
+
+\end{document}

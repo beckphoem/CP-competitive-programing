@@ -1,0 +1,258 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\usetheme{Madrid}
+
+% Cấu hình màu sắc cho code (nếu cần dùng sau này)
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Thông tin slide
+\title{Codeforces 546A - Soldier and Bananas}
+\subtitle{Tư duy thuật toán \& Cấp số cộng}
+\author{Coach Tư duy thuật toán}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Giới thiệu ---
+\begin{frame}{Giới thiệu}
+    \begin{block}{Lời chào từ Coach}
+        Chào mừng bạn. Tôi là Coach Tư duy thuật toán của bạn đây. \\
+        Đã nhận yêu cầu: \textbf{Codeforces 546A - Soldier and Bananas}.
+    \end{block}
+
+    \vspace{1em}
+
+    \begin{itemize}
+        \item \textbf{Đánh giá:} Bài toán nhập môn kinh điển (Rate 800).
+        \item \textbf{Kiến thức cốt lõi:} 
+        \begin{itemize}
+            \item Cấp số cộng (Arithmetic Progression).
+            \item Xử lý số âm (Negative handling).
+        \end{itemize}
+    \end{itemize}
+    
+    Chúng ta sẽ không code vội. Hãy mổ xẻ nó trước.
+\end{frame}
+
+% --- Slide Bước 1: Briefing ---
+\begin{frame}{BƯỚC 1: TIẾP NHẬN \& PHẪU THUẬT}
+    \begin{block}{Tóm tắt đề bài (Ngôn ngữ con người)}
+        Bài toán này thực chất là một bài toán đi chợ với quy luật giá tăng dần:
+        \begin{itemize}
+            \item Bạn muốn mua $w$ quả chuối.
+            \item Quả thứ \textbf{1} giá: $1k$ đô.
+            \item Quả thứ \textbf{2} giá: $2k$ đô.
+            \item Quả thứ \textbf{3} giá: $3k$ đô.
+            \item ... Cứ thế tăng lên theo cấp số nhân với $k$.
+            \item Trong túi bạn đang có sẵn $n$ đô.
+        \end{itemize}
+        \textbf{Mục tiêu:} Tính số tiền bạn \textbf{phải vay thêm} để mua đủ $w$ quả.
+    \end{block}
+\end{frame}
+
+% --- Slide Input & Roadmap ---
+\begin{frame}{Input \& Lộ trình tư duy}
+    \begin{exampleblock}{Các nhân vật chính (Input)}
+        \begin{itemize}
+            \item $k$: Giá gốc (hệ số giá).
+            \item $n$: Tiền có sẵn (ví tiền).
+            \item $w$: Số lượng cần mua.
+        \end{itemize}
+    \end{exampleblock}
+
+    \vspace{1em}
+
+    \textbf{Lộ trình tư duy (Roadmap):}
+    Để giải quyết bài này, chúng ta cần đi qua 3 mảnh ghép (Chunks):
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Hiểu quy luật tính tiền (Tư duy quy nạp).
+        \item \textbf{Chunk 2:} Tính tổng hóa đơn (Tư duy tối ưu toán học).
+        \item \textbf{Chunk 3:} Tính số tiền nợ \& Bẫy Logic (Edge Cases).
+    \end{enumerate}
+\end{frame}
+
+% --- Slide Chunk 1: Quy luật ---
+\begin{frame}{CHUNK 1: QUY LUẬT "CẦU THANG GIÁ CẢ"}
+    \begin{exampleblock}{Mô hình Cầu thang}
+        Giá chuối không cố định mà tăng dần như cầu thang:
+        \begin{itemize}
+            \item Bậc 1 (Quả thứ 1): Giá gốc là $1$ lần $k$.
+            \item Bậc 2 (Quả thứ 2): Giá tăng lên $2$ lần $k$.
+            \item Bậc 3 (Quả thứ 3): Giá tăng lên $3$ lần $k$.
+            \item ...
+            \item Bậc $i$ (Quả thứ $i$): Giá là $i \times k$.
+        \end{itemize}
+    \end{exampleblock}
+    Càng mua nhiều, giá từng quả càng đắt đỏ.
+\end{frame}
+
+% --- Slide Mental Check 1 (Quiz) ---
+\begin{frame}{THỬ THÁCH TƯ DUY (MENTAL CHECK)}
+    \begin{alertblock}{Câu hỏi}
+        Giả sử hệ số giá $k = 3$. \\
+        Tôi muốn bạn tính giá tiền của \textbf{riêng quả chuối thứ 4} (chỉ quả đó thôi, không phải tổng).
+        
+        \begin{itemize}
+            \item A. 3 đô
+            \item B. 9 đô
+            \item C. 12 đô
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+    
+    \begin{block}{Đáp án: C}
+        Chính xác! Giá quả thứ 4 là $4 \times 3 = 12$. \\
+        Công thức: Giá quả thứ $i = i \times k$.
+    \end{block}
+\end{frame}
+
+% --- Slide Chunk 2: Tính tổng ---
+\begin{frame}{CHUNK 2: TÍNH TỔNG HÓA ĐƠN (SUMMATION)}
+    Công thức tính tổng tiền cho $w$ quả:
+    $$ Total = 1k + 2k + 3k + \dots + wk $$
+
+    \begin{block}{Nhìn kỹ nhé (Pattern Recognition)}
+        Nếu ta đặt $k$ ra ngoài làm nhân tử chung, ta sẽ có:
+        $$ Total = k \times (1 + 2 + 3 + \dots + w) $$
+    \end{block}
+
+    Cụm $(1 + 2 + \dots + w)$ là tổng các số tự nhiên liên tiếp.
+    \begin{itemize}
+        \item \textit{Trong toán học:} Đây là cấp số cộng.
+        \item \textit{Trong lập trình:} Dùng vòng lặp hoặc công thức $\frac{w(w+1)}{2}$.
+    \end{itemize}
+\end{frame}
+
+% --- Slide Mental Check 2 (Quiz) ---
+\begin{frame}{THỬ THÁCH TƯ DUY (MENTAL CHECK)}
+    \begin{alertblock}{Câu hỏi}
+        Vẫn giữ $k = 3$. Lần này bạn muốn mua \textbf{4 quả} ($w = 4$). \\
+        Hãy tính \textbf{Tổng số tiền} bạn phải trả cho cả 4 quả này là bao nhiêu?
+        
+        \begin{itemize}
+            \item A. 12
+            \item B. 30
+            \item C. 24
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+
+    \begin{block}{Đáp án: B}
+        Quá chuẩn! Bạn đã cộng dồn rất đúng: \\
+        $3 \times (1 + 2 + 3 + 4) = 3 \times 10 = 30$.
+    \end{block}
+\end{frame}
+
+% --- Slide Chunk 3: Bẫy logic ---
+\begin{frame}{CHUNK 3: ĐIỀU KIỆN VAY MƯỢN \& CÁI BẪY SỐ ÂM}
+    Logic thông thường:
+    $$ \text{Tiền thiếu} = \text{Tổng chi phí} - \text{Tiền đang có} $$
+    $$ \text{Result} = Total - n $$
+
+    Nhưng cuộc đời không phải lúc nào cũng cần vay mượn.
+
+    \begin{exampleblock}{Tình huống thực tế}
+        Nếu tiền trong túi ($n$) lớn hơn hóa đơn ($Total$), bạn không cần vay ai cả. Số tiền nợ phải là 0, chứ không phải số âm.
+    \end{exampleblock}
+\end{frame}
+
+% --- Slide Trap Check (Quiz) ---
+\begin{frame}{THỬ THÁCH TƯ DUY (TRAP CHECK)}
+    \begin{alertblock}{Câu hỏi}
+        Giả sử hóa đơn là \textbf{30 đô}. Bạn có \textbf{40 đô} trong ví ($n=40$).
+        Máy tính cần in ra (số tiền phải vay) là bao nhiêu?
+        
+        \begin{itemize}
+            \item A. -10 (Vì $30 - 40 = -10$)
+            \item B. 0 (Không cần vay gì cả)
+            \item C. 10 (Vẫn vay cho chắc?)
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+
+    \begin{block}{Đáp án: B}
+        Tuyệt vời! Bạn đã tránh được cái "bẫy" phổ biến nhất. \\
+        \textbf{Tại sao lại là 0?} Không ai nói "Tôi phải vay âm 10 đô" cả. Nếu $Total \le n$, kết quả là 0.
+    \end{block}
+\end{frame}
+
+% --- Slide Tổng kết thuật toán ---
+\begin{frame}{TỔNG KẾT CHIẾN THUẬT (THE ALGORITHM)}
+    \begin{enumerate}
+        \item \textbf{Nhập dữ liệu (Input):} Lấy 3 số $k, n, w$.
+        
+        \item \textbf{Tính Tổng hóa đơn (Total Cost):}
+        \begin{itemize}
+            \item Cách 1 (Loop): Vòng lặp từ 1 đến $w$, cộng dồn.
+            \item Cách 2 (Math - Khuyên dùng): 
+            $$ Total = k \times \frac{w \times (w + 1)}{2} $$
+        \end{itemize}
+
+        \item \textbf{Tính tiền nợ (Result):}
+        \begin{itemize}
+            \item Tính độ lệch: $diff = Total - n$.
+            \item \textbf{Quyết định (Decision):}
+            \begin{itemize}
+                \item Nếu $diff > 0 \rightarrow$ In ra $diff$.
+                \item Nếu $diff \le 0 \rightarrow$ In ra $0$.
+            \end{itemize}
+        \end{itemize}
+    \end{enumerate}
+
+    \begin{block}{Công thức Pro (One-liner)}
+        $$ \text{Result} = \max(0, Total - n) $$
+    \end{block}
+\end{frame}
+
+% --- Slide Kết thúc ---
+\begin{frame}{BƯỚC TIẾP THEO}
+    \begin{exampleblock}{Hành động ngay}
+        Bây giờ bạn đã có đủ tư duy logic trong đầu. \\
+        \vspace{0.5em}
+        \textbf{Nhiệm vụ của bạn:} Hãy viết code (C++, Python hoặc ngôn ngữ bạn chọn) và nộp thử.
+    \end{exampleblock}
+
+    \vspace{1em}
+    Bạn có muốn dán đoạn code của bạn vào đây để tôi review không?
+\end{frame}
+
+\end{document}

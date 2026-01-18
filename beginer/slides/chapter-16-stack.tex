@@ -1,0 +1,281 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Chinh phục Stack trong C++17}
+\subtitle{Triết lý Learning How to Learn}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào từ người đồng hành}
+    \begin{block}{Triết lý Learning How to Learn}
+        Chào mừng bạn đến với hành trình xây dựng những "khối kiến thức" (chunks) vững chắc về Stack. Chúng ta sẽ biến những dòng lệnh khô khan thành những thực thể sống động trong tư duy.
+    \end{block}
+    \begin{itemize}
+        \item Không chỉ học code, mà học cách tư duy.
+        \item Hiểu bản chất thông qua các ẩn dụ thực tế.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lộ trình khám phá: 4 Trạm dừng chân}
+    \begin{enumerate}
+        \item \textbf{Chương 1: Chiếc ống Pringles thần kỳ} - Bản chất LIFO.
+        \item \textbf{Chương 2: Bộ lệnh điều khiển} - Các thao tác \texttt{push}, \texttt{pop}, \texttt{top}.
+        \item \textbf{Chương 3: Cuộc dạo chơi trong ngăn xếp} - Duyệt Stack bằng \texttt{while} và C++17.
+        \item \textbf{Chương 4: Khi Stack kết hợp cùng Algorithms} - Biến hóa sức mạnh.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chương 1: Chiếc ống Pringles thần kỳ}
+    \begin{exampleblock}{Ẩn dụ cốt lõi}
+        Hãy tưởng tượng \textbf{Stack} giống hệt như một \textbf{ống khoai tây chiên Pringles}.
+    \end{exampleblock}
+    \begin{itemize}
+        \item Miếng khoai bỏ vào \textbf{cuối cùng} $\rightarrow$ ăn \textbf{đầu tiên}.
+        \item Miếng khoai ở \textbf{đáy ống} $\rightarrow$ phải đợi ăn hết các miếng bên trên.
+        \item \textbf{Nguyên lý LIFO:} Last In, First Out (Vào sau cùng, ra đầu tiên).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Tại sao chúng ta cần Stack?}
+    \begin{block}{Ứng dụng thực tế}
+        Stack cực kỳ "kỷ luật", ép bạn làm việc theo thứ tự nhất định:
+    \end{block}
+    \begin{itemize}
+        \item Đảo ngược một chuỗi.
+        \item Nút \textbf{Undo} trong trình soạn thảo văn bản.
+        \item Kiểm tra tính đúng đắn của các cặp dấu ngoặc.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Cấu trúc cơ bản trong C++17}
+    Để gọi "ống Pringles" này ra, ta dùng thư viện \texttt{<stack>}.
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <stack> // Thu vien chua Stack
+using namespace std;
+
+int main() {
+    stack<int> s; // Tao mot ngan xep chua cac so nguyen
+    return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Kiểm tra "một chút" kiến thức}
+    \begin{alertblock}{Câu hỏi}
+        Nếu bỏ lần lượt 3 cuốn sách: "Toán", "Văn", "Anh" vào một cái thùng hẹp (Stack). Thứ tự nhận được khi lấy ra từng cuốn là gì?
+    \end{alertblock}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Thứ tự: \textbf{Anh} $\rightarrow$ \textbf{Văn} $\rightarrow$ \textbf{Toán}.
+        \textit{Giải thích: Cuốn "Anh" vào sau cùng nên nằm trên cùng (LIFO).}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chương 2: Bộ tay cầm điều khiển}
+    \begin{exampleblock}{Ẩn dụ Cánh tay Robot}
+        Chỉ có một cánh tay duy nhất ở miệng ống thực hiện 3 hành động:
+    \end{exampleblock}
+    \begin{itemize}
+        \item \textbf{\texttt{push(giá\_trị)}}: Đặt một miếng khoai mới lên đỉnh.
+        \item \textbf{\texttt{pop()}}: Gắp miếng trên cùng ra và vứt đi (không trả về giá trị).
+        \item \textbf{\texttt{top()}}: Nhìn lướt xem miếng trên cùng là gì nhưng vẫn để lại trong ống.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Các lệnh phụ trợ}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}ll@{}}
+            \toprule
+            \textbf{Lệnh} & \textbf{Công dụng} \\ \midrule
+            \texttt{empty()} & Kiểm tra ống còn miếng nào không (True/False) \\
+            \texttt{size()} & Đếm tổng số miếng khoai trong ống \\ \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Code thực tế: Vận hành ống Pringles}
+    \begin{lstlisting}[language=C++]
+stack<string> pringles;
+pringles.push("Vi Cay");
+pringles.push("Vi Pho Mai");
+pringles.push("Vi Tao Bien");
+
+cout << pringles.top() << endl; // Ket qua: Vi Tao Bien
+
+pringles.pop(); // An mieng tren cung
+    
+cout << pringles.top() << endl; // Ket qua: Vi Pho Mai
+cout << "Con: " << pringles.size() << " mieng.";
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tương tác & Tư duy logic}
+    \begin{alertblock}{Tình huống}
+        Trong trò chơi, người chơi đi: Trái $\rightarrow$ Lên. Khi ấn nút \textbf{Undo}, lệnh nào được thực hiện?
+    \end{alertblock}
+    \pause
+    \begin{block}{Giải đáp}
+        Lệnh \textbf{\texttt{pop()}} được thực hiện. Nó gỡ bỏ hành động vừa xảy ra nhất để đưa bạn về trạng thái ngay trước đó.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chương 3: Cuộc dạo chơi trong ngăn xếp}
+    \begin{alertblock}{Thách thức: Cỗ máy quét bí ẩn}
+        Stack không cho phép dùng mắt quét từ đầu đến cuối như Vector. Nó là một "kẻ kín tiếng".
+    \end{alertblock}
+    \begin{itemize}
+        \item Để xem bên trong, bạn phải dùng "camera nội soi".
+        \item Có hai cách chính: Kiểu truyền thống (Phá hủy) và Kiểu C++17 hiện đại.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Duyệt Stack kiểu truyền thống}
+    \begin{lstlisting}[language=C++]
+stack<int> s;
+// ... push 10, 20, 30 ...
+
+while (!s.empty()) {
+    auto topValue = s.top(); // C++17 dung auto
+    cout << "Dang xem mieng: " << topValue << endl;
+    s.pop(); // Bat buoc phai bo ra moi xem duoc mieng tiep theo
+}
+    \end{lstlisting}
+    \begin{alertblock}{Lưu ý quan trọng}
+        Sau vòng lặp này, Stack sẽ \textbf{trống rỗng}. Bạn phải ăn hết ống khoai mới biết bên trong có gì!
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Duyệt mà không làm mất dữ liệu}
+    \begin{lstlisting}[language=C++]
+stack<int> goc;
+for(int x : {1, 2, 3, 4, 5}) goc.push(x);
+
+// Tao mot ban sao de bao ve du lieu goc
+stack<int> ban_sao = goc; 
+
+while (!ban_sao.empty()) {
+    cout << ban_sao.top() << " ";
+    ban_sao.pop();
+}
+// goc.size() van con nguyen 5 phan tu!
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Phong cách C++17: Vòng lặp "Bán tự động"}
+    Tận dụng cấu trúc của vòng lặp \texttt{for} để code gọn gàng hơn.
+    \begin{lstlisting}[language=C++]
+stack<string> s;
+for(auto x : {"S", "T", "A", "C", "K"}) s.push(x);
+
+// for ( ; Dieu kien con hang ; Day hang cu ra )
+for (; !s.empty(); s.pop()) {
+    auto& item = s.top(); // Dung auto& de lay tham chieu nhanh
+    cout << item << " ";
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tại sao Stack không có Iterator?}
+    \begin{exampleblock}{Ẩn dụ: Chiếc giếng hẹp và sâu}
+        Stack là một cái giếng hẹp, chỉ vừa để thả gàu xuống.
+    \end{exampleblock}
+    \begin{itemize}
+        \item \textbf{Iterator (Thước kẻ):} Bạn muốn đứng ngoài chỉ trỏ vào từng món đồ mà không nhấc chúng lên $\rightarrow$ \textbf{Không thể}.
+        \item \textbf{Triết lý:} Stack ép bạn tuân thủ LIFO để bảo vệ tính kỷ luật của dữ liệu. Nếu cần duyệt nhiều, hãy dùng \texttt{vector}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{So sánh Vector và Stack}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}lll@{}}
+            \toprule
+            \textbf{Tính năng} & \textbf{Vector (Cái khay)} & \textbf{Stack (Cái ống)} \\ \midrule
+            Truy cập & Bất cứ vị trí nào & Chỉ ở đỉnh (\texttt{top()}) \\
+            \texttt{foreach} & Hỗ trợ (\textbf{Có}) & \textbf{Không} (Bảo vệ LIFO) \\
+            Tốc độ & Chậm ở đầu & Cực nhanh ở đỉnh \\
+            Ẩn dụ & Danh sách đi chợ & Ống Pringles \\ \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4: Kết hợp cùng Algorithms}
+    \begin{block}{Kỹ thuật "Đổ ra đĩa"}
+        Vì Stack không có Iterator, ta "đổ" dữ liệu ra \texttt{vector} để xử lý.
+    \end{block}
+    \begin{lstlisting}[language=C++]
+// Buoc 1: Do ra "dia" Vector
+vector<int> plate;
+while(!s.empty()) {
+    plate.push_back(s.top());
+    s.pop();
+}
+// Buoc 2: Sap xep tang dan bang Algorithms
+sort(plate.begin(), plate.end()); 
+
+// Buoc 3: Dong goi lai vao Stack
+for(auto x : plate) s.push(x);
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Bài toán cuối khóa: Đảo ngược chuỗi}
+    \begin{exampleblock}{Đề bài}
+        Nhập: "HOC SINH CAP HAI" $\rightarrow$ Xuất: "IAH PAC HNIS COH".
+    \end{exampleblock}
+    \begin{lstlisting}[language=C++]
+string text = "HOC SINH CAP HAI";
+stack<char> sentence;
+for (auto x : text) sentence.push(x);
+
+for (; !sentence.empty(); sentence.pop()) {
+    cout << sentence.top(); 
+}
+    \end{lstlisting}
+    \begin{block}{Tổng kết}
+        Bạn đã làm chủ Stack từ bản chất LIFO đến kỹ thuật duyệt C++17 chuyên nghiệp!
+    \end{block}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,20 @@
+\frametitle{Bước 3: Tổng kết \& Mã hóa (Wrap Up)}
+Đây là bản thiết kế cuối cùng cho chương trình của bạn (Pseudocode):
+
+    \begin{enumerate}
+        \item \textbf{Input:} Nhập vào số nguyên $n$.
+        \item \textbf{Process (Xử lý):} Kiểm tra xem $n$ là chẵn hay lẻ.
+        \item \textbf{Output:}
+            \begin{itemize}
+                \item Nếu Chẵn (\texttt{n \% 2 == 0}): In ra \texttt{Mahmoud}
+                \item Nếu Lẻ (\texttt{else}): In ra \texttt{Ehab}
+            \end{itemize}
+    \end{enumerate}
+
+    \vspace{0.3cm}
+    \textbf{Lưu ý nhỏ khi code (C++/Python):}
+    \begin{itemize}
+        \item Input $n$ có thể lên tới $10^9$, nhưng vì chỉ dùng phép chia lấy dư (\texttt{\%}) và so sánh nên kiểu \texttt{int} (C++) hoặc số nguyên thường (Python) đều xử lý tốt.
+        \item Độ phức tạp: $O(1)$ - siêu nhanh.
+        \item Đừng quên in hoa chữ cái đầu \texttt{Mahmoud} và \texttt{Ehab}.
+    \end{itemize}

@@ -1,0 +1,199 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Cấu hình hiển thị code (giả mã/C++)
+\lstset{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{green!60!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    tabsize=4
+}
+
+\title{Codeforces 977A - Wrong Subtraction}
+\subtitle{Rèn luyện tư duy Điều kiện và Vòng lặp}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\frame{\titlepage}
+
+% --- PHẦN 1: GIỚI THIỆU ---
+\section{Tiếp nhận \& Phẫu thuật}
+
+\begin{frame}{Tóm tắt đề bài (Ngôn ngữ con người)}
+    \begin{block}{Nhiệm vụ}
+        Bạn có một số nguyên $n$ và phải thực hiện biến đổi nó đúng $k$ lần.
+    \end{block}
+
+    \vspace{0.5cm}
+    Hành động phụ thuộc vào chữ số cuối cùng (cái đuôi) của $n$:
+    \begin{itemize}
+        \item \textbf{Nếu đuôi khác 0:} Giảm số đó đi 1 đơn vị ($n - 1$).
+        \item \textbf{Nếu đuôi là 0:} Cắt bỏ cái đuôi đi (Chia cho 10: $n / 10$).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy (Thinking Roadmap)}
+    Để giải quyết bài toán, chúng ta cần 2 mảnh ghép tư duy (Micro-chunks):
+    
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Chunk 1: Cơ chế "Nhìn đuôi đoán bệnh"} \\
+        (Xác định xem cần làm gì với con số hiện tại).
+        \vspace{0.3cm}
+        \item \textbf{Chunk 2: Cỗ máy lặp lại} \\
+        (Thực hiện hành động trên đủ số lần yêu cầu).
+    \end{enumerate}
+\end{frame}
+
+% --- PHẦN 2: CHUNK 1 ---
+\section{Chunk 1: Cơ chế xử lý}
+
+\begin{frame}{Chunk 1: Cơ chế "Nhìn đuôi đoán bệnh"}
+    \begin{exampleblock}{Logic (Explain)}
+        Tưởng tượng $n$ là con thằn lằn. Nhìn vào \textbf{đuôi} (hàng đơn vị):
+        \begin{itemize}
+            \item \textbf{Tình huống 1 (Đuôi $\neq 0$):} Mài bớt đuôi đi 1 chút. \\
+            Ví dụ: $59 \to 58$.
+            \item \textbf{Tình huống 2 (Đuôi $= 0$):} Rụng luôn khúc đuôi. \\
+            Ví dụ: $50 \to 5$.
+        \end{itemize}
+    \end{exampleblock}
+
+    \vspace{0.3cm}
+    Trong lập trình, để lấy chữ số cuối cùng, ta dùng phép toán \textbf{chia lấy dư cho 10} (Modulus \%).
+\end{frame}
+
+\begin{frame}{Cảnh báo quan trọng}
+    \begin{alertblock}{Bẫy (Trap)}
+        Nhiều bạn vội vàng chia cho 10 ngay khi thấy số lớn, hoặc trừ 1 liên tục.
+        
+        \textbf{Hãy nhớ: Luôn phải kiểm tra cái đuôi trước khi hành động.}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check 1)}
+    \begin{block}{Câu hỏi}
+        Giả sử số hiện tại là $n = 209$. Bạn cần thực hiện \textbf{1 bước} biến đổi.
+        Kết quả mới sẽ là bao nhiêu?
+    \end{block}
+
+    \begin{itemize}
+        \item A. 208
+        \item B. 20
+        \item C. 29
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án: A (208)}
+        Vì đuôi là 9 (khác 0), nên chúng ta chỉ đơn giản là trừ đi 1:
+        $$209 - 1 = 208$$
+    \end{exampleblock}
+\end{frame}
+
+% --- PHẦN 3: CHUNK 2 ---
+\section{Chunk 2: Vòng lặp}
+
+\begin{frame}{Chunk 2: Cỗ máy lặp lại}
+    \begin{block}{Logic (Explain)}
+        Đề bài yêu cầu làm đúng $k$ lần. Hãy coi $k$ là năng lượng.
+        Mỗi lần biến đổi (Chunk 1) tốn 1 đơn vị năng lượng.
+    \end{block}
+
+    \textbf{Quy trình vòng lặp:}
+    \begin{enumerate}
+        \item Kiểm tra $k$: Còn năng lượng không? ($k > 0$?)
+        \item Nếu còn: Thực hiện biến đổi $n$ (theo quy tắc Chunk 1).
+        \item Giảm $k$ đi 1 (đã làm xong 1 lần).
+        \item Quay lại bước 1.
+    \end{enumerate}
+    
+    Dừng lại khi $k = 0$. Giá trị cuối cùng của $n$ là đáp án.
+\end{frame}
+
+\begin{frame}{Lưu ý về biến số}
+    \begin{alertblock}{Bẫy (Trap)}
+        Đừng nhầm lẫn vai trò của hai biến:
+        \begin{itemize}
+            \item $k$: Số lần lặp (Bộ đếm).
+            \item $n$: Đối tượng bị thay đổi (Con số).
+        \end{itemize}
+        Chúng ta không trừ $k$ ra khỏi $n$!
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check 2)}
+    \begin{block}{Bài toán nhỏ}
+        Số ban đầu: $n = 51$. Số lần cần làm: $k = 3$. \\
+        Hãy thực hiện từng bước và tìm kết quả cuối cùng.
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{Phân tích bước đi (Nhấn để xem từng bước):}
+    \begin{itemize}
+        \item \textbf{Bắt đầu:} $n=51, k=3$.
+        \pause
+        \item \textbf{Lần 1:} Đuôi là 1 ($\neq 0$) $\to$ Trừ 1 $\to$ $n=50$. ($k$ còn 2)
+        \pause
+        \item \textbf{Lần 2:} Đuôi là 0 ($= 0$) $\to$ Chia 10 $\to$ $n=5$. ($k$ còn 1)
+        \pause
+        \item \textbf{Lần 3:} Đuôi là 5 ($\neq 0$) $\to$ Trừ 1 $\to$ $n=4$. ($k$ còn 0)
+    \end{itemize}
+    \pause
+    \vspace{0.3cm}
+    \textbf{Kết quả: 4}. Bạn đã tư duy đúng như máy tính!
+\end{frame}
+
+% --- PHẦN 4: TỔNG KẾT ---
+\section{Tổng kết \& Mã giả}
+
+\begin{frame}[fragile]{Bản thiết kế thuật toán (Blueprint)}
+    Chúng ta gom các mảnh ghép lại thành mã giả (Pseudocode):
+
+    \begin{enumerate}
+        \item \textbf{Input:} Nhận $n$ (số cần sửa) và $k$ (số lần sửa).
+        \item \textbf{Loop:} Lặp lại hành động $k$ lần:
+        \begin{itemize}
+            \item Kiểm tra đuôi: \verb|tail = n % 10|
+            \item \textbf{IF} \verb|tail == 0|:
+            \begin{itemize}
+                \item \verb|n = n / 10|
+            \end{itemize}
+            \item \textbf{ELSE} (đuôi khác 0):
+            \begin{itemize}
+                \item \verb|n = n - 1|
+            \end{itemize}
+        \end{itemize}
+        \item \textbf{Output:} In số $n$ ra màn hình.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Đến lượt bạn (Your Turn)}
+    \begin{block}{Hành động ngay}
+        Bạn đã có logic và bản thiết kế. Bây giờ hãy thử chuyển nó thành code thật (C++, Python, v.v.) và nộp bài!
+    \end{block}
+
+    \vspace{1cm}
+    \begin{center}
+        \textit{Bạn muốn tự viết code hay muốn xem một đoạn khung sườn (Template) trước?}
+    \end{center}
+\end{frame}
+
+\end{document}

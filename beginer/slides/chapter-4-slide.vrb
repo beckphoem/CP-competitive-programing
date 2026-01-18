@@ -1,0 +1,32 @@
+\frametitle{🎁 Mảnh ghép cuối cùng: Ứng dụng thực tế}
+Khi nào dùng cái nào? Hãy học tư duy giải quyết vấn đề.
+
+    \begin{columns}
+        \begin{column}{0.48\textwidth}
+            \begin{block}{1. Do/While $\rightarrow$ Nhập mật khẩu}
+                Bạn luôn muốn người dùng nhập \textit{ít nhất một lần}.
+\begin{lstlisting}[language=C++]
+int password;
+do {
+  cout << "Moi nhap pass: ";
+  cin >> password;
+}
+while (password != 1234);
+// @Sai (khác 1234) thì nhập lại!@
+\end{lstlisting}
+                \small \textit{Ẩn dụ: Ăn thử một miếng rồi mới quyết định ăn tiếp hay không.}
+            \end{block}
+        \end{column}
+
+        \begin{column}{0.48\textwidth}
+            \begin{block}{2. While $\rightarrow$ Kiểm tra bình xăng}
+                Trước khi nổ máy, phải kiểm tra xăng.
+                \begin{itemize}
+                    \item Xăng hết $\rightarrow$ Không đi mét nào (0 lần).
+                    \item Còn xăng $\rightarrow$ Lái xe, xăng vơi dần.
+                \end{itemize}
+                \vspace{0.5cm}
+                \small \textit{Ẩn dụ: An toàn là trên hết. Kiểm tra trước khi hành động.}
+            \end{block}
+        \end{column}
+    \end{columns}

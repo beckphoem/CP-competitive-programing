@@ -1,0 +1,20 @@
+\frametitle{Chương 4: Bài toán Con đường kiến đi}
+\begin{exampleblock}{Đề bài}
+        Đếm số cách đi từ (0,0) đến (M,N) nếu chỉ được đi sang phải hoặc xuống dưới.
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++]
+// Khoi tao o dau tien
+dp[0][0] = 1;
+
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+        if (i == 0 && j == 0) continue;
+
+        int tu_phia_tren = (i > 0) ? dp[i-1][j] : 0;
+        int tu_ben_trai = (j > 0) ? dp[i][j-1] : 0;
+
+        dp[i][j] = tu_phia_tren + tu_ben_trai;
+    }
+}
+\end{lstlisting}

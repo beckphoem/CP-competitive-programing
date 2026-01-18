@@ -1,0 +1,272 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Quan trọng để hiển thị tiếng Việt đúng
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Định nghĩa màu sắc code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title[CF 492A - Vanya and Cubes]{Codeforces 492A - Vanya and Cubes}
+\subtitle{Phân tích tư duy và Giải thuật}
+\author{Coach Tư Duy}
+\date{\today}
+
+\begin{document}
+
+% Slide 1: Title
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 2: Briefing
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Tóm tắt đề bài}
+        Bạn có $n$ viên gạch. Xây kim tự tháp cao nhất có thể với quy luật:
+        \begin{itemize}
+            \item Tầng 1 (trên cùng): 1 viên.
+            \item Tầng 2: $1 + 2$ viên.
+            \item Tầng 3: $1 + 2 + 3$ viên.
+            \item ...
+            \item Tầng $i$: $1 + 2 + ... + i$ viên.
+        \end{itemize}
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{Lộ trình tư duy:}
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Giá tiền của từng tầng (Mỗi tầng tốn bao nhiêu?).
+        \item \textbf{Chunk 2:} Tính tổng hóa đơn (Tổng gạch đã dùng).
+        \item \textbf{Chunk 3:} Điểm dừng (Khi nào hết gạch?).
+    \end{enumerate}
+\end{frame}
+
+% Slide 3: Chunk 1 - Logic
+\begin{frame}{Bước 2: Chunk 1 - Giá của từng tầng}
+    \begin{block}{Logic: Quy tắc cộng dồn (Rolling Sum)}
+        Mỗi tầng giống như một "hòn tuyết lăn". Số gạch cần cho tầng $i$ bằng số gạch tầng trước cộng thêm $i$.
+        \begin{itemize}
+            \item Tầng 1: 1 viên.
+            \item Tầng 2: (Tầng 1) + 2 = 3 viên.
+            \item Tầng 3: (Tầng 2) + 3 = 6 viên.
+        \end{itemize}
+    \end{block}
+
+    \begin{alertblock}{Lưu ý (Trap)}
+        Đừng nhầm lẫn giữa:
+        \begin{enumerate}
+            \item Số gạch của \textbf{riêng tầng đó}.
+            \item Tổng số gạch của \textbf{cả kim tự tháp}.
+        \end{enumerate}
+        Ở đây ta đang tính số gạch cho \textbf{riêng tầng đó}.
+    \end{alertblock}
+\end{frame}
+
+% Slide 4: Chunk 1 - Mental Check
+\begin{frame}{Thử thách tư duy: Chunk 1}
+    \textbf{Câu hỏi:}
+    Giả sử muốn xây \textbf{Tầng thứ 4} (Level 4). Chỉ riêng tầng này cần bao nhiêu viên gạch?
+    
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item[A.] 4 viên
+        \item[B.] 6 viên
+        \item[C.] 10 viên
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án}
+        \textbf{C. 10 viên.} \\
+        \textit{Giải thích:} Tầng 3 tốn 6 viên. Tầng 4 sẽ tốn $6 + 4 = 10$ viên.
+    \end{exampleblock}
+\end{frame}
+
+% Slide 5: Chunk 2 - Total Cost
+\begin{frame}{Bước 2: Chunk 2 - Tính tổng "Hóa đơn"}
+    \begin{block}{Logic: Tổng chi phí}
+        Để xây tháp cao $h$ tầng, bạn cần tổng số gạch của tất cả các tầng cộng lại.
+        $$ \text{Total} = \text{Gạch Tầng 1} + \text{Gạch Tầng 2} + ... + \text{Gạch Tầng } h $$
+    \end{block}
+
+    \begin{alertblock}{Bẫy lớn nhất!}
+        Phải lấy \textbf{TỔNG số gạch đã dùng từ đầu} so sánh với $n$.
+        \\ \textbf{KHÔNG ĐƯỢC} lấy số gạch của riêng tầng đang xây để so sánh.
+    \end{alertblock}
+\end{frame}
+
+% Slide 6: Chunk 2 - Mental Check
+\begin{frame}{Thử thách tư duy: Chunk 2}
+    \textbf{Dữ liệu:} Tầng 1 (1 viên), Tầng 2 (3 viên), Tầng 3 (6 viên).
+    
+    \vspace{0.2cm}
+    \textbf{Câu hỏi:} Để xây kim tự tháp hoàn chỉnh cao \textbf{3 tầng}, tổng cộng cần bao nhiêu gạch?
+
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item[A.] 6 viên
+        \item[B.] 9 viên ($1+2+6$)
+        \item[C.] 10 viên ($1+3+6$)
+    \end{itemize}
+
+    \pause
+    \vspace{0.3cm}
+    \begin{exampleblock}{Đáp án}
+        \textbf{C. 10 viên.} \\
+        \textit{Giải thích:} Tổng = 1 (Tầng 1) + 3 (Tầng 2) + 6 (Tầng 3) = 10 viên.
+    \end{exampleblock}
+\end{frame}
+
+% Slide 7: Chunk 3 - Stop Condition
+\begin{frame}{Bước 2: Chunk 3 - Điểm dừng (Simulation)}
+    \begin{block}{Chiến thuật: Thử và Sai (Simulation)}
+        Chúng ta không biết tháp cao bao nhiêu, nên sẽ xây từng tầng và kiểm tra túi tiền ($n$).
+    \end{block}
+
+    \vspace{0.3cm}
+    \textbf{Quy trình lặp (Loop):}
+    \begin{enumerate}
+        \item Tính gạch cho tầng tiếp theo.
+        \item \textbf{Kiểm tra:} Tổng gạch đang có ($n$) có đủ trả cho tầng này không?
+        \begin{itemize}
+            \item \textbf{Đủ:} Xây tiếp (Chiều cao + 1, Trừ bớt gạch).
+            \item \textbf{Thiếu:} DỪNG LẠI NGAY!
+        \end{itemize}
+    \end{enumerate}
+
+    \begin{alertblock}{Bẫy: Quá trớn (Off-by-one error)}
+        Chỉ khi \textbf{chắc chắn đủ gạch} mới được đếm tầng đó vào chiều cao!
+    \end{alertblock}
+\end{frame}
+
+% Slide 8: Chunk 3 - Mental Check (Trace)
+\begin{frame}{Thử thách tư duy: Chạy bằng cơm ($n=25$)}
+    Hãy kiểm tra với $n=25$. Kết quả chiều cao là bao nhiêu?
+
+    \begin{table}[]
+        \begin{tabular}{@{}lllll@{}}
+            \toprule
+            \textbf{Tầng} & \textbf{Chi phí tầng} & \textbf{Tổng chi phí} & \textbf{Trạng thái ($n=25$)} \\ \midrule
+            1             & 1                     & 1                     & Đủ (Còn 24)                  \\
+            2             & 3                     & $1+3=4$               & Đủ (Còn 21)                  \\
+            3             & 6                     & $4+6=10$              & Đủ (Còn 15)                  \\
+            4             & 10                    & $10+10=20$            & Đủ (Còn 5)                   \\ 
+            \textbf{5}    & \textbf{15}           & \textbf{35}           & \textbf{THIẾU!}              \\ \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \pause
+    \begin{exampleblock}{Kết quả}
+        \textbf{Đáp án: A. 4 tầng.} \\
+        (Tầng 5 cần tổng 35 viên, ta chỉ có 25 viên $\to$ Không xây được).
+    \end{exampleblock}
+\end{frame}
+
+% Slide 9: Solution Construction
+\begin{frame}[fragile]{Bước 3: Tổng kết \& Mã giả (Pseudocode)}
+    \begin{block}{Giải thuật (Algorithm)}
+        \begin{enumerate}
+            \item \textbf{Chuẩn bị:} 
+                \begin{itemize}
+                    \item \verb|height = 0| (Chiều cao)
+                    \item \verb|current_level_cost = 0| (Gạch tầng hiện tại)
+                    \item \verb|n| (Input)
+                \end{itemize}
+            \item \textbf{Vòng lặp (While):}
+                \begin{itemize}
+                    \item Phí tầng kế: \verb|next_cost = current_level_cost + (height + 1)|
+                    \item \textbf{Kiểm tra:} 
+                    \item Nếu \verb|n >= next_cost|: 
+                        \begin{itemize}
+                             \item \verb|n = n - next_cost|
+                             \item \verb|current_level_cost = next_cost|
+                             \item \verb|height++|
+                        \end{itemize}
+                    \item Nếu \verb|n < next_cost|: \textbf{BREAK}.
+                \end{itemize}
+            \item \textbf{In kết quả:} \verb|height|.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+% Slide 10: Skeleton Code
+\begin{frame}[fragile]{Mẫu Code (Skeleton)}
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cin >> n;
+
+    int height = 0;
+    int current_level_cost = 0; 
+    
+    // Bat dau xay dung
+    while (true) {
+        // 1. Tinh so gach can cho tang tiep theo
+        int next_level = height + 1;
+        int cost_for_next = current_level_cost + next_level;
+
+        // 2. Kiem tra xem co du gach khong?
+        if (n >= cost_for_next) {
+            // ??? (Dien code vao day: Tru gach, tang chieu cao)
+            // Cap nhat current_level_cost
+        } else {
+            // ??? (Dien code vao day: Dung lai)
+        }
+    }
+
+    cout << height << endl;
+    return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+% Slide 11: Next Step
+\begin{frame}{Next Step}
+    Mọi thứ đã nằm trong đầu bạn. Bạn muốn làm gì tiếp theo?
+
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Tự viết code:} Mở IDE lên và code ngay bằng C++/Python.
+        \item \textbf{Cần hỗ trợ:} Sử dụng mẫu Skeleton Code ở slide trước.
+    \end{enumerate}
+    
+    \vspace{1cm}
+    \centering \textit{"Logic trước, Code sau - Đó là cách của Master."}
+\end{frame}
+
+\end{document}

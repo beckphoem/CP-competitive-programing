@@ -1,0 +1,346 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Định nghĩa màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình hiển thị code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title{Chinh Phục C++ For Loop}
+\subtitle{Xây dựng Cỗ máy Tự động hóa}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 1: Giới thiệu lộ trình
+\begin{frame}{Lộ trình bài học}
+    Chào bạn! Hôm nay chúng ta sẽ biến khái niệm For Loop thành một trò chơi lắp ráp tư duy thú vị: \textbf{"Cỗ máy tự động hóa"}.
+
+    \begin{block}{3 Bước chinh phục}
+    \begin{enumerate}
+        \item \textbf{Bức tranh toàn cảnh:} Tại sao lại cần For Loop? (Phép ẩn dụ về Robot chép phạt).
+        \item \textbf{Giải phẫu cỗ máy:} 3 công tắc bí mật vận hành vòng lặp.
+        \item \textbf{Thực chiến:} Code ví dụ và các bài tập kiểm tra tư duy.
+    \end{enumerate}
+    \end{block}
+\end{frame}
+
+% Slide 2: Bức tranh toàn cảnh
+\begin{frame}{Phần 1: Bức tranh toàn cảnh (The Big Picture)}
+    \begin{alertblock}{Vấn đề: Chép phạt thủ công}
+    Hãy tưởng tượng bạn phải chép 100 dòng chữ: "Em hứa sẽ làm bài tập đầy đủ".
+    \begin{itemize}
+        \item \textbf{Cách thủ công:} Viết từng dòng một $\rightarrow$ Mỏi tay, chán ngắt. Trong code, tương đương việc copy-paste lệnh \texttt{cout} 100 lần.
+    \end{itemize}
+    \end{alertblock}
+
+    \begin{exampleblock}{Giải pháp: Robot For Loop}
+    Bạn chế tạo một con Robot và ra lệnh:
+    \textit{"Hãy bắt đầu từ dòng 0. Hễ số dòng còn nhỏ hơn 100 thì viết tiếp. Mỗi lần xong một dòng thì tự đếm thêm 1 số."}
+    \end{exampleblock}
+    
+    $\rightarrow$ Vòng lặp \texttt{for} giúp thực hiện công việc lặp lại hàng nghìn lần chỉ với vài dòng code.
+\end{frame}
+
+% Slide 3: Cú pháp (Syntax)
+\begin{frame}[fragile]{Phần 2: Giải phẫu cỗ máy (Syntax)}
+    Cú pháp chuẩn của vòng lặp \texttt{for} như một bảng điều khiển với 3 công tắc:
+
+\begin{lstlisting}[language=C++]
+for (statement 1; statement 2; statement 3) {
+  // code block to be executed
+}
+\end{lstlisting}
+
+    \vspace{0.5cm}
+    Chúng ta sẽ đi sâu vào từng "công tắc" (Statements).
+\end{frame}
+
+% Slide 4: Chi tiết 3 Statements
+\begin{frame}{Chi tiết 3 công tắc điều khiển}
+    \begin{itemize}
+        \item \textbf{Statement 1: Vạch Xuất Phát (Khởi tạo)}
+        \begin{itemize}
+            \item Nhiệm vụ: Thiết lập biến đếm ban đầu.
+            \item Ví dụ: \texttt{int i = 0;} (Bắt đầu từ 0).
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \item \textbf{Statement 2: Trọng Tài (Điều kiện)}
+        \begin{itemize}
+            \item Nhiệm vụ: Kiểm tra xem có được chạy tiếp không.
+            \item Ví dụ: \texttt{i < 5;} (Nếu đúng thì chạy tiếp, sai thì dừng).
+        \end{itemize}
+        
+        \vspace{0.3cm}
+        \item \textbf{Statement 3: Bước Nhảy (Tăng/Giảm)}
+        \begin{itemize}
+            \item Nhiệm vụ: Thay đổi biến đếm sau mỗi lần lặp để tránh vòng lặp vô tận.
+            \item Ví dụ: \texttt{i++} (Tăng i lên 1 đơn vị).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Slide 5: Thực chiến Code
+\begin{frame}[fragile]{Phần 3: Thực chiến (Code Example)}
+    \textbf{Nhiệm vụ:} In ra các số từ 0 đến 4.
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+  // Bat dau: i = 0; Dieu kien: i < 5; Buoc nhay: i++
+  for (int i = 0; i < 5; i++) {
+    cout << "Gia tri cua i la: " << i << "\n";
+  }
+  return 0;
+}
+\end{lstlisting}
+
+    \begin{block}{Kết quả màn hình}
+\begin{verbatim}
+Gia tri cua i la: 0
+...
+Gia tri cua i la: 4
+\end{verbatim}
+    \end{block}
+\end{frame}
+
+% Slide 6: Phân tích dòng chảy
+\begin{frame}{Phân tích dòng chảy (Flow)}
+    Quá trình máy tính thực hiện:
+    \begin{enumerate}
+        \item \textbf{Khởi tạo:} Máy tạo ra $i = 0$.
+        \item \textbf{Kiểm tra:} 0 có nhỏ hơn 5 không? $\rightarrow$ \textbf{CÓ}.
+        \item \textbf{Thực thi:} In ra "Gia tri cua i la: 0".
+        \item \textbf{Bước nhảy:} Tăng $i$ lên 1 (lúc này $i=1$).
+        \item \textbf{Lặp lại:} Quay lại bước kiểm tra...
+        \item ... Lặp liên tục đến khi $i = 5$.
+        \item \textbf{Dừng:} 5 có nhỏ hơn 5 không? $\rightarrow$ \textbf{KHÔNG}. Thoát vòng lặp.
+    \end{enumerate}
+\end{frame}
+
+% Slide 7: Quiz 1
+\begin{frame}[fragile]{Kiểm tra sự hiểu biết}
+    \begin{alertblock}{Câu hỏi}
+        Trong đoạn code trước, nếu thay đổi \textbf{Statement 3} từ \texttt{i++} thành \texttt{i = i + 2}, chuyện gì sẽ xảy ra?
+    \end{alertblock}
+
+    \begin{itemize}
+        \item[A.] Nó vẫn in từ 0 đến 4 bình thường.
+        \item[B.] Nó sẽ in ra các số: 0, 2, 4.
+        \item[C.] Nó sẽ chạy mãi mãi không dừng.
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án: B}
+        Chính xác! Robot bây giờ sẽ "nhảy cóc" 2 bước (bỏ qua số lẻ).
+        \begin{itemize}
+            \item Vạch xuất phát: $i=0$
+            \item Đích đến: $i < 5$
+            \item Di chuyển: Nhảy +2 (0 $\rightarrow$ 2 $\rightarrow$ 4).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Slide 8: Thử thách đếm ngược
+\begin{frame}[fragile]{Thử thách: Đảo ngược thời gian}
+    \textbf{Nhiệm vụ:} Lập trình tên lửa đếm ngược từ 10 về 0.
+    
+    Hãy điền vào chỗ trống:
+\begin{lstlisting}[language=C++]
+for (int i = ???; i >= 0; ???) {
+    cout << i << "\n";
+}
+\end{lstlisting}
+
+    \pause
+    \begin{block}{Lời giải}
+\begin{lstlisting}[language=C++]
+for (int i = 10; i >= 0; i--) {
+    cout << i << "\n";
+}
+\end{lstlisting}
+    \end{block}
+    \begin{itemize}
+        \item Xuất phát: 10.
+        \item Điều kiện: Lớn hơn hoặc bằng 0 ($>=0$).
+        \item Bước nhảy: Giảm đi 1 (\texttt{i--}).
+    \end{itemize}
+\end{frame}
+
+% Slide 9: Nested Loops Concept
+\begin{frame}{Vòng lặp lồng nhau (Nested Loops)}
+    \textbf{Phép ẩn dụ: Chiếc Đồng Hồ}
+    \begin{itemize}
+        \item \textbf{Vòng lặp ngoài (Outer Loop):} Kim Giờ.
+        \item \textbf{Vòng lặp trong (Inner Loop):} Kim Phút.
+    \end{itemize}
+
+    \begin{block}{Quy luật bất biến}
+        "Chỉ khi nào kim phút chạy đủ một vòng (hết nhiệm vụ của vòng trong), thì kim giờ mới được phép nhích lên 1 nấc (bước tiếp theo của vòng ngoài)."
+    \end{block}
+\end{frame}
+
+% Slide 10: Nested Loops Code
+\begin{frame}[fragile]{Code mô phỏng đồng hồ}
+\begin{lstlisting}[language=C++]
+// VONG LAP NGOAI (Kim Gio): i tu 1 den 2
+for (int i = 1; i <= 2; ++i) {
+    cout << "Gio thu: " << i << "\n"; 
+
+    // VONG LAP TRONG (Kim Phut): j tu 1 den 3
+    // Chay het tu 1-3 moi lan 'i' xuat hien
+    for (int j = 1; j <= 3; ++j) {
+        cout << "   Phut thu: " << j << "\n";
+    }
+}
+\end{lstlisting}
+
+    \begin{block}{Kết quả}
+    Gio thu: 1 $\rightarrow$ Phut thu: 1, 2, 3 \\
+    Gio thu: 2 $\rightarrow$ Phut thu: 1, 2, 3
+    \end{block}
+\end{frame}
+
+% Slide 11: Quiz Nested Loops
+\begin{frame}{Thử thách tư duy (Mental Gym)}
+    \begin{alertblock}{Câu hỏi}
+        Nếu vòng ngoài chạy từ 1 đến \textbf{3}, vòng trong chạy từ 1 đến \textbf{5}.
+        Dòng chữ "Phut thu: ..." sẽ được in ra tổng cộng bao nhiêu lần?
+    \end{alertblock}
+
+    \begin{itemize}
+        \item[A.] 8 lần (lấy $3 + 5$)
+        \item[B.] 15 lần (lấy $3 \times 5$)
+        \item[C.] 5 lần (chỉ tính vòng trong)
+    \end{itemize}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án: B (15 lần)}
+        Đây chính là phép nhân trong lập trình:
+        $$ 3 \text{ (vòng ngoài)} \times 5 \text{ (vòng trong)} = 15 \text{ lần} $$
+    \end{exampleblock}
+\end{frame}
+
+% Slide 12: Foreach Loop
+\begin{frame}[fragile]{Mảnh ghép cuối: Foreach Loop}
+    \textbf{Ẩn dụ: Băng chuyền hành lý}
+    Thay vì chạy đi tìm đồ vật (dùng index $i$), bạn đứng yên và băng chuyền (Array) đưa từng món đồ đến tay bạn.
+
+    \begin{block}{Cú pháp}
+\begin{lstlisting}[language=C++]
+for (type variableName : arrayName) {
+  // code block
+}
+\end{lstlisting}
+    \end{block}
+    \begin{itemize}
+        \item Không cần biến đếm $i$.
+        \item Không cần điều kiện dừng phức tạp.
+        \item Đọc là: "Với mỗi \texttt{variableName} nằm trong \texttt{arrayName}".
+    \end{itemize}
+\end{frame}
+
+% Slide 13: Foreach Example
+\begin{frame}[fragile]{Ví dụ Foreach}
+\begin{lstlisting}[language=C++]
+int main() {
+  // Bang chuyen chua 4 con so
+  int soMayMan[] = {10, 20, 30, 40};
+
+  // Voi moi "so" nam trong "soMayMan"
+  for (int so : soMayMan) {
+    cout << so << "\n";
+  }
+  return 0;
+}
+\end{lstlisting}
+    
+    Code gọn gàng, tự động chạy từ đầu đến cuối mảng.
+\end{frame}
+
+% Slide 14: Bài tập tốt nghiệp
+\begin{frame}[fragile]{Bài tập tốt nghiệp For Loop}
+    Cho mảng: \texttt{int diemSo[] = \{5, 8, 10\};}
+    
+    Đoạn code sau thực hiện:
+\begin{lstlisting}[language=C++]
+for (int d : diemSo) {
+  cout << d + 1 << "\n";
+}
+\end{lstlisting}
+
+    \begin{alertblock}{Câu hỏi: Biến \texttt{d} đại diện cho cái gì?}
+        \begin{itemize}
+            \item[A.] \textbf{Vị trí} của điểm số (0, 1, 2).
+            \item[B.] \textbf{Giá trị} thực sự của điểm số (5, 8, 10).
+            \item[C.] Tổng số lượng điểm số (3).
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+    \begin{exampleblock}{Đáp án: B (Giá trị)}
+        Foreach lấy trực tiếp giá trị (Value). Kết quả in ra sẽ là: 6, 9, 11.
+    \end{exampleblock}
+\end{frame}
+
+% Slide 15: Tổng kết
+\begin{frame}{Tổng kết hành trình}
+    Chúng ta đã đi qua 3 trạm dừng chân:
+    
+    \begin{enumerate}
+        \item \textbf{For Loop cơ bản:} Robot chép phạt (Lặp theo số lần).
+        \item \textbf{Nested Loop:} Chiếc đồng hồ (Vòng trong xong, vòng ngoài mới bước).
+        \item \textbf{Foreach Loop:} Băng chuyền hành lý (Duyệt qua danh sách, không cần đếm).
+    \end{enumerate}
+
+    \vspace{1cm}
+    \begin{block}{Bước tiếp theo: Quyền năng kiểm soát}
+        Làm sao để phanh gấp hoặc bỏ qua chướng ngại vật?
+        Hẹn gặp lại ở bài học về \textbf{Break} và \textbf{Continue}!
+    \end{block}
+\end{frame}
+
+\end{document}

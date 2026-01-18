@@ -1,0 +1,172 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb} % Thêm gói này để dùng các ký hiệu toán học
+\usepackage{xcolor}
+
+% Chọn theme
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Thông tin bài thuyết trình
+\title[Codeforces 486A]{Giải Mã Tư Duy: Codeforces 486A}
+\subtitle{Calculating Function - Learning How to Learn Edition}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% Slide tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Mục lục
+\begin{frame}{Lộ trình tư duy}
+    \tableofcontents
+\end{frame}
+
+% --- BƯỚC 1 ---
+\section{Bước 1: Phẫu thuật đề bài}
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    \begin{block}{Công thức đề bài}
+        $$f(n) = -1 + 2 - 3 + 4 - 5 + ... + (-1)^n n$$
+    \end{block}
+
+    \vspace{0.5cm}
+    \textbf{[Dịch sang ngôn ngữ con người]}
+    \begin{itemize}
+        \item Số \textbf{LẺ} (1, 3, 5...): Mang dấu \textbf{TRỪ (-)}.
+        \item Số \textbf{CHẴN} (2, 4, 6...): Mang dấu \textbf{CỘNG (+)}.
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{[Lộ trình tư duy]}
+    \begin{enumerate}
+        \item \textbf{Quan sát:} Tính tay thử vài số nhỏ để thấy "nhịp điệu".
+        \item \textbf{Cạm bẫy:} Tại sao cách "trâu bò" (vòng lặp) lại thất bại?
+        \item \textbf{Giải pháp:} Tìm công thức toán học $O(1)$.
+    \end{enumerate}
+\end{frame}
+
+% --- CHUNK 1 ---
+\section{Chunk 1: Quan sát quy luật}
+\begin{frame}{Chunk 1: Quan sát quy luật (Pattern Recognition)}
+    \textbf{Ẩn dụ:} Trò chơi "Kéo co logic".
+    \begin{itemize}
+        \item Số lẻ kéo lùi (Âm).
+        \item Số chẵn đẩy tiến (Dương).
+    \end{itemize}
+
+    \vspace{0.5cm}
+
+    \begin{alertblock}{Cạm bẫy (Trap)}
+        Rất nhiều bạn nhìn thấy dấu $...$ là nghĩ ngay đến vòng lặp \texttt{for}. \\
+        \textbf{Đừng làm thế!} Với $n = 10^{15}$, vòng lặp sẽ bị \textbf{Time Limit Exceeded}.
+    \end{alertblock}
+
+    \begin{exampleblock}{Thử thách tư duy (Mental Check)}
+        Hãy tính nhẩm kết quả:
+        \begin{itemize}
+            \item $n = 4 \rightarrow -1 + 2 - 3 + 4 = \mathbf{2}$
+            \item $n = 5 \rightarrow -1 + 2 - 3 + 4 - 5 = \mathbf{-3}$
+            \item $n = 6 \rightarrow -1 + 2 - 3 + 4 - 5 + 6 = \mathbf{3}$
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% --- CHUNK 2 ---
+\section{Chunk 2: Tìm công thức (Số Chẵn)}
+\begin{frame}{Chunk 2: Tìm công thức Thần thánh (Trường hợp Chẵn)}
+    \textbf{Quan sát kết quả với số CHẴN ($n$ is Even):}
+    \begin{itemize}
+        \item $n = 4 \rightarrow$ Kết quả là $2$
+        \item $n = 6 \rightarrow$ Kết quả là $3$
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Giải thích bằng ẩn dụ:}
+    Gom thành từng cặp "đôi bạn cùng tiến":
+    $$(-1 + 2) + (-3 + 4) + ...$$
+    Mỗi cặp có giá trị là $1$. Với $n$ số, ta có $n/2$ cặp.
+
+    \begin{block}{KEY: Công thức cho số Chẵn}
+        $$\text{Result} = \frac{n}{2}$$
+    \end{block}
+    \textit{Ví dụ:} $n=100 \rightarrow 100/2 = 50$.
+\end{frame}
+
+% --- CHUNK 3 ---
+\section{Chunk 3: Tìm công thức (Số Lẻ)}
+\begin{frame}{Chunk 3: Chốt công thức (Trường hợp Lẻ)}
+    \textbf{Quan sát kết quả với số LẺ ($n$ is Odd):}
+    \begin{itemize}
+        \item $n = 1 \rightarrow -1$
+        \item $n = 3 \rightarrow -2$
+        \item $n = 5 \rightarrow -3$
+        \item $n = 99 \rightarrow -50$
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Quy luật hình ảnh:}
+    Kết quả giống phép chia đôi nhưng "làm tròn lên" và thêm dấu âm.
+
+    \begin{block}{KEY: Công thức cho số Lẻ}
+        $$\text{Result} = -\frac{n + 1}{2}$$
+    \end{block}
+    \textit{Kiểm chứng:} $n=5 \rightarrow -(5+1)/2 = -3$. (Đúng!)
+\end{frame}
+
+% --- TỔNG KẾT ---
+\section{Tổng kết Thuật toán}
+\begin{frame}{Tổng kết mảnh ghép (The Algorithm)}
+    Chúng ta không cần vòng lặp. Chúng ta chỉ cần logic rẽ nhánh:
+
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item \textbf{Trường hợp 1:} Nếu $n$ Chẵn ($n \% 2 == 0$)
+            $$\Rightarrow \text{In ra: } n / 2$$
+        \item \textbf{Trường hợp 2:} Nếu $n$ Lẻ ($n \% 2 != 0$)
+            $$\Rightarrow \text{In ra: } -(n + 1) / 2$$
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \centering
+    \textbf{Độ phức tạp:} $O(1)$ (Nhanh nhất có thể).
+\end{frame}
+
+% --- CẢNH BÁO ---
+\section{Cảnh báo quan trọng}
+\begin{frame}{Cảnh báo cuối cùng (Edge Case \& Data Type)}
+    \begin{alertblock}{Đề bài: $n \le 10^{15}$}
+        Đây là con số "siêu to khổng lồ".
+    \end{alertblock}
+
+    \vspace{0.5cm}
+    \textbf{Vấn đề:}
+    \begin{itemize}
+        \item Nếu dùng kiểu \texttt{int} (trong C++/Java): Chỉ chứa được khoảng $2 \times 10^9$.
+        \item Kết quả: \textbf{Tràn số (Overflow)} $\rightarrow$ Sai kết quả.
+    \end{itemize}
+
+    \vspace{0.5cm}
+    \textbf{Giải pháp:}
+    \begin{itemize}
+        \item[\checkmark] \textbf{C++:} Phải dùng \texttt{long long}.
+        \item[\checkmark] \textbf{Java:} Phải dùng \texttt{long}.
+        \item[\checkmark] \textbf{Python:} Tự động xử lý số lớn (An toàn).
+    \end{itemize}
+\end{frame}
+
+% --- KẾT THÚC ---
+\begin{frame}
+    \centering
+    \Huge
+    \textbf{Bạn đã sẵn sàng Code chưa?} \\
+    \vspace{1cm}
+    \large
+    Hãy cẩn thận với \texttt{long long}!
+\end{frame}
+
+\end{document}

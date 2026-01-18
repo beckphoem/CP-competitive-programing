@@ -1,0 +1,215 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Luyện tập Map trong Competitive Programming}
+\subtitle{Danh sách bài tập Codeforces Rank 800 - 1000}
+\author{slide learning cpp}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu về Map trong CP}
+    \begin{block}{Sức mạnh của Map}
+        Cấu trúc dữ liệu \texttt{map} (\texttt{std::map} hoặc \texttt{std::unordered\_map}) là công cụ mạnh mẽ để:
+        \begin{itemize}
+            \item Đếm tần suất xuất hiện của phần tử.
+            \item Quản lý cặp khóa - giá trị (Key-Value).
+            \item Tối ưu hóa phép tìm kiếm.
+        \end{itemize}
+    \end{block}
+    
+    \begin{alertblock}{Lưu ý về hiệu năng}
+        \begin{itemize}
+            \item \texttt{std::map}: Độ phức tạp $O(\log n)$, các khóa được sắp xếp.
+            \item \texttt{std::unordered\_map}: Độ phức tạp trung bình $O(1)$, không sắp xếp. Cẩn thận bị "hack" $O(n)$ trên Codeforces.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Bài 1: 1003A - Polycarp's Pockets}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1003/A} \\
+    \textbf{Rank:} 800
+    
+    \begin{block}{Dịch đề bài}
+        Cho $n$ đồng xu với các mệnh giá khác nhau. Cần ít nhất bao nhiêu cái túi để không có 2 đồng xu cùng mệnh giá trong 1 túi?
+    \end{block}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item Dùng \texttt{map<int, int>} để đếm tần suất của từng mệnh giá.
+            \item \pause \textbf{Kết quả:} Là giá trị lớn nhất trong các tần suất đã đếm.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bài 2: 1454B - Unique Bid Auction}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1454/B} \\
+    \textbf{Rank:} 800
+    
+    \begin{block}{Dịch đề bài}
+        Tìm người đưa ra giá duy nhất và nhỏ nhất trong cuộc đấu giá.
+    \end{block}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item Dùng \texttt{map} lưu tần suất và vị trí (index) của mỗi giá trị.
+            \item \pause \textbf{Thực hiện:} Duyệt qua \texttt{map} theo thứ tự khóa tăng dần, tìm khóa đầu tiên có tần suất bằng 1.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bài 3: 1616A - Integer Diversity}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1616/A} \\
+    \textbf{Rank:} 800
+    
+    \begin{block}{Dịch đề bài}
+        Cho mảng số nguyên, bạn có thể đổi dấu bất kỳ số nào. Tìm số lượng phần tử phân biệt tối đa.
+    \end{block}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item Dùng \texttt{map} đếm trị tuyệt đối của các số.
+            \item Với số $x > 0$: nếu có từ 2 số trở lên, ta lấy được cả $x$ và $-x$.
+            \item Với số $0$: chỉ lấy được duy nhất một số 0.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bài 4: 236A - Boy or Girl}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/236/A} \\
+    \textbf{Rank:} 800
+    
+    \begin{block}{Dịch đề bài}
+        Đếm số lượng ký tự phân biệt trong một cái tên để xác định giới tính.
+    \end{block}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item Dùng \texttt{map<char, int>} để đánh dấu các ký tự khác nhau.
+            \item \pause \textbf{Kết quả:} Kiểm tra tính chẵn lẻ của \texttt{map.size()}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bài 6: 4C - Registration System}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/4/C} \\
+    \textbf{Rank:} 1000
+    
+    \begin{alertblock}{Bài tập kinh điển}
+        Quản lý việc đăng ký tên người dùng. Nếu tên đã tồn tại, thêm số thứ tự vào sau.
+    \end{alertblock}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item Dùng \texttt{map<string, int>} để lưu số lần mỗi tên đã xuất hiện.
+            \item Nếu \texttt{map[s] == 0}, in "OK", ngược lại in \texttt{s + map[s]}.
+            \item \pause Sau đó tăng \texttt{map[s]++}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bài 13: 903C - Boxes Packing}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/903/C} \\
+    \textbf{Rank:} 1000
+    
+    \begin{block}{Dịch đề bài}
+        Hộp nhỏ có thể cho vào hộp lớn hơn. Tìm số hộp ít nhất còn lại sau khi lồng nhau.
+    \end{block}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item \textbf{Nhận xét:} Số hộp không thể lồng vào nhau chính là số lượng hộp có cùng kích thước nhiều nhất.
+            \item \pause Dùng \texttt{map} đếm tần suất xuất hiện của mỗi kích thước hộp.
+            \item \textbf{Đáp án:} Giá trị lớn nhất (max frequency) trong \texttt{map}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bài 17: 520A - Pangram}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/520/A} \\
+    \textbf{Rank:} 800
+    
+    \begin{block}{Dịch đề bài}
+        Kiểm tra chuỗi có chứa đủ 26 chữ cái tiếng Anh (không phân biệt hoa thường) không.
+    \end{block}
+    
+    \begin{exampleblock}{Chiến lược giải với Map}
+        \begin{itemize}
+            \item Chuyển toàn bộ chuỗi về chữ thường.
+            \item Dùng \texttt{map<char, bool>} để đánh dấu các chữ cái đã xuất hiện.
+            \item \pause Kiểm tra nếu \texttt{map.size() == 26}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Mẫu Code cơ bản (C++)}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+int main() {
+    int n; cin >> n;
+    map<string, int> reg_system;
+    while(n--) {
+        string s; cin >> s;
+        if (reg_system[s] == 0) {
+            cout << "OK" << endl;
+        } else {
+            cout << s << reg_system[s] << endl;
+        }
+        reg_system[s]++;
+    }
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Kết luận}
+    \begin{itemize}
+        \item Map là công cụ không thể thiếu để xử lý các bài toán đếm và phân loại.
+        \item Hãy chú ý giữa \texttt{std::map} và \texttt{std::unordered\_map} để tránh TLE hoặc bị Hack.
+        \item Luyện tập thêm các bài rank 1000+ để thành thạo việc kết hợp Map với các cấu trúc khác.
+    \end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,16 @@
+\frametitle{Tổng kết thuật toán (Algorithm Recipe)}
+Đây là "bản thiết kế" trước khi viết code:
+
+    \begin{enumerate}
+        \item \textbf{Đầu vào:} Nhập 2 số $a, b$.
+        \item \textbf{Khởi tạo:} Biến đếm \texttt{nam = 0}.
+        \item \textbf{Vòng lặp (While Loop):}
+            \begin{lstlisting}[language=C++]
+while (a <= b) {
+    nam++;      // Tang nam
+    a = a * 3;  // Limak tang truong
+    b = b * 2;  // Bob tang truong
+}
+            \end{lstlisting}
+        \item \textbf{Kết thúc:} In ra giá trị \texttt{nam}.
+    \end{enumerate}

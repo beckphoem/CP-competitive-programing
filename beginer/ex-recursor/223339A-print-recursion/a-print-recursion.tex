@@ -1,0 +1,208 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{A. Print Recursion}
+\author{Slide Learning C++}
+\date{2026}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Yêu cầu cốt lõi}
+        \begin{itemize}
+            \item \textbf{Đầu vào (Input):} Một số nguyên $N$ ($1 \le N \le 100$).
+            \item \textbf{Nhiệm vụ:} In ra dòng chữ \texttt{"I love Recursion"} đúng $N$ lần.
+            \item \textbf{Điều kiện bắt buộc:} Phải sử dụng \textbf{Đệ quy (Recursion)}, không dùng vòng lặp.
+        \end{itemize}
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{Chunk 1:} Hiểu về Đệ quy qua hình ảnh đời thường.
+        \item \textbf{Chunk 2:} Xác định Điểm dừng (Base case).
+        \item \textbf{Chunk 3:} Xác định Bước gọi lại (Recursive step).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 1: Đệ quy là gì? (Metaphor)}
+    \begin{exampleblock}{Tưởng tượng}
+        Bạn có xấp $N$ tờ giấy trắng. Quy trình:
+        \begin{itemize}
+            \item Nếu còn giấy: In dòng chữ, rồi \textbf{đưa xấp còn lại cho chính mình} làm tiếp.
+            \item Nếu hết giấy: Dừng lại.
+        \end{itemize}
+    \end{exampleblock}
+    
+    \begin{block}{Định nghĩa}
+        Đệ quy là việc một hàm \textbf{tự gọi lại chính nó} với một phiên bản "nhỏ hơn" của vấn đề ban đầu.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 1}
+    Nếu bắt đầu với $N = 3$:
+    \begin{enumerate}
+        \item Lần 1: In 1 dòng, còn lại $N=2$. Gọi lại chính mình.
+        \item Lần 2: In thêm 1 dòng, còn lại $N=1$. Gọi lại chính mình.
+        \item Lần 3: In thêm 1 dòng, còn lại $N=0$.
+    \end{enumerate}
+    
+    \textbf{Câu hỏi:} Tại $N = 0$, bạn có in thêm dòng nào không?
+    \pause
+    \begin{alertblock}{Kết quả}
+        Chính xác! Khi $N=0$, chúng ta kết thúc. Đây là \textbf{Điểm dừng (Base case)} để ngăn máy tính chạy vô tận.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chunk 2: Thiết kế hàm đệ quy}
+    Một hàm đệ quy thường có 2 phần chính:
+    \begin{enumerate}
+        \item \textbf{Phần dừng (Base Case):} Nếu $N = 0$, thoát khỏi hàm.
+        \item \textbf{Phần thực thi \& Gọi lại (Recursive Step):} In dòng chữ và gọi lại hàm với giá trị $N - 1$.
+    \end{enumerate}
+
+    \begin{lstlisting}[language=C++]
+void solve(int n) {
+    if (n == 0) return; // Diem dung
+    
+    // BUOC A: In dong chu "I love Recursion"
+    // BUOC B: solve(n - 1);
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 2}
+    Nếu đổi thứ tự: Đưa \textbf{BƯỚC B} lên trước \textbf{BƯỚC A} thì kết quả có thay đổi không?
+    
+    \begin{itemize}
+        \item \texttt{solve(3)} gọi \texttt{solve(2)}...
+        \item \texttt{solve(2)} gọi \texttt{solve(1)}...
+        \item \texttt{solve(1)} gọi \texttt{solve(0)}...
+    \end{itemize}
+    \pause
+    \begin{alertblock}{Lưu ý}
+        Thứ tự thực thi bị đảo lộn! Các lệnh in chỉ bắt đầu khi hàm "quay về" (backtracking). Tuy nhiên, vì các dòng in giống hệt nhau, bạn vẫn thấy đủ $N$ dòng nhưng bản chất thực hiện đã khác.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chunk 3: Tổng kết thuật toán}
+    \begin{block}{Mã giả (Pseudocode)}
+    \begin{lstlisting}[language=C++]
+H@à@m InDeQuy(s@ố@_l@ầ@n):
+    N@ế@u (s@ố@_l@ầ@n == 0): 
+        Tho@á@t (Base Case)
+    
+    In d@ò@ng ch@ữ@ "I love Recursion"
+    
+    InDeQuy(s@ố@_l@ầ@n - 1)
+    \end{lstlisting}
+    \end{block}
+
+    \begin{alertblock}{Bẫy logic}
+        Luôn phải tiến về phía \textbf{Điểm dừng}. Nếu gọi \texttt{InDeQuy(N)} mà không giảm $N$, máy tính sẽ bị treo (Stack Overflow).
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Trắc nghiệm cuối Chunk}
+    Nếu truyền vào $N=3$, hàm sẽ được \textbf{gọi tổng cộng bao nhiêu lần} (tính cả lần gọi đầu tiên và lần gọi tại điểm dừng)?
+    
+    \begin{itemize}
+        \item A. 3 lần
+        \item B. 4 lần
+        \item C. 2 lần
+    \end{itemize}
+    \pause
+    \begin{block}{Đáp án: B. 4 lần}
+        \begin{enumerate}
+            \item \texttt{solve(3)} $\rightarrow$ In dòng 1, gọi \texttt{solve(2)}.
+            \item \texttt{solve(2)} $\rightarrow$ In dòng 2, gọi \texttt{solve(1)}.
+            \item \texttt{solve(1)} $\rightarrow$ In dòng 3, gọi \texttt{solve(0)}.
+            \item \textbf{\texttt{solve(0)}} $\rightarrow$ Kiểm tra $N=0$ nên \texttt{return}.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Kiến trúc chương trình hoàn chỉnh}
+    \begin{lstlisting}[language=C++]
+void printLove(int n) {
+    if (n == 0) return; // 1. Base Case
+    
+    // 2. Thuc hien hanh dong
+    cout << "I love Recursion" << endl;
+    
+    // 3. Goi de quy
+    printLove(n - 1);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    printLove(n);
+    return 0;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    Trong C++, lệnh nào dùng để \textbf{thoát ngang} khỏi một hàm \texttt{void} ngay khi gặp điều kiện dừng?
+    
+    \begin{itemize}
+        \item A. \texttt{break;}
+        \item B. \texttt{return;}
+        \item C. \texttt{exit(0);}
+    \end{itemize}
+    \pause
+    \begin{block}{Đáp án: B. \texttt{return;}}
+        Dùng để kết thúc thực thi hàm và quay lại nơi nó được gọi.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Tổng kết \& Bước tiếp theo}
+    \begin{block}{Tóm tắt luồng chạy}
+        \begin{enumerate}
+            \item \textbf{Main}: Gọi "nhân viên" đệ quy đầu tiên.
+            \item \textbf{Đệ quy}: Nếu $N=0$ thì nghỉ. Nếu $N>0$ thì làm việc rồi chuyển phần còn lại cho phiên bản sau.
+        \end{enumerate}
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{Lựa chọn 1:} Tự tay viết Code dựa trên bản thiết kế.
+        \item \textbf{Lựa chọn 2:} Thử thách in \textbf{ngược} (Dòng $N$ trước, dòng 1 sau) bằng cách đổi vị trí 1 dòng code.
+    \end{itemize}
+\end{frame}
+
+\end{document}

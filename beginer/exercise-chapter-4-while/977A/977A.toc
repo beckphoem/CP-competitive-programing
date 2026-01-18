@@ -1,0 +1,5 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Tiếp nhận \& Phẫu thuật}{2}{0}{1}
+\beamer@sectionintoc {2}{Chunk 1: Cơ chế xử lý}{4}{0}{2}
+\beamer@sectionintoc {3}{Chunk 2: Vòng lặp}{8}{0}{3}
+\beamer@sectionintoc {4}{Tổng kết \& Mã giả}{15}{0}{4}

@@ -1,0 +1,18 @@
+\frametitle{Tổng kết \& Mã giả}
+\begin{block}{Chiến thuật}
+        \begin{enumerate}
+            \item \textbf{Sắp xếp:} Nhìn 3 số dạng `Min -> Mid -> Max`.
+            \item \textbf{Chọn điểm:} Điểm hẹn tối ưu là `Mid`.
+            \item \textbf{Công thức:} Tổng = `Max - Min`.
+        \end{enumerate}
+    \end{block}
+
+    \begin{exampleblock}{Mã giả (Pseudocode)}
+\begin{verbatim}
+BƯỚC 1: Đọc 3 số nguyên a, b, c.
+BƯỚC 2: Tìm Max trong 3 số.
+        Tìm Min trong 3 số.
+BƯỚC 3: Kết quả = Max - Min.
+BƯỚC 4: In Kết quả.
+\end{verbatim}
+    \end{exampleblock}

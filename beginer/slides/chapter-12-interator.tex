@@ -1,0 +1,350 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle, language=C++}
+
+\title{Chinh Phục C++ Iterator}
+\subtitle{Hành trình của "Người Soát Vé"}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{1. Bức tranh toàn cảnh: Iterator là gì?}
+    \begin{block}{Phép ẩn dụ: Đoàn tàu hỏa}
+        Hãy tưởng tượng \texttt{vector} trong C++ là một đoàn tàu chở đầy đồ chơi.
+        Để kiểm tra từng món đồ, ta cần một \textbf{Người soát vé}.
+    \end{block}
+
+    \begin{itemize}
+        \item Người soát vé không phải là đoàn tàu.
+        \item Người soát vé không phải là món đồ chơi.
+        \item Người soát vé biết cách: \textbf{đứng tại một toa}, \textbf{xem bên trong}, và \textbf{bước tiếp}.
+    \end{itemize}
+
+    \begin{exampleblock}{Định nghĩa}
+        \textbf{Iterator} chính là "Người soát vé" giúp bạn duyệt qua danh sách mà không cần nhớ số thứ tự (index).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2. Giải mã Siêu năng lực (4 Lệnh cơ bản)}
+    Để làm việc, "Người soát vé" cần 4 lệnh cơ bản:
+
+    \begin{enumerate}
+        \item \textbf{\texttt{begin()}}: Vạch xuất phát. Nhảy dù xuống \textbf{toa đầu tiên}.
+        \item \textbf{\texttt{end()}}: Biển báo "Vực thẳm".
+            \begin{alertblock}{Lưu ý quan trọng}
+                \texttt{end()} \textbf{KHÔNG PHẢI} là toa cuối cùng. Nó là khoảng không \textbf{ngay sau} toa cuối cùng.
+            \end{alertblock}
+        \item \textbf{\texttt{*}} (Dereference): Đôi mắt thần. "Mở cửa toa" để xem dữ liệu bên trong (ví dụ: \texttt{*it}).
+        \item \textbf{\texttt{++}} (Cộng cộng): Bước chân. Đi sang toa kế tiếp.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{3. Code mẫu: Iterator truyền thống}
+    Dưới đây là cách "Người soát vé" đi bộ từ đầu đến cuối tàu.
+
+\begin{lstlisting}
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int main() {
+  // 1. Tao doan tau (vector)
+  vector<string> doan_tau = {"Pizza", "Ga ran", "Tra sua"};
+
+  // 2. Tao nguoi soat ve (iterator)
+  vector<string>::iterator nguoi_soat_ve;
+
+  // 3. Bat dau hanh trinh
+  for (nguoi_soat_ve = doan_tau.begin(); 
+       nguoi_soat_ve != doan_tau.end(); 
+       nguoi_soat_ve++) {
+    
+    // Dung mat than (*) de xem mon an
+    cout << "Mon an: " << *nguoi_soat_ve << "\n";
+  }
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy}
+    \begin{block}{Câu hỏi kiểm tra}
+        Nếu "Người soát vé" (Iterator) đang đứng ở vị trí \texttt{end()}, chú ấy có thể dùng "mắt thần" (\texttt{*}) để lấy dữ liệu được không? Tại sao?
+    \end{block}
+
+    \pause
+
+    \begin{alertblock}{Câu trả lời}
+        \textbf{KHÔNG!} Vì \texttt{end()} là vực thẳm (vạch vôi đỏ) sau toa cuối cùng. Ở đó không có toa tàu nào cả. Nếu cố tình dùng \texttt{*}, chương trình sẽ bị lỗi (crash).
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{4. Từ khóa \texttt{auto} và Băng chuyền tự động}
+    Thay vì viết dài dòng \texttt{vector<string>::iterator}, ta dùng \textbf{\texttt{auto}}.
+    
+    \begin{itemize}
+        \item \textbf{\texttt{auto}}: Chiếc kính thông minh, tự nhận diện kiểu dữ liệu.
+        \item \textbf{Range-based for loop}: Biến đoàn tàu thành "Băng chuyền".
+    \end{itemize}
+
+    \begin{block}{So sánh hình ảnh}
+        \begin{itemize}
+            \item \textbf{Cách cũ:} Người soát vé đi bộ từng toa (\texttt{begin}, \texttt{++}, \texttt{*}, \texttt{end}).
+            \item \textbf{Cách mới:} Bạn đứng yên, băng chuyền tự đẩy món đồ (\texttt{item}) đến trước mặt.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Code mẫu: Số tự động (Range-based for loop)}
+    Cú pháp sạch và đẹp hơn rất nhiều:
+
+\begin{lstlisting}
+int main() {
+  vector<string> doan_tau = {"Pizza", "Ga ran", "Tra sua"};
+
+  // Dich nghia: "Voi moi 'mon an' nam trong 'doan tau'..."
+  for (auto mon_an : doan_tau) {
+    
+    // O day 'mon_an' da la du lieu that roi!
+    // Khong can dung dau * nua.
+    cout << "Mon an tren bang chuyen: " << mon_an << "\n";
+  }
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{5. So sánh nhanh}
+    \begin{table}[]
+        \begin{tabular}{|l|l|l|}
+        \hline
+        \textbf{Đặc điểm} & \textbf{Cách cũ (Iterator)} & \textbf{Cách mới (Auto + Range)} \\ \hline
+        \textbf{Hình ảnh} & Người đi bộ từng toa & Băng chuyền tự động \\ \hline
+        \textbf{Độ dài} & Rất dài, dễ sai & Ngắn gọn, súc tích \\ \hline
+        \textbf{Quản lý} & Phải lo \texttt{begin}, \texttt{++} & Máy tính lo hết \\ \hline
+        \textbf{Kiểm soát} & Biết rõ vị trí (địa chỉ) & Chỉ biết giá trị món đồ \\ \hline
+        \end{tabular}
+    \end{table}
+
+    \begin{block}{Vấn đề nhỏ}
+        Khi dùng băng chuyền, bạn biết đó là "Pizza", nhưng bạn \textbf{không biết} nó nằm ở toa số mấy. Nếu muốn kiểm soát vị trí, ta phải kết hợp \texttt{auto} với vòng lặp truyền thống.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{6. Kết hợp: \texttt{auto} + Vòng lặp truyền thống}
+    Dùng \texttt{auto} làm "thẻ tên tắc kè hoa" thay cho kiểu dữ liệu dài dòng, nhưng vẫn giữ cơ chế điều khiển thủ công.
+
+\begin{lstlisting}
+  vector<string> doan_tau = {"Pizza", "Ga ran"};
+
+  // 'auto' tu hieu la iterator
+  for (auto it = doan_tau.begin(); it != doan_tau.end(); it++) {
+    
+    // Van can dung (*) vi it la con tro/dia chi
+    cout << "Mon an: " << *it << "\n";
+  }
+\end{lstlisting}
+
+    \begin{exampleblock}{Lợi ích}
+        Giúp bạn thực hiện các thao tác nâng cao: Đi bước đôi (\texttt{it += 2}), đi lùi, hoặc sửa đổi dữ liệu tại chỗ.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{7. Quyền năng thay đổi thực tại}
+    Vì Iterator nắm giữ địa chỉ thật, khi bạn dùng \texttt{*} để mở cửa, bạn có thể \textbf{THAY ĐỔI} món đồ bên trong.
+
+\begin{lstlisting}
+  for (auto it = doan_tau.begin(); it != doan_tau.end(); it++) {
+    
+    // Neu thay Ga ran
+    if (*it == "Ga ran") {
+        // PHEP THUAT: Bien hinh!
+        *it = "Com tam"; 
+    }
+  }
+  // Ket qua: Pizza, Com tam, Tra sua...
+\end{lstlisting}
+
+    \begin{block}{Phép ẩn dụ}
+        Khác với xem TV (chỉ nhìn), Iterator cho phép bạn bước vào bếp và đổi cái bánh Pizza thành Bánh Mì.
+    \end{block}
+\end{frame}
+
+\begin{frame}{8. Cái bẫy \texttt{const auto}}
+    Muốn tạo iterator chỉ đọc (Read-only), nhiều bạn dùng \texttt{const auto it}. Đây là sai lầm!
+
+    \begin{alertblock}{Cái bẫy: Chân bị xích}
+        \texttt{const auto it = ...} nghĩa là: "Tạo ra một iterator và \textbf{đóng băng} nó".
+        \begin{itemize}
+            \item \textbf{Hậu quả:} Bạn không thể thực hiện \texttt{it++} (bước đi).
+            \item \textbf{Vòng lặp:} Báo lỗi ngay lập tức.
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+
+    \begin{exampleblock}{Giải pháp: \texttt{cbegin()}}
+        Muốn tạo "Khách tham quan" (đi được nhưng không sửa được), hãy dùng \textbf{\texttt{cbegin()}} và \textbf{\texttt{cend()}}.
+        Khi đó \texttt{auto} sẽ trở thành \texttt{const\_iterator}.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Code mẫu: \texttt{cbegin()} (An toàn tuyệt đối)}
+\begin{lstlisting}
+  vector<string> doan_tau = {"Pizza", "Ga ran"};
+
+  // Dung cbegin (Const Begin)
+  for (auto it = doan_tau.cbegin(); it != doan_tau.cend(); it++) {
+    
+    // 1. Doc: OK
+    cout << *it << "\n";
+    
+    // 2. Sua: LOI!
+    // *it = "Bun dau";  <-- May tinh se bao loi ngay
+  }
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{9. Phép thuật: Chèn toa (\texttt{insert})}
+    \begin{block}{Quy tắc Cần Cẩu Khổng Lồ}
+        Lệnh \texttt{insert(it, "Món mới")} sẽ:
+        \begin{enumerate}
+            \item Đẩy lùi toa hiện tại và các toa sau.
+            \item Thả toa mới vào \textbf{PHÍA TRƯỚC} vị trí iterator đang đứng.
+        \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Cảnh báo động đất (Iterator Invalidation)}
+        Sau khi chèn, đường ray bị xê dịch. Iterator cũ (\texttt{it}) có thể bị hỏng.
+        \textbf{Lời khuyên:} Cập nhật lại iterator nếu muốn dùng tiếp.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Check-point: Thứ tự chèn}
+    \begin{block}{Câu hỏi}
+        Đoàn tàu: \texttt{\{"A", "B", "C"\}}. \\
+        Iterator \texttt{it} đang trỏ vào \textbf{"A"}. \\
+        Gọi lệnh: \texttt{vector.insert(it, "Z");}
+        
+        Thứ tự mới là gì?
+    \end{block}
+
+    \pause
+
+    \begin{exampleblock}{Đáp án}
+        \textbf{\{"Z", "A", "B", "C"\}} \\
+        (Chèn vào \textbf{trước} A).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{10. Hủy diệt (\texttt{erase}) và Cú nhảy lò xo}
+    Lệnh \texttt{erase(it)} xóa phần tử tại vị trí \texttt{it}.
+    
+    \begin{alertblock}{Quy tắc sinh tồn}
+        Sau khi xóa toa tàu, iterator hiện tại sẽ rơi xuống vực.
+        \texttt{erase} sẽ trả về vị trí của \textbf{người kế tiếp} (cơ chế lò xo).
+        Phải luôn hứng lấy nó: \texttt{it = v.erase(it);}
+    \end{alertblock}
+
+\begin{lstlisting}
+    auto it = v.begin() + 1; // Dang o B
+    // Xoa B, it tu dong nhay sang C
+    it = v.erase(it); 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{11. Cú nhảy cóc tai hại (Logic Trap)}
+    Khi xóa trong vòng lặp, cẩn thận với \texttt{it++} ở tiêu đề vòng lặp.
+
+    \begin{block}{Kịch bản lỗi}
+        \begin{enumerate}
+            \item \texttt{erase} tự đẩy \texttt{it} sang phần tử kế tiếp.
+            \item Vòng lặp \texttt{for} lại thực hiện \texttt{it++} thêm lần nữa.
+            \item \textbf{Kết quả:} Bạn nhảy qua đầu một phần tử mà không kiểm tra (Double Jump).
+        \end{enumerate}
+    \end{block}
+    
+    \textbf{Code sai:}
+\begin{lstlisting}
+// SAI: Vua erase day, vua it++ day -> Nhay coc
+for (auto it = v.begin(); it != v.end(); it++) {
+    if (*it % 2 == 0) it = v.erase(it);
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Giải pháp: Điều khiển thủ công}
+    Đưa \texttt{it++} vào trong thân vòng lặp để kiểm soát.
+
+\begin{lstlisting}
+    // CHUAN: Bo it++ o tieu de
+    for (auto it = v.begin(); it != v.end(); /* Trong */ ) {
+        
+        if (*it % 2 == 0) {
+            // Truong hop XOA: erase tu day it sang ke tiep
+            it = v.erase(it); 
+        } else {
+            // Truong hop KHONG XOA: Tu buoc di
+            it++;
+        }
+    }
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng kết hành trình}
+    Chúng ta đã tốt nghiệp khóa học "Người soát vé"!
+
+    \begin{enumerate}
+        \item \textbf{Iterator}: Con trỏ thông minh duyệt mảng.
+        \item \textbf{\texttt{begin/end}}: Điểm đầu và Vực thẳm.
+        \item \textbf{\texttt{auto}}: Thẻ tên tàng hình cho code gọn.
+        \item \textbf{\texttt{cbegin}}: Chế độ "Khách tham quan" (Chỉ đọc).
+        \item \textbf{\texttt{insert}}: Chèn phía trước (Cẩn thận động đất).
+        \item \textbf{\texttt{erase}}: Xóa và hứng lấy vị trí mới (Tránh nhảy cóc).
+    \end{enumerate}
+
+    \begin{block}{Bước tiếp theo}
+        Bạn đã sẵn sàng để khám phá các thuật toán sắp xếp và tìm kiếm với Iterator chưa?
+    \end{block}
+\end{frame}
+
+\end{document}

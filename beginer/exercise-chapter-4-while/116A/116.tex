@@ -1,0 +1,268 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+% Chọn theme
+\usetheme{Madrid}
+
+% Cấu hình màu sắc cho code (nếu cần dùng)
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Thông tin bài trình chiếu
+\title[Codeforces 116A]{Codeforces 116A - Tram}
+\subtitle{Rèn luyện tư duy Mô phỏng (Simulation)}
+\author{Slide Learning Cpp}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Giới thiệu ---
+\begin{frame}{Giới thiệu bài toán}
+    \begin{block}{Chào mừng bạn đến với Codeforces 116A - Tram!}
+        Đây là một bài toán kinh điển để rèn luyện tư duy \textbf{Mô phỏng (Simulation)} – tức là bắt máy tính làm theo đúng những gì diễn ra trong thực tế.
+    \end{block}
+    
+    \vspace{0.5cm}
+    Chúng ta sẽ không vội viết code. Hãy cùng nhau "mổ xẻ" chiếc xe điện này nhé.
+\end{frame}
+
+% --- Slide Phân tích 1 ---
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruction)}
+    \begin{block}{1. Cốt truyện đời thường}
+        Hãy tưởng tượng bạn là người quản lý một tuyến xe điện (Tram). Tuyến xe này đi qua $n$ trạm dừng. Tại mỗi trạm, quy trình luôn diễn ra theo thứ tự:
+        \begin{enumerate}
+            \item Cửa mở: Một số khách \textbf{xuống xe} (gọi là $a_i$).
+            \item Sau đó: Một số khách \textbf{lên xe} (gọi là $b_i$).
+        \end{enumerate}
+    \end{block}
+
+    \pause
+
+    \begin{alertblock}{2. Mục tiêu}
+        Bạn cần mua một chiếc xe có sức chứa \textbf{vừa đủ nhỏ nhất} nhưng vẫn đảm bảo \textbf{không bao giờ} bị quá tải.
+        
+        \textbf{Nói cách khác:} Tìm con số \textbf{lớn nhất} (Maximum) lượng hành khách có mặt trên xe tại bất kỳ thời điểm nào trong suốt hành trình.
+    \end{alertblock}
+\end{frame}
+
+% --- Slide Lộ trình ---
+\begin{frame}{Lộ trình tư duy}
+    Chúng ta sẽ đi qua 3 bước (Chunks):
+    \begin{itemize}
+        \item \textbf{Chunk 1:} Hiểu cơ chế "Dòng chảy" (Ra và Vào).
+        \item \textbf{Chunk 2:} Theo dõi "Biến động" (Số khách hiện tại).
+        \item \textbf{Chunk 3:} Chốt hạ "Đỉnh điểm" (Kết quả).
+    \end{itemize}
+\end{frame}
+
+% --- Slide Chunk 1 ---
+\begin{frame}{Chunk 1: Cơ chế dòng chảy (Flow)}
+    Trước khi tính toán cả hành trình, ta phải hiểu chuyện gì xảy ra tại \textbf{một trạm}.
+    
+    \begin{block}{Ẩn dụ: Chiếc hồ nước}
+        \begin{itemize}
+            \item Số người xuống ($a_i$): Là nước bị rút ra.
+            \item Số người lên ($b_i$): Là nước được bơm thêm vào.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Quy tắc bất di bất dịch}
+        Xe đến trạm $\rightarrow$ Khách xuống trước $\rightarrow$ Khách lên sau $\rightarrow$ Xe chạy tiếp.
+    \end{exampleblock}
+    
+    \textit{Lưu ý: Lúc khởi hành (trước trạm 1), xe luôn rỗng (0 người).}
+\end{frame}
+
+% --- Slide Mental Check ---
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    Giả sử xe đang chạy và bên trong có \textbf{10 hành khách}.
+    Xe đến trạm kế tiếp với dữ liệu:
+    \begin{itemize}
+        \item $a = 4$ (4 người xuống).
+        \item $b = 7$ (7 người lên).
+    \end{itemize}
+
+    \textbf{Câu hỏi:} Sau khi xe rời trạm này, trên xe có bao nhiêu người?
+    
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án:}
+    
+    \pause
+    Nếu bạn nghĩ là $7 - 4 = 3$... \textbf{Rất tiếc, chưa chính xác!}
+    Đây chỉ là lượng khách \textit{tăng thêm}.
+    
+    \pause
+    \begin{block}{Quy trình đúng}
+        \begin{enumerate}
+            \item Trên xe có sẵn: \textbf{10 người}.
+            \item 4 người xuống: $10 - 4 = 6$ người.
+            \item 7 người lên: $6 + 7 = 13$ người.
+        \end{enumerate}
+        \textbf{Công thức cốt lõi:} $New = Old - a + b$
+    \end{block}
+\end{frame}
+
+% --- Slide Chunk 2 ---
+\begin{frame}[fragile]{Chunk 2: Theo dõi biến động (Accumulation)}
+    Bài toán là cả một hành trình dài. Ta cần một biến để lưu trữ \textbf{"Số khách hiện tại"}.
+    
+    Giả sử biến đó tên là: \texttt{current\_passengers}.
+    
+    \begin{alertblock}{Quy luật quan trọng}
+        \begin{itemize}
+            \item Số khách hiện tại của trạm này sẽ là \textbf{số khách khởi điểm} cho trạm kế tiếp.
+            \item Giá trị \texttt{current\_passengers} sẽ thay đổi liên tục qua từng trạm.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% --- Slide Chain Challenge ---
+\begin{frame}{Thử thách liên hoàn (Chain Challenge)}
+    Tuyến xe đi qua 3 trạm. Ban đầu xe rỗng (0 người).
+    
+    \textbf{Dữ liệu hành trình:}
+    \begin{enumerate}
+        \item \textbf{Trạm 1:} Xuống 0, Lên 5 ($0 - 0 + 5$)
+        \item \textbf{Trạm 2:} Xuống 2, Lên 4 ($a=2, b=4$)
+        \item \textbf{Trạm 3:} ...
+    \end{enumerate}
+    
+    \textbf{Câu hỏi:} Ngay khi xe \textbf{rời khỏi Trạm 2}, trên xe có bao nhiêu người?
+    (Hãy tính cộng dồn từ Trạm 1).
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Đáp án}
+        \begin{itemize}
+            \item \textbf{Rời Trạm 1:} $0 - 0 + 5 = \mathbf{5}$ khách.
+            \item \textbf{Rời Trạm 2:} $5 - 2 + 4 = \mathbf{7}$ khách.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% --- Slide Chunk 3 ---
+\begin{frame}[fragile]{Chunk 3: Đi tìm đỉnh điểm (The Peak)}
+    Câu hỏi chính: \textbf{"Sức chứa nhỏ nhất là bao nhiêu?"}
+    
+    \begin{block}{Tư duy}
+        Để không ai bị bỏ lại, chiếc xe phải chứa được lượng khách vào lúc \textbf{đông nhất}.
+    \end{block}
+
+    \textbf{Nhiệm vụ:}
+    Dùng một biến "camera" (gọi là \texttt{max\_capacity}) để chụp lại con số lớn nhất từng xuất hiện.
+    
+    \begin{itemize}
+        \item Ví dụ Trạm 1: 5 người $\rightarrow$ Kỷ lục: 5.
+        \item Ví dụ Trạm 2: 7 người $\rightarrow$ Kỷ lục mới: 7 (vì $7 > 5$).
+        \item Ví dụ Trạm 3: 2 người $\rightarrow$ Kỷ lục vẫn là 7 (vì $2 < 7$).
+    \end{itemize}
+    $\Rightarrow$ Kết quả cuối cùng là \textbf{7}.
+\end{frame}
+
+% --- Slide Final Boss ---
+\begin{frame}{Thử thách cuối cùng (Final Boss)}
+    Có 4 trạm. Hãy điền vào (A) và (B) và tìm Đáp án cuối cùng.
+
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}cccc@{}}
+            \toprule
+            Trạm & Xuống ($a$) & Lên ($b$) & Số khách sau khi rời trạm \\ \midrule
+            1 & 0 & 3 & \textbf{3} \\
+            2 & 2 & 5 & \textbf{? (A)} \\
+            3 & 4 & 2 & \textbf{? (B)} \\
+            4 & 4 & 0 & \textbf{0} (Hết chuyến) \\ \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \pause
+    \textbf{Giải mã:}
+    \begin{itemize}
+        \item<2-> Tại (A): $3 - 2 + 5 = \mathbf{6}$
+        \item<3-> Tại (B): $6 - 4 + 2 = \mathbf{4}$
+        \item<4-> So sánh các thời điểm: 3, \textbf{6}, 4.
+    \end{itemize}
+    
+    \onslide<5->{
+        \begin{alertblock}{Kết quả}
+            Sức chứa tối thiểu cần mua là \textbf{6}.
+        \end{alertblock}
+    }
+\end{frame}
+
+% --- Slide Blueprint ---
+\begin{frame}[fragile]{Tổng kết thuật toán (Blueprint)}
+    Bản thiết kế (Mã giả - Pseudocode):
+
+    \begin{block}{1. Chuẩn bị (Setup)}
+        \begin{itemize}
+            \item Đọc số lượng trạm \texttt{n}.
+            \item \texttt{hien\_tai = 0} (số khách đang ngồi trên xe).
+            \item \texttt{suc\_chua = 0} (kỷ lục đông nhất).
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{2. Vòng lặp hành trình (Loop)}
+        Lặp \texttt{n} lần (đi qua từng trạm):
+        \begin{itemize}
+            \item Đọc 2 số \texttt{a} (xuống) và \texttt{b} (lên).
+            \item \textbf{Cập nhật:} \texttt{hien\_tai = hien\_tai - a + b}
+            \item \textbf{Kiểm tra kỷ lục:} Nếu \texttt{hien\_tai > suc\_chua} thì \texttt{suc\_chua = hien\_tai}
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{3. Kết quả}
+        In ra \texttt{suc\_chua}.
+    \end{block}
+\end{frame}
+
+% --- Slide Kết thúc ---
+\begin{frame}{Bước tiếp theo}
+    \begin{center}
+        \Huge \textbf{Code thôi!}
+    \end{center}
+    \vspace{1cm}
+    Tư duy đã thông suốt, bản vẽ đã có. Bây giờ là lúc bạn hiện thực hóa nó bằng C++, Python hoặc Java.
+    
+    \vspace{0.5cm}
+    \begin{block}{Hỗ trợ}
+        Nếu gặp lỗi, hãy gửi code của bạn vào đây để tôi kiểm tra nhé!
+    \end{block}
+\end{frame}
+
+\end{document}

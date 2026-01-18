@@ -1,0 +1,15 @@
+\frametitle{1. Way Too Long Words (71A)}
+\textbf{Link:} \url{https://codeforces.com/problemset/problem/71/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Nếu từ dài \textbf{hơn 10 ký tự}, thay thế bằng: [ký tự đầu] + [số ký tự ở giữa] + [ký tự cuối]. Ví dụ: "localization" $\rightarrow$ "l10n".
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Kiểm tra điều kiện $L > 10$.
+            \item Số ký tự ở giữa: $L - 2$.
+            \item Lưu ý: Xử lý bộ đệm (buffer) khi chuyển từ \texttt{cin >> n} sang \texttt{getline} hoặc \texttt{cin >> s}.
+        \end{itemize}
+    \end{exampleblock}

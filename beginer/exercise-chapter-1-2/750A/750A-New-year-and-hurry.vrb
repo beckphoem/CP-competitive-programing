@@ -1,0 +1,26 @@
+\frametitle{Mã giả cụ thể (Code Implementation)}
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, k;
+    cin >> n >> k; // 1. Nhập dữ liệu
+
+    int time_left = 240 - k; // 2. Tính vốn (Chunk 1)
+    int count = 0;
+
+    // 3. Vòng lặp tư duy (Chunk 2 & 3)
+    for (int i = 1; i <= n; i++) {
+        int cost = 5 * i; // Giá bài i
+        if (time_left >= cost) {
+            time_left = time_left - cost; // Trừ tiền
+            count++; // Tăng đếm
+        } else {
+            break; // Hết tiền -> Dừng
+        }
+    }
+    cout << count << endl; // 4. In kết quả
+    return 0;
+}
+\end{lstlisting}

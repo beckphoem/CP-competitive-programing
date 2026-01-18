@@ -1,0 +1,21 @@
+\frametitle{Trận chiến cuối cùng: Quản lý Kho Vũ Khí}
+\begin{exampleblock}{Thử thách cho bạn}
+        Viết chương trình:
+        \begin{enumerate}
+            \item Tạo \texttt{map<string, int> vukhi}.
+            \item Thêm "Kiem" (50), "Cung" (40).
+            \item Dùng \texttt{auto \&} để giảm sát thương tất cả đi 10.
+            \item Kiểm tra "Riu" bằng \texttt{contains}.
+        \end{enumerate}
+    \end{exampleblock}
+
+    \pause
+    \begin{lstlisting}[language=C++]
+for (auto & [ten, sat_thuong] : vukhi) {
+    sat_thuong -= 10; // Su dung & de sua du lieu that
+}
+
+if (!vukhi.contains("Riu")) {
+    vukhi["Riu"] = 60;
+}
+    \end{lstlisting}

@@ -1,0 +1,26 @@
+\frametitle{8. Lời Giải Tham Khảo}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    // @1. Dùng long long để tránh tràn số@
+    long long n, m, a;
+    cin >> n >> m >> a;
+
+    // @2. Tính số gạch cho chiều Dọc (n)@
+    long long doc;
+    if (n % a == 0) doc = n / a;
+    else doc = n / a + 1;
+
+    // @3. Tính số gạch cho chiều Ngang (m)@
+    long long ngang;
+    if (m % a == 0) ngang = m / a;
+    else ngang = m / a + 1;
+
+    // @3. Kết quả là tích của hai chiều@
+    cout << doc * ngang;
+
+    return 0;
+}
+\end{lstlisting}

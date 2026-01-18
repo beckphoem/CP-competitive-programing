@@ -1,0 +1,21 @@
+\frametitle{💻 Giao nhiệm vụ cuối}
+Bây giờ là lúc bạn chuyển tư duy này thành code.
+
+    \begin{exampleblock}{Gợi ý khi code}
+        Hàm tìm giá trị nhỏ nhất:
+        \begin{itemize}
+            \item \textbf{C++:}
+            \begin{verbatim}
+min({a, b, c})
+// Hoặc
+min(a, min(b, c))
+            \end{verbatim}
+            \item \textbf{Python:}
+            \begin{verbatim}
+min(a, b, c)
+            \end{verbatim}
+        \end{itemize}
+    \end{exampleblock}
+
+    \vspace{0.3cm}
+    Hãy thử viết code và nộp bài (submit). Nếu gặp lỗi, hãy quay lại đây để "debug" tư duy!

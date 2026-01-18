@@ -1,0 +1,425 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Cấu hình hiển thị code (nếu cần)
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=none,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+\lstset{style=mystyle}
+
+% Thông tin bài trình bày
+\title[Codeforces 800-900 \& While Loop]{Phân tích Thuật toán 20 Bài tập Codeforces\\(Rating 800-900)}
+\subtitle{Sử dụng Cấu trúc Vòng lặp While}
+\author{Báo cáo Chuyên sâu}
+\date{\today}
+
+\begin{document}
+
+% Slide tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Mục lục
+\begin{frame}{Nội dung chính}
+    \tableofcontents
+\end{frame}
+
+% --- Phần 1: Simulation & Accumulation ---
+\section{Mô phỏng Sự Tăng trưởng (Simulation)}
+
+\begin{frame}{Bài 1: Bear and Big Brother (791A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/791/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Limak ($a$) và Bob ($b$) có cân nặng ban đầu ($a \le b$). Mỗi năm Limak gấp 3, Bob gấp 2. Tìm số năm để $a > b$.
+        \item \textbf{Input:} \texttt{4 7} \quad \textbf{Output:} \texttt{2}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Sử dụng vòng lặp để mô phỏng từng năm:
+        \begin{itemize}
+            \item Điều kiện lặp: \texttt{while (a <= b)}
+            \item Cập nhật: \texttt{a *= 3}, \texttt{b *= 2}, \texttt{years++}
+            \item Kết quả: In ra biến đếm \texttt{years}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 2: Vanya and Cubes (492A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/492/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Xây kim tự tháp với $n$ khối lập phương. Tầng $h$ cần tổng các số từ 1 đến $h$ viên gạch. Tìm chiều cao tối đa.
+        \item \textbf{Input:} \texttt{25} \quad \textbf{Output:} \texttt{4}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Trừ dần số gạch cho đến khi không đủ xây tầng tiếp theo:
+        \begin{itemize}
+            \item \texttt{h = 0}, \texttt{cnt = 0} (gạch tầng hiện tại).
+            \item \texttt{while (n >= cnt + h + 1)}: 
+            \item Tăng chiều cao \texttt{h++}, cập nhật gạch cần \texttt{cnt += h}, trừ kho \texttt{n -= cnt}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 3: Wrong Subtraction (977A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/977/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Giảm số $n$ đi $k$ lần. Nếu tận cùng khác 0 thì trừ 1, nếu là 0 thì chia 10.
+        \item \textbf{Input:} \texttt{512 4} \quad \textbf{Output:} \texttt{50}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Thực hiện $k$ lần thao tác giảm:
+        \begin{itemize}
+            \item Điều kiện: \texttt{while (k > 0)}
+            \item Logic: Nếu \texttt{n \% 10 == 0} thì \texttt{n /= 10}, ngược lại \texttt{n--}.
+            \item Giảm biến đếm: \texttt{k--}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- Phần 2: Digit Extraction ---
+\section{Tách Số và Xử lý Chữ số}
+
+\begin{frame}{Bài 4: Near Lucky Number (110A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/110/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Đếm số lượng chữ số may mắn (4 hoặc 7) trong số $n$. Nếu \textit{số lượng} đó là số may mắn (là 4 hoặc 7), in YES.
+        \item \textbf{Input:} \texttt{40047} \quad \textbf{Output:} \texttt{NO} (có 3 số may mắn, 3 không phải lucky number).
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Tách số: \texttt{while (n > 0)} để duyệt từng chữ số (\texttt{n \% 10}).
+            \item Đếm: Nếu chữ số là 4 hoặc 7 thì \texttt{count++}.
+            \item Kết quả: Kiểm tra \texttt{if (count == 4 || count == 7)}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 5: Elephant (617A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/617/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Con voi ở 0, cần đến $x$. Bước đi tối đa 5 đơn vị. Tìm số bước tối thiểu.
+        \item \textbf{Input:} \texttt{12} \quad \textbf{Output:} \texttt{3} (5+5+2)
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While - Greedy)}
+        Ưu tiên bước dài nhất (5):
+        \begin{itemize}
+            \item \texttt{while (x > 0)}: Trừ $x$ cho 5 (hoặc bước nhỏ hơn để về 0).
+            \item Mỗi lần trừ tăng \texttt{steps++}.
+            \item (Cách tối ưu hơn: \texttt{while} trừ 5 cho đến khi hết).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 6: Tram (116A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/116/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Tàu đi qua $n$ trạm. Mỗi trạm có người lên/xuống. Tìm sức chứa tối thiểu (lượng khách cực đại tại 1 thời điểm).
+        \item \textbf{Input:} 4 trạm: (0,3), (2,5), (4,2), (4,0) $\to$ \textbf{Output:} \texttt{6}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Duyệt qua các trạm:
+        \begin{itemize}
+            \item \texttt{current -= exit; current += enter;}
+            \item Cập nhật Max: \texttt{if (current > capacity) capacity = current;}
+            \item Lặp $n$ lần.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- Phần 3: Array & String ---
+\section{Duyệt Mảng và Chuỗi}
+
+\begin{frame}{Bài 7: Team (231A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/231/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} 3 người thi lập trình. Giải bài nếu ít nhất 2 người đồng ý (nhập 1). Đếm số bài giải được.
+        \item \textbf{Input:} 3 dòng: (1 1 0), (1 1 1), (1 0 0) $\to$ \textbf{Output:} \texttt{2}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Lặp $n$ lần test case.
+            \item Đọc 3 biến $p, v, t$.
+            \item Kiểm tra: \texttt{if (p + v + t >= 2) count++;}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 8: Next Round (158A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/158/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Đậu vòng sau nếu điểm $>0$ và $\ge$ điểm của người thứ $k$.
+        \item \textbf{Input:} 8 5 (n=8, k=5), Scores: 10 9 8 7 7 7 5 5 $\to$ \textbf{Output:} \texttt{6}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Lưu mảng điểm số.
+            \item Lấy điểm chuẩn: \texttt{target = scores[k-1]}.
+            \item Duyệt lại mảng: \texttt{while (i < n)} đếm nếu \texttt{scores[i] >= target \&\& scores[i] > 0}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 9: Soldier and Bananas (546A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/546/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Giá chuối tăng dần: $k, 2k, 3k, \dots, wk$. Có $n$ đô la. Hỏi phải vay bao nhiêu?
+        \item \textbf{Input:} 3 17 4 (k=3, n=17, w=4) $\to$ \textbf{Output:} \texttt{13}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Tính tổng chi phí:
+        \begin{itemize}
+            \item \texttt{i = 1}, \texttt{total = 0}.
+            \item \texttt{while (i <= w)}: \texttt{total += i * k}.
+            \item Kết quả: \texttt{max(0, total - n)}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 10: Word (59A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/59/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Nếu chữ hoa nhiều hơn chữ thường $\to$ in hoa toàn bộ. Ngược lại in thường toàn bộ.
+        \item \textbf{Input:} \texttt{HoUse} $\to$ \textbf{Output:} \texttt{house}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Bước 1: Duyệt chuỗi đếm \texttt{upper}, \texttt{lower}.
+            \item Bước 2: So sánh và duyệt lại chuỗi để in ra dạng chuyển đổi (cộng/trừ 32 ASCII hoặc dùng hàm `tolower/toupper`).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 11: Translation (41A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/41/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Kiểm tra chuỗi $t$ có phải là đảo ngược của chuỗi $s$ không.
+        \item \textbf{Input:} \texttt{code}, \texttt{edoc} $\to$ \textbf{Output:} \texttt{YES}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        So sánh hai đầu:
+        \begin{itemize}
+            \item \texttt{i = 0}, \texttt{j = t.length() - 1}.
+            \item \texttt{while (i < s.length())}: Nếu \texttt{s[i] != t[j]} $\to$ NO.
+            \item Kết thúc vòng lặp không lỗi $\to$ YES.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 12: Way Too Long Words (71A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/71/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Từ dài hơn 10 ký tự viết tắt: Đầu + số ký tự giữa + Cuối (ví dụ: l10n).
+        \item \textbf{Input:} \texttt{localization} $\to$ \textbf{Output:} \texttt{l10n}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Xử lý $n$ test case:
+        \begin{itemize}
+            \item \texttt{while (n--)}: Đọc chuỗi $s$.
+            \item Nếu \texttt{s.length() > 10}: In \texttt{s[0]}, \texttt{len-2}, \texttt{s[len-1]}.
+            \item Else: In $s$.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 13: Anton and Danik (734A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/734/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Chuỗi kết quả 'A' và 'D'. Ai thắng nhiều hơn?
+        \item \textbf{Input:} \texttt{ADAAAA} $\to$ \textbf{Output:} \texttt{Anton}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Duyệt chuỗi $s$ với biến chạy $i$.
+            \item Nếu \texttt{s[i] == 'A'} tăng biến Anton, ngược lại tăng Danik.
+            \item So sánh 2 biến đếm và in kết quả.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- Phần 4: Logic Flags ---
+\section{Cờ Hiệu và Logic (Flags)}
+
+\begin{frame}{Bài 14: In Search of an Easy Problem (1030A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1030/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} $n$ người cho ý kiến (0=Dễ, 1=Khó). Nếu có ít nhất một số 1 $\to$ HARD.
+        \item \textbf{Input:} \texttt{0 0 1} $\to$ \textbf{Output:} \texttt{HARD}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Tìm kiếm sự tồn tại:
+        \begin{itemize}
+            \item Cờ \texttt{is\_hard = 0}.
+            \item Duyệt input: Nếu gặp 1 $\to$ \texttt{is\_hard = 1}.
+            \item Cuối cùng kiểm tra cờ để in kết quả.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 15: George and Accommodation (467A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/467/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} $n$ phòng, phòng $i$ có $p$ người, chứa được $q$. Đếm phòng đủ chỗ cho 2 người ($q - p \ge 2$).
+        \item \textbf{Input:} (1, 1), (2, 2), (3, 10) $\to$ \textbf{Output:} \texttt{1} (chỉ phòng 3)
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Lặp $n$ lần. Đọc cặp $p, q$.
+            \item Kiểm tra: \texttt{if (q - p >= 2) count++;}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- Phần 5: Spatial & Pattern ---
+\section{Tư duy Không gian và Quy luật}
+
+\begin{frame}{Bài 16: Beautiful Matrix (263A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/263/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Ma trận 5x5 có một số 1. Tìm số bước chuyển hàng/cột để đưa số 1 về tâm (3,3).
+        \item \textbf{Input:} Số 1 ở hàng 2, cột 5 $\to$ \textbf{Output:} \texttt{3} ($|2-3| + |5-3|$)
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Dùng 2 vòng \texttt{while} lồng nhau để đọc tọa độ $(r, c)$ của số 1.
+            \item Công thức Manhattan: \texttt{abs(r - 3) + abs(c - 3)}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 17: Stones on the Table (266A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/266/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Chuỗi màu đá (R, G, B). Loại bỏ đá sao cho không có 2 viên kề nhau cùng màu.
+        \item \textbf{Input:} \texttt{RRG} $\to$ \textbf{Output:} \texttt{1} (Bỏ 1 R)
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Duyệt chuỗi đến \texttt{n-1}.
+            \item So sánh \texttt{s[i]} và \texttt{s[i+1]}.
+            \item Nếu giống nhau: \texttt{count++}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 18: Magnets (344A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/344/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Nam châm cực "10" hoặc "01". Đếm số nhóm nam châm liên kết (khác cực hút nhau, cùng cực đẩy nhau $\to$ tách nhóm).
+        \item \textbf{Input:} \texttt{10, 10, 01} $\to$ \textbf{Output:} \texttt{2} (Nhóm 10-10, Nhóm 01)
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        Phát hiện biên thay đổi:
+        \begin{itemize}
+            \item Lưu \texttt{prev}. Lặp đọc \texttt{curr}.
+            \item Nếu \texttt{curr != prev} $\to$ Nhóm mới (\texttt{groups++}).
+            \item Cập nhật \texttt{prev = curr}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 19: Drinks (200B)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/200/B}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} Tính nồng độ phần trăm trung bình của ly cocktail từ $n$ loại nước.
+        \item \textbf{Input:} 50, 100 $\to$ \textbf{Output:} \texttt{75.0}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Tính tổng: \texttt{sum += p} trong vòng lặp.
+            \item Kết quả: \texttt{sum / n}.
+            \item Lưu ý ép kiểu số thực (double/float).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bài 20: Hulk (705A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/705/A}
+    
+    \begin{itemize}
+        \item \textbf{Đề bài:} In chuỗi cảm xúc lớp hành tây. Lẻ: "I hate", Chẵn: "I love". Nối bằng "that", kết bằng "it".
+        \item \textbf{Input:} \texttt{3} $\to$ \textbf{Output:} \texttt{I hate that I love that I hate it}
+    \end{itemize}
+
+    \begin{block}{Giải pháp (While)}
+        \begin{itemize}
+            \item Chạy \texttt{i} từ 1 đến $n$.
+            \item Nếu \texttt{i \% 2 != 0} in "I hate", else "I love".
+            \item Nếu \texttt{i < n} in " that ", else in " it".
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge \textbf{HẾT} \\
+    \large Cảm ơn đã theo dõi!
+\end{frame}
+
+\end{document}

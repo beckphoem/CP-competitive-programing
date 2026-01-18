@@ -1,0 +1,23 @@
+\frametitle{Lời giải tham khảo}
+Đây là đoạn code giải quyết thử thách trên:
+
+    \begin{lstlisting}[language=C++]
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string name;
+
+    cout << "Nhap ten cua ban: ";
+    // Dung getline de nhap ten co dau cach
+    getline(cin, name);
+
+    cout << "Chu cai dau tien: " << name[0] << endl;
+
+    // Dung .size() hoac .length() deu duoc
+    cout << "Do dai ten ban: " << name.size() << endl;
+
+    return 0;
+}
+    \end{lstlisting}

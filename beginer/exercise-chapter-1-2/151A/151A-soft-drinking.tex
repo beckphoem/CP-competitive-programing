@@ -1,0 +1,290 @@
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% Cấu hình ngôn ngữ và font chữ
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+
+% Giao diện (Theme)
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Cấu hình màu sắc và font
+\setbeamerfont{title}{size=\huge, series=\bfseries}
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+
+% Thông tin bài giảng
+\title[Codeforces 151A]{Giải Mã Tư Duy Thuật Toán}
+\subtitle{Bài toán: Codeforces 151A - Soft Drinking}
+\author[Coach Tư Duy]{Coach Tư Duy Thuật Toán (LHTL Edition)}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Mục lục ---
+\begin{frame}{Nội dung bài học}
+    \tableofcontents
+\end{frame}
+
+% =============================================================================
+% MỞ ĐẦU
+% =============================================================================
+\section{Giới thiệu bài toán}
+\begin{frame}{Codeforces 151A - Soft Drinking}
+    \begin{block}{Chào mừng bạn!}
+        Chúng ta sẽ cùng nhau "mổ xẻ" bài \textbf{Codeforces 151A - Soft Drinking}.
+    \end{block}
+    
+    \vspace{0.5cm}
+    Đây là một bài toán kinh điển về:
+    \begin{itemize}
+        \item \textbf{Quản lý tài nguyên}.
+        \item \textbf{Tìm điểm thắt nút (Bottleneck)}.
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textit{Đừng để đống biến số $n, k, l, c, d, p, nl, np$ làm bạn hoa mắt. Chúng ta sẽ dọn dẹp nó ngay bây giờ.}
+\end{frame}
+
+% =============================================================================
+% PHẦN 1: PHẪU THUẬT
+% =============================================================================
+\section{Phẫu thuật đề bài (Deconstruct)}
+\begin{frame}{1. 🔪 Phẫu thuật đề bài (Deconstruct)}
+    Hãy quên chuyện "uống nước ngọt" đi. Hãy tưởng tượng bạn là một \textbf{Bar trưởng} đang pha chế các \textbf{Combo đồ uống}.
+    
+    \begin{alertblock}{Quy tắc pha 1 Combo}
+        Bạn \textbf{BẮT BUỘC} phải có đủ 3 thành phần cùng lúc:
+        \begin{enumerate}
+            \item \textbf{Nước:} Một lượng ml nhất định.
+            \item \textbf{Chanh:} Một lát chanh.
+            \item \textbf{Muối:} Một lượng gam muối.
+        \end{enumerate}
+        \textit{Nếu thiếu bất kỳ cái nào $\rightarrow$ Không thể tạo ra Combo.}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Dữ liệu đầu vào (Kho hàng)}
+    Dữ liệu đầu vào (Input) thực chất là kho hàng của bạn:
+    
+    \begin{itemize}
+        \item \textbf{Nhân lực:} $n$ (số người bạn).
+        \item \textbf{Kho Nước:} $k$ chai, mỗi chai $l$ ml.
+        \item \textbf{Kho Chanh:} $c$ quả, mỗi quả cắt được $d$ lát.
+        \item \textbf{Kho Muối:} $p$ gam.
+        \item \textbf{Công thức pha 1 Combo:} Cần $nl$ ml nước và $np$ gam muối (và luôn luôn là 1 lát chanh).
+    \end{itemize}
+\end{frame}
+
+% =============================================================================
+% PHẦN 2: LỘ TRÌNH
+% =============================================================================
+\section{Lộ trình tư duy}
+\begin{frame}{2. 🗺️ Lộ trình tư duy}
+    Chúng ta sẽ đi qua 3 mảnh ghép (Chunks):
+    
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Chunk 1: Tổng kiểm kê kho hàng} \\
+        (Quy đổi mọi thứ về đơn vị nhỏ nhất).
+        
+        \item \textbf{Chunk 2: Quy tắc "Chiếc thùng gỗ" (Bottleneck)} \\
+        (Tìm xem nguyên liệu nào sẽ hết trước).
+        
+        \item \textbf{Chunk 3: Chia phần công bằng} \\
+        (Tính ra kết quả cuối cùng cho mỗi người).
+    \end{enumerate}
+\end{frame}
+
+% =============================================================================
+% PHẦN 3: CHUNK 1
+% =============================================================================
+\section{Chunk 1: Tổng kiểm kê}
+\begin{frame}{🚀 Chunk 1: Tổng kiểm kê kho hàng}
+    Trước khi pha chế, bạn phải biết trong kho mình có \textbf{tổng cộng} bao nhiêu nguyên liệu rời.
+    
+    \begin{exampleblock}{Quy đổi đơn vị}
+        \begin{itemize}
+            \item \textbf{Nước:} Bạn có $k$ chai, mỗi chai $l$ ml.
+            \item \textbf{Chanh:} Bạn có $c$ quả, mỗi quả cắt được $d$ lát.
+            \item \textbf{Muối:} Đã có sẵn $p$ gam (không cần tính).
+        \end{itemize}
+    \end{exampleblock}
+    
+    \textbf{Nhiệm vụ:} Tính tổng số lượng thực tế có thể dùng được.
+\end{frame}
+
+\begin{frame}{❓ Thử thách tư duy (Mental Check)}
+    \textbf{Giả sử kho hàng có số liệu sau:}
+    \begin{itemize}
+        \item $k = 3$ (chai), $l = 100$ (ml/chai).
+        \item $c = 5$ (quả chanh), $d = 2$ (lát/quả).
+        \item $p = 50$ (gam muối).
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{Kết quả kiểm kê:}
+        \begin{enumerate}
+            \item Nước: $3 \times 100 = 300$ ml.
+            \item Chanh: $5 \times 2 = 10$ lát.
+            \item Muối: $50$ gam.
+        \end{enumerate}
+        
+        \column{0.5\textwidth}
+        \begin{alertblock}{Lưu ý quan trọng}
+            Ở bước này, muối là $p$, không phải $p/np$. \\
+            Phép chia thuộc về bước "Tính khả năng phục vụ" sau này.
+        \end{alertblock}
+    \end{columns}
+\end{frame}
+
+% =============================================================================
+% PHẦN 4: CHUNK 2
+% =============================================================================
+\section{Chunk 2: Quy tắc Chiếc thùng gỗ}
+\begin{frame}{🚀 Chunk 2: Quy tắc "Chiếc thùng gỗ" (Bottleneck)}
+    Bây giờ bạn đã có tổng nguyên liệu. Chúng ta cần xem từng loại nguyên liệu \textbf{độc lập} có thể tạo ra tối đa bao nhiêu Combo.
+    
+    \vspace{0.3cm}
+    \textbf{Công thức pha 1 Combo cần:} $nl$ ml nước, $1$ lát chanh, $np$ gam muối.
+    
+    \begin{block}{Nguyên lý Chiếc thùng gỗ}
+        Bạn chỉ có thể tạo ra số Combo bằng với nguyên liệu \textbf{ít nhất/hạn hẹp nhất}.
+        \\ \textit{(Giống như thùng gỗ chỉ đựng được nước đến chiều cao của thanh gỗ thấp nhất).}
+    \end{block}
+\end{frame}
+
+\begin{frame}{❓ Thử thách tư duy (Quan trọng)}
+    \textbf{Dữ liệu:}
+    \begin{itemize}
+        \item Kho: Nước \textbf{300}, Chanh \textbf{10}, Muối \textbf{50}.
+        \item Công thức cần: \textbf{5} ml nước, \textbf{1} lát chanh, \textbf{2} gam muối.
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    \textbf{Tính toán:}
+    \begin{enumerate}
+        \item Nước: $300 / 5 = \mathbf{60}$ ly.
+        \item Chanh: $10 / 1 = \mathbf{10}$ ly.
+        \item Muối: $50 / 2 = \mathbf{25}$ ly.
+    \end{enumerate}
+    
+    \vspace{0.3cm}
+    \textbf{Quy luật cốt lõi:} Dù nước đủ 60 ly, muối đủ 25 ly, nhưng làm đến ly thứ 10 thì chanh hết sạch!
+    
+    $\rightarrow$ Số Combo tối đa = \textbf{min(60, 10, 25) = 10 Combo}.
+\end{frame}
+
+% =============================================================================
+% PHẦN 5: CHUNK 3
+% =============================================================================
+\section{Chunk 3: Chia phần công bằng}
+\begin{frame}{🚀 Chunk 3: Chia phần công bằng (Final Step)}
+    Chúng ta đã có \textbf{10 Combo} trên bàn.
+    \\ Đề bài hỏi: \textbf{"Mỗi người bạn nhận được bao nhiêu ly?"}
+    
+    \vspace{0.5cm}
+    \textbf{Dữ kiện cuối cùng:} Số người bạn $n$.
+    
+    \begin{block}{Quy tắc chia}
+        Phải chia đều. Nếu chia không hết thì bỏ phần dư (chia lấy phần nguyên), vì không thể uống "nửa ly" trong bài toán này.
+    \end{block}
+\end{frame}
+
+\begin{frame}{❓ Thử thách về đích}
+    Giả sử có tổng \textbf{10 Combo}.
+    
+    \vspace{0.5cm}
+    \begin{columns}
+        \column{0.33\textwidth}
+        \textbf{TH1: $n=3$ người}
+        $$10 / 3 = 3$$
+        (Dư 1, bỏ qua)
+        
+        \column{0.33\textwidth}
+        \textbf{TH2: $n=4$ người}
+        $$10 / 4 = 2$$
+        (Dư 2, bỏ qua)
+        
+        \column{0.33\textwidth}
+        \textbf{TH3: $n=11$ người}
+        $$10 / 11 = 0$$
+        (Không đủ chia)
+    \end{columns}
+    
+    \vspace{0.5cm}
+    \centering
+    \textit{Số nguyên chia nhau sẽ mất phần thập phân (trong C++/Python/Java).}
+\end{frame}
+
+% =============================================================================
+% TỔNG KẾT
+% =============================================================================
+\section{Tổng kết chiến thuật}
+\begin{frame}{📝 Tổng kết chiến thuật (Wrap-up)}
+    Đây là \textbf{Bản thiết kế thuật toán} cho bài 151A:
+    
+    \begin{enumerate}
+        \item \textbf{Bước 1: Quy đổi tổng lực}
+        \begin{itemize}
+            \item $Total\_Water = k \times l$
+            \item $Total\_Lime = c \times d$
+            \item $Total\_Salt = p$
+        \end{itemize}
+        
+        \item \textbf{Bước 2: Tìm giới hạn (Bottleneck)}
+        \begin{itemize}
+            \item $Toast\_Water = Total\_Water / nl$
+            \item $Toast\_Lime = Total\_Lime / 1$
+            \item $Toast\_Salt = Total\_Salt / np$
+            \item $\Rightarrow Max\_Toast = \min(Toast\_Water, Toast\_Lime, Toast\_Salt)$
+        \end{itemize}
+        
+        \item \textbf{Bước 3: Chia phần}
+        \begin{itemize}
+            \item $Result = Max\_Toast / n$
+        \end{itemize}
+    \end{enumerate}
+\end{frame}
+
+% =============================================================================
+% NHIỆM VỤ
+% =============================================================================
+\section{Giao nhiệm vụ}
+\begin{frame}[fragile]{💻 Giao nhiệm vụ cuối}
+    Bây giờ là lúc bạn chuyển tư duy này thành code.
+    
+    \begin{exampleblock}{Gợi ý khi code}
+        Hàm tìm giá trị nhỏ nhất:
+        \begin{itemize}
+            \item \textbf{C++:}
+            \begin{verbatim}
+min({a, b, c}) 
+// Hoặc
+min(a, min(b, c))
+            \end{verbatim}
+            \item \textbf{Python:}
+            \begin{verbatim}
+min(a, b, c)
+            \end{verbatim}
+        \end{itemize}
+    \end{exampleblock}
+    
+    \vspace{0.3cm}
+    Hãy thử viết code và nộp bài (submit). Nếu gặp lỗi, hãy quay lại đây để "debug" tư duy!
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge \textbf{Chúc bạn thành công!} \\
+    \large Hẹn gặp lại ở bài toán tiếp theo.
+\end{frame}
+
+\end{document}

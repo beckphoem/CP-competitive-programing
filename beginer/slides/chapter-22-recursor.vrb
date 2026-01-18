@@ -1,0 +1,22 @@
+\frametitle{Bài tập: Tính tổng các chữ số}
+Ví dụ: $123 \rightarrow 1 + 2 + 3 = 6$.
+    Công cụ: Phép chia lấy dư (`%`) và chia nguyên (`/`).
+
+    \begin{lstlisting}[language=C++]
+int tinhTongChuSo(int n) {
+    // 1. Diem dung: Neu n chi con 1 chu so
+    if (n < 10) {
+        return n;
+    }
+
+    // 2. Buoc de quy
+    return (n % 10) + tinhTongChuSo(n / 10);
+}
+    \end{lstlisting}
+
+    \textbf{Luồng chạy với n = 123:}
+    \begin{itemize}
+        \item Bước 1: $3 + \text{tong}(12)$
+        \item Bước 2: $3 + (2 + \text{tong}(1))$
+        \item Bước 3 (Base Case): $3 + (2 + 1) = 6$
+    \end{itemize}

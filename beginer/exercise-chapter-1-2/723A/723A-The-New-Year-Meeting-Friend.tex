@@ -1,0 +1,264 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+% Chọn theme
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Cấu hình thông tin bài giảng
+\title[Codeforces 723A]{Tư duy thuật toán: Codeforces 723A}
+\subtitle{The New Year: Meeting Friends}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% Slide tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Mục lục
+\begin{frame}{Mục lục}
+    \tableofcontents
+\end{frame}
+
+% ---------------------------------------------------------
+\section{Bước 1: Tiếp nhận và Phẫu thuật (Briefing)}
+% ---------------------------------------------------------
+
+\begin{frame}{Chào mừng}
+    \textbf{Chào mừng bạn đến với phòng tập tư duy thuật toán!}
+    
+    Hôm nay chúng ta sẽ khởi động với một bài toán thú vị về hình học trên một đường thẳng.
+    
+    \vspace{1em}
+    \textbf{Bước đầu tiên: Tiếp nhận \& Phẫu thuật bài toán.}
+\end{frame}
+
+\begin{frame}{1. Dịch đề sang "Ngôn ngữ con người"}
+    Bỏ qua cốt truyện rườm rà, đề bài cốt lõi như sau:
+    \begin{itemize}
+        \item Có \textbf{3 người bạn} đứng ở 3 vị trí khác nhau trên trục số ($x_1, x_2, x_3$).
+        \item Họ muốn hẹn gặp nhau tại một điểm $P$ trên con đường này.
+        \item \textbf{Mục tiêu:} Tìm $P$ sao cho \textbf{tổng quãng đường} cả 3 người phải đi bộ là \textbf{nhỏ nhất}.
+        \item \textbf{Output:} In ra tổng quãng đường nhỏ nhất đó.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{2. Ẩn dụ hình ảnh (Metaphor)}
+    Hãy tưởng tượng 3 ngôi nhà nằm trên một con phố dài:
+    
+    \begin{center}
+        (A) ....... (B) ............... (C)
+    \end{center}
+    
+    Họ cần chọn một vị trí để tụ tập. Vị trí đó có thể là:
+    \begin{itemize}
+        \item Nhà của A.
+        \item Nhà của B.
+        \item Nhà của C.
+        \item Hoặc một quán trà đá bất kỳ nằm đâu đó trên phố.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{3. Lộ trình tư duy (Roadmap)}
+    Để giải bài này, không code vội, cần đi qua các mảnh ghép logic:
+    
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Sắp xếp trật tự thế giới (Xác định vị trí tương đối).
+        \item \textbf{Chunk 2:} Thử nghiệm điểm hẹn (Chiến thuật "Kéo co").
+        \item \textbf{Chunk 3:} Chốt công thức tính toán.
+    \end{enumerate}
+    
+    \begin{block}{Trạng thái}
+        Bạn đã sẵn sàng "mổ xẻ" vấn đề đầu tiên chưa?
+        \textbf{Mục tiêu:} Tìm điểm gặp nhau để tổng đi bộ là ít nhất.
+    \end{block}
+\end{frame}
+
+% ---------------------------------------------------------
+\section{Chunk 1: Sắp xếp trật tự thế giới}
+% ---------------------------------------------------------
+
+\begin{frame}{1. Logic (Tư duy)}
+    Đề bài cho 3 số ngẫu nhiên (Ví dụ: 7 1 4). Trên trục số, các vị trí luôn nằm theo thứ tự từ bé đến lớn.
+    
+    Để giải quyết bài toán "khoảng cách", não bộ cần \textbf{"Xếp hàng"} lại chúng:
+    \begin{itemize}
+        \item Ai đứng ngoài cùng bên trái? $\rightarrow$ Giá trị \textbf{Min}.
+        \item Ai đứng ngoài cùng bên phải? $\rightarrow$ Giá trị \textbf{Max}.
+        \item Ai đứng kẹp ở giữa? $\rightarrow$ Giá trị \textbf{Mid}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{2. Bẫy tư duy (Trap)}
+    Rất nhiều bạn mới học thường vội vàng lấy luôn số đầu tiên làm mốc.
+    
+    \begin{alertblock}{Sai lầm thường gặp}
+        Ví dụ: Input 10 30 20.
+        Nếu vẽ sơ đồ $10 \rightarrow 30 \rightarrow 20$ là sai thực tế.
+    \end{alertblock}
+    
+    \begin{block}{Thực tế}
+        Nó phải là: $10 \rightarrow 20 \rightarrow 30$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    \textbf{Đề bài:} Giả sử input là 6 15 2. Hãy sắp xếp lại trong đầu.
+    
+    \vspace{1em}
+    \textbf{Đáp án của bạn:}
+    \begin{enumerate}
+        \item Nhà bên trái nhất (Min): 2
+        \item Nhà ở giữa (Mid): 6
+        \item Nhà bên phải nhất (Max): 15
+    \end{enumerate}
+    
+    \vspace{1em}
+    \textbf{Nhận xét:} Chính xác! Hình ảnh rõ ràng: \\
+    \textbf{Nhà Ông Bé (2) ———— Nhà Ông Giữa (6) ———— Nhà Ông Lớn (15)}
+\end{frame}
+
+% ---------------------------------------------------------
+\section{Chunk 2: Chiến thuật Kéo co}
+% ---------------------------------------------------------
+
+\begin{frame}{1. Logic (Tư duy)}
+    Hãy tưởng tượng con đường nối từ \textbf{Ông Bé (2)} đến \textbf{Ông Lớn (15)} là một sợi dây.
+    
+    \begin{itemize}
+        \item Hẹn ở bất kỳ đâu trong đoạn [2, 15]: Tổng quãng đường của Ông Bé + Ông Lớn luôn bằng độ dài sợi dây ($15 - 2 = 13$).
+        \item \textbf{Vấn đề nằm ở Ông Giữa (6)!}
+        \begin{itemize}
+            \item Nếu điểm hẹn lệch khỏi nhà Ông Giữa $\rightarrow$ Ông ấy phải đi bộ $\rightarrow$ Tổng tăng thêm.
+            \item Nếu điểm hẹn \textbf{tại ngay nhà Ông Giữa} $\rightarrow$ Ông ấy không đi bước nào (Distance = 0) $\rightarrow$ Tiết kiệm nhất!
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{2. Kết luận \& Bẫy tư duy}
+    \textbf{Kết luận logic:}
+    \begin{enumerate}
+        \item Ông Bé đi đến nhà Ông Giữa.
+        \item Ông Lớn đi đến nhà Ông Giữa.
+        \item Ông Giữa... ngồi yên uống trà.
+    \end{enumerate}
+    
+    \vspace{1em}
+    \begin{alertblock}{Bẫy tư duy (Trap)}
+        Không dùng "Trung bình cộng" (Average).
+        Trong bài toán này, \textbf{"Trung vị" (Median)} mới là vua. Đừng phức tạp hóa bằng phép chia!
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy (Mental Check)}
+    Bộ số: \textbf{2, 6, 15}. So sánh 2 phương án:
+    
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Phương án A (Tại 6)}
+            \begin{itemize}
+                \item Bé (2): 4 bước
+                \item Lớn (15): 9 bước
+                \item Giữa (6): 0 bước
+                \item \textbf{Tổng = 13}
+            \end{itemize}
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \begin{block}{Phương án B (Tại 7)}
+            \begin{itemize}
+                \item Bé (2): 5 bước
+                \item Lớn (15): 8 bước
+                \item Giữa (6): 1 bước
+                \item \textbf{Tổng = 14}
+            \end{itemize}
+        \end{block}
+    \end{columns}
+    
+    \vspace{1em}
+    \textbf{Kết luận:} $13 < 14$. Phương án gặp tại nhà ông Giữa (Trung vị) là tối ưu nhất.
+\end{frame}
+
+% ---------------------------------------------------------
+\section{Chunk 3: Chốt công thức Ma thuật}
+% ---------------------------------------------------------
+
+\begin{frame}{1. Logic (Tư duy)}
+    Chúng ta đã đồng ý:
+    \begin{itemize}
+        \item Điểm hẹn = Giá trị ở giữa ($Mid$).
+        \item Tổng quãng đường = (Khoảng cách Min $\to$ Mid) + (Khoảng cách Max $\to$ Mid).
+    \end{itemize}
+    
+    Công thức:
+    $$Distance = (Mid - Min) + (Max - Mid)$$
+    $$Distance = Mid - Min + Max - Mid$$
+    \begin{alertblock}{Công thức Ma Thuật}
+        $$Distance = Max - Min$$
+    \end{alertblock}
+    \textbf{Điều kỳ diệu:} Vị trí $Mid$ bị triệt tiêu! Kết quả chỉ là khoảng cách giữa ông lớn nhất và bé nhất.
+\end{frame}
+
+\begin{frame}{2. Thuật toán cuối cùng \& Trường hợp biên}
+    \textbf{Quy trình 3 bước:}
+    \begin{enumerate}
+        \item Nhập 3 số $a, b, c$.
+        \item Tìm $Max$ và $Min$.
+        \item Kết quả = $Max - Min$.
+    \end{enumerate}
+    
+    \vspace{1em}
+    \textbf{Trường hợp biên (Edge Case):} Input 10 10 10.
+    \begin{itemize}
+        \item Thực tế: Ở chung chỗ, không cần đi đâu.
+        \item Công thức: $10 - 10 = 0$.
+    \end{itemize}
+    $\rightarrow$ Công thức đúng cho cả trường hợp trùng nhau!
+\end{frame}
+
+% ---------------------------------------------------------
+\section{Tổng kết chiến thuật (Wrap Up)}
+% ---------------------------------------------------------
+
+\begin{frame}[fragile]{Tổng kết \& Mã giả}
+    \begin{block}{Chiến thuật}
+        \begin{enumerate}
+            \item \textbf{Sắp xếp:} Nhìn 3 số dạng `Min -> Mid -> Max`.
+            \item \textbf{Chọn điểm:} Điểm hẹn tối ưu là `Mid`.
+            \item \textbf{Công thức:} Tổng = `Max - Min`.
+        \end{enumerate}
+    \end{block}
+    
+    \begin{exampleblock}{Mã giả (Pseudocode)}
+\begin{verbatim}
+BƯỚC 1: Đọc 3 số nguyên a, b, c.
+BƯỚC 2: Tìm Max trong 3 số.
+        Tìm Min trong 3 số.
+BƯỚC 3: Kết quả = Max - Min.
+BƯỚC 4: In Kết quả.
+\end{verbatim}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Nhiệm vụ cuối cùng: Implementation}
+    Bạn định dùng ngôn ngữ nào (C++, Python, Java...)?
+    
+    \begin{itemize}
+        \item \textbf{Cách 1 (Dùng hàm có sẵn):}
+        Sử dụng `max(a,b,c)` và `min(a,b,c)`. Đây là cách nhanh nhất.
+        
+        \item \textbf{Cách 2 (Sắp xếp):}
+        Cho 3 số vào mảng, dùng `sort()`, sau đó lấy `số_cuối - số_đầu`.
+    \end{itemize}
+    
+    \vspace{1em}
+    \textbf{Action:} Hãy viết code theo ngôn ngữ sở trường của bạn!
+\end{frame}
+
+\end{document}

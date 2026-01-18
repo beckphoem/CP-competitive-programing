@@ -1,0 +1,26 @@
+\frametitle{4. Mã giả (Pseudocode) - C++ Style}
+\begin{lstlisting}[language=C++]
+// Nhap a, b
+cin >> a >> b;
+
+// Tinh toan
+// 1. So ngay sanh dieu la min cua a va b
+int days_fashion = min(a, b);
+
+// 2. So tat thua la tri tuyet doi hieu a va b
+int remaining_socks = abs(a - b);
+// Luu y: Can thu vien <cmath> hoac tu viet if/else
+
+// 3. So ngay thuong thuong la phan nguyen cua phep chia 2
+int days_boring = remaining_socks / 2;
+
+// Ket qua
+cout << days_fashion << " " << days_boring;
+    \end{lstlisting}
+
+    \vspace{0.5cm}
+    \begin{center}
+        \textbf{🚀 BƯỚC CUỐI CÙNG:} \\
+        Hãy thử viết code hoàn chỉnh và nộp thử (Submit)! \\
+        Nếu gặp lỗi, hãy gọi: \textbf{"Coach, bài tiếp theo!"} 👊
+    \end{center}

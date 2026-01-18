@@ -1,0 +1,265 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Định nghĩa màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình hiển thị code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@,
+    inputencoding=utf8,
+    extendedchars=true,
+    literate={đ}{{\dj}}1 {Đ}{{\DJ}}1 {á}{{\'a}}1 {à}{{\`a}}1 {ả}{{\'a}}1 {ã}{{\~a}}1 {ạ}{{\d{a}}}1
+    {ă}{{\u{a}}}1 {ắ}{{\'a}}1 {ằ}{{\`a}}1 {ẳ}{{\'a}}1 {ẵ}{{\~a}}1 {ặ}{{\d{a}}}1
+    {â}{{\^a}}1 {ấ}{{\'a}}1 {ầ}{{\`a}}1 {ẩ}{{\'a}}1 {ẫ}{{\~a}}1 {ậ}{{\d{a}}}1
+    {é}{{\'e}}1 {è}{{\`e}}1 {ẻ}{{\'e}}1 {ẽ}{{\~e}}1 {ẹ}{{\d{e}}}1
+    {ê}{{\^e}}1 {ế}{{\'e}}1 {ề}{{\`e}}1 {ể}{{\'e}}1 {ễ}{{\~e}}1 {ệ}{{\d{e}}}1
+    {í}{{\'i}}1 {ì}{{\`i}}1 {ỉ}{{\'i}}1 {ĩ}{{\~i}}1 {ị}{{\d{i}}}1
+    {ó}{{\'o}}1 {ò}{{\`o}}1 {ỏ}{{\'o}}1 {õ}{{\~o}}1 {ọ}{{\d{o}}}1
+    {ô}{{\^o}}1 {ố}{{\'o}}1 {ồ}{{\`o}}1 {ổ}{{\'o}}1 {ỗ}{{\~o}}1 {ộ}{{\d{o}}}1
+    {ơ}{{\'o}}1 {ờ}{{\`o}}1 {ở}{{\'o}}1 {ỡ}{{\~o}}1 {ợ}{{\d{o}}}1
+    {ú}{{\'u}}1 {ù}{{\`u}}1 {ủ}{{\'u}}1 {ũ}{{\~u}}1 {ụ}{{\d{u}}}1
+    {ư}{{\'u}}1 {ừ}{{\`u}}1 {ử}{{\'u}}1 {ữ}{{\~u}}1 {ự}{{\d{u}}}1
+    {ý}{{\'y}}1 {ỳ}{{\`y}}1 {ỷ}{{\'y}}1 {ỹ}{{\~y}}1 {ỵ}{{\d{y}}}1
+}
+
+\lstset{style=mystyle}
+
+\title{C++ Pointers (Con trỏ)}
+\subtitle{Hành trình truy tìm kho báu trong bộ nhớ}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\frame{\titlepage}
+
+% --- Slide Giới thiệu ---
+\begin{frame}{Bức tranh toàn cảnh: Dãy tủ đồ khổng lồ}
+    \begin{block}{Ẩn dụ: Bộ nhớ máy tính (RAM)}
+        Tưởng tượng bộ nhớ máy tính giống như một hành lang dài vô tận chứa hàng triệu cái \textbf{tủ đồ (lockers)}.
+    \end{block}
+
+    \begin{itemize}
+        \item Mỗi tủ chứa một đồ vật (Dữ liệu/Biến).
+        \item Mỗi tủ có một số thứ tự sơn bên ngoài (Địa chỉ bộ nhớ).
+    \end{itemize}
+
+    \begin{alertblock}{Định nghĩa Con trỏ (Pointer)}
+        Con trỏ \textbf{không phải} là cái tủ chứa đồ. Nó là một mẩu giấy ghi lại \textbf{"số thứ tự của cái tủ"} để bạn tìm thấy kho báu.
+    \end{alertblock}
+\end{frame}
+
+% --- Slide Lộ trình ---
+\begin{frame}{Lộ trình khám phá}
+    Chúng ta sẽ đi qua 3 chương chính:
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Chương 1: Bí mật của những con số (Creating Pointers)} \\
+        Hiểu về "Địa chỉ nhà" và cách tạo tấm bản đồ.
+        \item \textbf{Chương 2: Mở rương kho báu (Dereferencing)} \\
+        Cách dùng bản đồ để lấy đồ vật ra (dấu sao \texttt{*}).
+        \item \textbf{Chương 3: Phép thuật thay đổi từ xa (Modifying)} \\
+        Cách thay đổi đồ vật trong tủ mà không chạm vào tủ.
+    \end{enumerate}
+\end{frame}
+
+% --- CHƯƠNG 1 ---
+\begin{frame}[fragile]{Chương 1: Tạo Con trỏ - Địa chỉ nhà}
+    \begin{block}{Toán tử \texttt{\&} (Address-of)}
+        Để hỏi "Số tủ của bạn là bao nhiêu?", ta dùng ký hiệu \texttt{\&}. Nó móc vào biến để kéo ra địa chỉ nhà.
+    \end{block}
+
+    \begin{exampleblock}{Ẩn dụ quan trọng}
+        \begin{itemize}
+            \item Biến (\texttt{string monAn}): Cái \textbf{Hộp} chứa Pizza.
+            \item Con trỏ (\texttt{string* ptr}): Ngón tay \textbf{Chỉ đường}, giữ địa chỉ nơi cất Pizza.
+        \end{itemize}
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++, caption={Ví dụ tạo con trỏ}]
+string monAn = "Pizza"; // 1. Tao bien (Cai hop)
+
+// 2. Tao Con tro (Giay ghi so tu)
+// Dau * o khai bao: "Toi la mot con tro"
+// Dau & o day: "Lay dia chi cua monAn dua cho toi"
+string* ptr = &monAn; 
+
+cout << monAn;  // In ra: Pizza
+cout << &monAn; // In ra: 0x6dfed4 (Dia chi)
+cout << ptr;    // In ra: 0x6dfed4 (Giong het dong tren)
+\end{lstlisting}
+\end{frame}
+
+% --- Quiz Chương 1 ---
+\begin{frame}[fragile]{Kiểm tra nhanh: Chương 1}
+    \begin{alertblock}{Câu đố}
+        Giả sử có dòng code:
+\begin{lstlisting}[language=C++]
+int tuoi = 14;
+int* p = &tuoi;
+cout << p;
+\end{lstlisting}
+        Máy tính sẽ in ra số \textbf{14} hay một \textbf{địa chỉ bộ nhớ} (ví dụ: 0x7ff...)?
+    \end{alertblock}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án:}
+    Chính xác! Nó sẽ in ra \textbf{địa chỉ bộ nhớ}.
+    \begin{itemize}
+        \item \texttt{p} chỉ là mảnh giấy ghi địa chỉ.
+        \item Muốn lấy số 14, ta cần sang Chương 2.
+    \end{itemize}
+\end{frame}
+
+% --- CHƯƠNG 2 ---
+\begin{frame}[fragile]{Chương 2: Mở rương kho báu (Dereference)}
+    \begin{block}{Cánh cửa thần kỳ: Dấu sao \texttt{*}}
+        Khi đặt dấu \texttt{*} trước tên con trỏ (ví dụ: \texttt{*ptr}), nó biến thành một hành động: \textbf{"Đến địa chỉ đó và LẤY đồ vật ra!"}.
+    \end{block}
+
+    \begin{exampleblock}{Hai khuôn mặt của dấu Sao}
+        \begin{itemize}
+            \item Khi tạo biến (\texttt{string* ptr}): \textbf{DANH TỪ} (Tôi là con trỏ).
+            \item Khi sử dụng (\texttt{*ptr}): \textbf{ĐỘNG TỪ} (Mở tủ ra lấy đồ!).
+        \end{itemize}
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++, caption={Sử dụng Dereference}]
+string monAn = "Pizza";
+string* ptr = &monAn; 
+
+cout << ptr;  // In ra: 0x6dfed4 (Dia chi - To giay)
+
+// Phep thuat Dereference:
+cout << *ptr; // In ra: Pizza (Gia tri - Do an)
+\end{lstlisting}
+\end{frame}
+
+% --- Quiz Chương 2 ---
+\begin{frame}[fragile]{Kiểm tra nhanh: Chương 2}
+    \begin{alertblock}{Trắc nghiệm}
+        Cho đoạn code:
+\begin{lstlisting}[language=C++]
+int diemSo = 10;
+int* p = &diemSo;
+\end{lstlisting}
+        Dòng lệnh nào sẽ in ra số \textbf{10}?
+        \begin{itemize}
+            \item A. \texttt{cout << \&diemSo;}
+            \item B. \texttt{cout << p;}
+            \item C. \texttt{cout << *p;}
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+    \vspace{0.5cm}
+    \textbf{Đáp án đúng: C (`cout << *p;`)} \\
+    Bạn đã dùng chìa khóa (\texttt{*}) để mở tủ lấy điểm số ra.
+\end{frame}
+
+% --- CHƯƠNG 3 ---
+\begin{frame}[fragile]{Chương 3: Phép thuật thay đổi từ xa}
+    \begin{block}{Cơ chế hoạt động}
+        Nếu bạn dùng chìa khóa (\texttt{*ptr}), mở tủ ra và thay Pizza bằng Hamburger, thì người giữ tủ (\texttt{monAn}) cũng sẽ thấy Hamburger.
+    \end{block}
+
+    \begin{exampleblock}{Quy tắc: Một nhà, hai cửa}
+        \begin{itemize}
+            \item Biến (\texttt{monAn}): Cửa chính.
+            \item Con trỏ (\texttt{*ptr}): Cửa phụ.
+            \item Thay đổi ở cửa phụ sẽ ảnh hưởng trực tiếp đến ngôi nhà.
+        \end{itemize}
+    \end{exampleblock}
+
+\begin{lstlisting}[language=C++, caption={Thay đổi giá trị qua con trỏ}]
+string monAn = "Pizza";
+string* ptr = &monAn;
+
+cout << monAn; // In ra: Pizza
+
+// Thay doi qua con tro
+*ptr = "Hamburger";
+
+// Kiem tra lai bien goc
+cout << monAn; // In ra: Hamburger (Da bi thay doi!)
+\end{lstlisting}
+\end{frame}
+
+% --- Tổng kết ---
+\begin{frame}{Tổng kết hành trình}
+    Chúc mừng bạn đã thu thập đủ bộ công cụ Con trỏ (Pointers)!
+
+    \begin{table}
+        \centering
+        \begin{tabular}{l l l}
+            \toprule
+            \textbf{Công cụ} & \textbf{Tên gọi} & \textbf{Chức năng} \\
+            \midrule
+            \texttt{\&} & Address-of & Tìm số nhà (địa chỉ) \\
+            \texttt{type* ptr} & Khai báo & Tạo mẩu giấy ghi địa chỉ \\
+            \texttt{*ptr} & Dereference & Mở tủ lấy/sửa đồ vật \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \begin{block}{Bước tiếp theo}
+        Cẩn thận với "Con trỏ rỗng" (Null Pointer) - cái bẫy nguy hiểm tiếp theo!
+    \end{block}
+\end{frame}
+
+% --- Thử thách cuối cùng ---
+\begin{frame}[fragile]{Thử thách: Code Challenge}
+    \textbf{Đề bài:}
+    \begin{enumerate}
+        \item Tạo biến \texttt{diemThi} bằng 9.
+        \item Tạo con trỏ \texttt{p} trỏ vào \texttt{diemThi}.
+        \item Dùng \texttt{p} sửa điểm thành 10.
+        \item In \texttt{diemThi} ra màn hình.
+    \end{enumerate}
+
+    \pause
+    \begin{exampleblock}{Lời giải tham khảo}
+\begin{lstlisting}[language=C++]
+int main() {
+    int diemThi = 9;    // 1. Tao bien
+    int* p = &diemThi;  // 2. Tao con tro
+    
+    *p = 10;            // 3. Sua diem (phep thuat!)
+    
+    cout << diemThi;    // 4. In ra: 10
+    return 0;
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

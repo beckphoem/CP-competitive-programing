@@ -1,0 +1,453 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Xử lý Chuỗi Codeforces]{Phân tích Chiến lược & Giải thuật Xử lý Chuỗi}
+\subtitle{Phân khúc Rating 800 - 1000 trên Codeforces}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu}
+    \begin{block}{Tầm quan trọng của Xử lý Chuỗi}
+        \begin{itemize}
+            \item Phân khúc 800-1000 là giai đoạn chuyển giao từ cú pháp sang tư duy giải thuật.
+            \item Chuỗi ký tự là hình thức biểu diễn thông tin tự nhiên và phổ biến nhất.
+            \item Yêu cầu sự kết hợp giữa logic, quản lý bộ nhớ và cấu trúc dữ liệu cơ bản.
+        \end{itemize}
+    \end{block}
+    \pause
+    \begin{exampleblock}{Mục tiêu báo cáo}
+        Cung cấp bộ công cụ tư duy (mental models) để giải quyết các bài toán String thông qua 20 ví dụ điển hình.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Cơ sở Lý luận và Thách thức}
+    \begin{itemize}
+        \item \textbf{Biểu diễn bộ nhớ:} \texttt{std::string} (C++) linh hoạt nhưng cần tối ưu; String trong Python là bất biến (immutable).
+        \item \textbf{Bảng mã ASCII:} Tận dụng tính liên tục của 'a'-'z' để tính toán chỉ số: \texttt{c - 'a'}.
+        \item \textbf{Độ phức tạp:} Với $N \approx 10^2 - 10^5$, các giải thuật $O(N)$ hoặc $O(N \log N)$ là lý tưởng.
+    \end{itemize}
+    \begin{alertblock}{Cạm bẫy}
+        Lạm dụng các hàm thư viện như \texttt{find} hay \texttt{substr} bên trong vòng lặp có thể dẫn đến $O(N^2)$ và gây lỗi TLE.
+    \end{alertblock}
+\end{frame}
+
+% Bài 1
+\begin{frame}[fragile]{1. Way Too Long Words (71A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/71/A} \\
+    \textbf{Rating:} 800
+    
+    \begin{block}{Đề bài}
+        Nếu từ dài \textbf{hơn 10 ký tự}, thay thế bằng: [ký tự đầu] + [số ký tự ở giữa] + [ký tự cuối]. Ví dụ: "localization" $\rightarrow$ "l10n".
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Kiểm tra điều kiện $L > 10$.
+            \item Số ký tự ở giữa: $L - 2$.
+            \item Lưu ý: Xử lý bộ đệm (buffer) khi chuyển từ \texttt{cin >> n} sang \texttt{getline} hoặc \texttt{cin >> s}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 2
+\begin{frame}{2. Word (59A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/59/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Chuẩn hóa từ về toàn hoa hoặc toàn thường. Nếu số chữ hoa > số chữ thường: chuyển toàn bộ thành hoa. Ngược lại: chuyển thành thường.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Duyệt 1: Đếm \texttt{upper\_count} và \texttt{lower\_count}.
+            \item Duyệt 2: Biến đổi dựa trên so sánh.
+            \item Kỹ thuật: Dùng \texttt{tolower()}/\texttt{toupper()} hoặc cộng trừ 32 trong mã ASCII.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 3
+\begin{frame}{3. Petya and Strings (112A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/112/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        So sánh thứ tự từ điển của hai chuỗi không phân biệt hoa thường. Trả về -1, 1, hoặc 0.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item \textbf{Chuẩn hóa:} Chuyển cả hai chuỗi về cùng một dạng (thường là lowercase).
+            \item Sử dụng toán tử so sánh có sẵn (\texttt{<}, \texttt{>}, \texttt{==}) trên \texttt{std::string}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 4
+\begin{frame}{4. Word Capitalization (281A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/281/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Viết hoa chữ cái đầu tiên của từ, các chữ cái khác giữ nguyên.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Chỉ thao tác tại chỉ số \texttt{s[0]}.
+            \item Sử dụng \texttt{toupper(s[0])}. Không cần kiểm tra nếu đã là chữ hoa vì hàm thư viện đã xử lý giúp.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 5
+\begin{frame}{5. Boy or Girl (236A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/236/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Đếm số ký tự riêng biệt (distinct characters). Nếu chẵn là nữ (CHAT WITH HER!), nếu lẻ là nam (IGNORE HIM!).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item \textbf{Cách 1:} Dùng \texttt{std::set<char>} để lưu và lấy \texttt{size()}.
+            \item \textbf{Cách 2:} Dùng mảng tần suất \texttt{bool seen[26]}.
+            \item \textbf{Cách 3:} Sắp xếp chuỗi rồi đếm các cặp \texttt{s[i] != s[i-1]}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 6
+\begin{frame}{6. Translation (41A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/41/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Kiểm tra xem chuỗi $t$ có phải là phiên bản đảo ngược của chuỗi $s$ hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item \textbf{Cách 1:} Dùng \texttt{std::reverse(s.begin(), s.end())} rồi so sánh $s == t$.
+            \item \textbf{Cách 2:} So sánh \texttt{s[i]} với \texttt{t[n-1-i]}.
+            \item \textbf{Lưu ý:} Kiểm tra độ dài trước khi so sánh chi tiết.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 7
+\begin{frame}{7. Anton and Danik (734A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/734/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Đếm số lần 'A' (Anton) và 'D' (Danik) xuất hiện. Ai nhiều hơn thì thắng.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Duyệt tuyến tính (Linear Scan).
+            \item Sử dụng hai biến đếm đơn giản.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 8
+\begin{frame}{8. Amusing Joke (141A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/141/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Cho 3 chuỗi: $A$, $B$, $C$. Kiểm tra xem các ký tự của $C$ có tạo thành đúng tập hợp ký tự của ($A + B$) hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Nối chuỗi: $D = A + B$.
+            \item Sắp xếp cả $C$ và $D$. So sánh $C == D$.
+            \item Hoặc sử dụng mảng tần suất (Frequency Map) để so sánh.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 9
+\begin{frame}{9. Pangram (520A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/520/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Kiểm tra xem chuỗi có chứa đủ 26 chữ cái Latin (không phân biệt hoa thường) hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Chuyển về lowercase.
+            \item Đưa vào \texttt{std::set<char>}.
+            \item Kết quả là "YES" nếu \texttt{set.size() == 26}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 10
+\begin{frame}{10. Stones on the Table (266A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/266/A} \\
+    \textbf{Rating:} 800
+
+    \begin{block}{Đề bài}
+        Tìm số đá tối thiểu cần bỏ để không có hai viên đá nào cạnh nhau cùng màu.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item \textbf{Tham lam (Greedy):} So sánh các phần tử liền kề.
+            \item Nếu \texttt{s[i] == s[i+1]}, tăng biến đếm (loại bỏ 1 viên).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 11
+\begin{frame}{11. Football (96A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/96/A} \\
+    \textbf{Rating:} 900
+
+    \begin{block}{Đề bài}
+        Kiểm tra xem có ít nhất 7 cầu thủ cùng đội (ký tự giống nhau) đứng liên tiếp hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Duyệt và đếm số ký tự trùng lặp liên tiếp. Reset về 1 nếu gặp ký tự khác.
+            \item Hoặc dùng hàm \texttt{s.find("0000000")} và \texttt{s.find("1111111")}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 12
+\begin{frame}{12. Dubstep (208A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/208/A} \\
+    \textbf{Rating:} 900
+
+    \begin{block}{Đề bài}
+        Khôi phục bài hát gốc bằng cách loại bỏ "WUB". Các từ gốc cách nhau bằng 1 dấu cách.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Duyệt chuỗi, nếu gặp "WUB" thì bỏ qua 3 ký tự.
+            \item Dùng biến cờ hiệu (\texttt{flag}) để xử lý khoảng trắng giữa các từ, tránh khoảng trắng thừa ở đầu/cuối.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 13
+\begin{frame}{13. HQ9+ (133A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/133/A} \\
+    \textbf{Rating:} 900
+
+    \begin{block}{Đề bài}
+        Kiểm tra xem chương trình HQ9+ có in ra gì không (lệnh H, Q, 9 có in, lệnh + không in).
+    \end{block}
+    \pause
+    \begin{alertblock}{Cạm bẫy}
+        Đừng cố mô phỏng lệnh '+'. Nó chỉ thay đổi biến nội bộ, không tạo ra output.
+    \end{alertblock}
+    \begin{exampleblock}{Phân tích chiến lược}
+        Tìm sự tồn tại của ký tự 'H', 'Q', hoặc '9' trong chuỗi đầu vào.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 14
+\begin{frame}{14. String Task (118A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/118/A} \\
+    \textbf{Rating:} 1000
+
+    \begin{block}{Đề bài}
+        Xóa nguyên âm (bao gồm cả 'y'), viết thường các phụ âm và thêm dấu '.' trước mỗi phụ âm.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Chuyển về lowercase trước.
+            \item Duyệt từng ký tự, kiểm tra nếu không phải nguyên âm thì in ra \texttt{"." + c}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 15
+\begin{frame}{15. Chat Room (58A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/58/A} \\
+    \textbf{Rating:} 1000
+
+    \begin{block}{Đề bài}
+        Kiểm tra xem "hello" có phải là một dãy con (subsequence) của chuỗi đầu vào hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Dùng một biến chỉ mục \texttt{idx = 0} cho chuỗi mục tiêu "hello".
+            \item Duyệt chuỗi input, nếu \texttt{s[i] == target[idx]} thì tăng \texttt{idx}.
+            \item Nếu \texttt{idx == 5} thì kết luận YES.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 16
+\begin{frame}{16. cAPS lOCK (131A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/131/A} \\
+    \textbf{Rating:} 1000
+
+    \begin{block}{Đề bài}
+        Sửa lỗi Caps Lock: Nếu từ toàn in hoa HOẶC chỉ chữ cái đầu viết thường còn lại in hoa $\rightarrow$ Đảo ngược toàn bộ trạng thái hoa/thường.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Kiểm tra điều kiện: Mọi ký tự từ vị trí thứ 2 trở đi (\texttt{s[1...n-1]}) phải là in hoa.
+            \item Nếu thỏa mãn, duyệt lại và dùng \texttt{islower}/\texttt{isupper} để đảo ngược.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 17
+\begin{frame}{17. Case of the Zeros and Ones (556A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/556/A} \\
+    \textbf{Rating:} 1000
+
+    \begin{block}{Đề bài}
+        Xóa cặp "01" hoặc "10" liên tiếp. Tìm độ dài nhỏ nhất còn lại.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Quan sát Toán học}
+        Mỗi lần xóa luôn mất một số 0 và một số 1. Thứ tự không quan trọng.
+        \begin{itemize}
+            \item Gọi $n0$ là số lượng '0', $n1$ là số lượng '1'.
+            \item Số lượng cặp bị xóa: $\min(n0, n1)$.
+            \item Độ dài còn lại: $|n0 - n1|$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 18
+\begin{frame}{18. Keyboard (474A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/474/A} \\
+    \textbf{Rating:} 900
+
+    \begin{block}{Đề bài}
+        Khôi phục ký tự gốc khi tay bị lệch sang trái ('L') hoặc phải ('R') trên bàn phím.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Lưu bàn phím vào 1 chuỗi: \texttt{"qwertyuiopasdfghjkl;zxcvbnm,./"}
+            \item Tìm vị trí ký tự đã gõ, rồi lấy ký tự ở vị trí \texttt{index-1} (nếu lệch 'R') hoặc \texttt{index+1} (nếu lệch 'L').
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 19
+\begin{frame}{19. Double-ended Strings (1506C)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1506C} \\
+    \textbf{Rating:} 1000
+
+    \begin{block}{Đề bài}
+        Tìm số lần xóa ký tự ở hai đầu ít nhất để hai chuỗi bằng nhau.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Thực chất là tìm \textbf{Chuỗi con chung dài nhất} (Longest Common Substring - LCS).
+            \item Với $N \le 20$, dùng Brute Force duyệt mọi chuỗi con của $A$ và kiểm tra trong $B$ bằng \texttt{find()}.
+            \item Đáp án: $len(A) + len(B) - 2 \times len(LCS)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 20
+\begin{frame}{20. Comparison String (1837B)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1837/B} \\
+    \textbf{Rating:} 900
+
+    \begin{block}{Đề bài}
+        Xây dựng dãy số thỏa mãn chuỗi dấu so sánh sao cho số lượng giá trị phân biệt là ít nhất.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích chiến lược}
+        \begin{itemize}
+            \item Quan sát: Ta chỉ cần thêm số mới khi dấu so sánh kéo dài liên tục theo một hướng ($<$ hoặc $>$).
+            \item Đáp án = (Độ dài đoạn ký tự giống nhau liên tiếp dài nhất) + 1.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Tổng hợp Kỹ thuật}
+    \centering
+    \scriptsize
+    \begin{tabular}{llll}
+        \toprule
+        Bài toán & Rating & Kỹ thuật & Cạm bẫy \\
+        \midrule
+        71A & 800 & Parsing & Định dạng số \\
+        112A & 800 & Chuẩn hóa & So sánh trực tiếp \\
+        236A & 800 & Set/Freq Map & Đếm sai ký tự trùng \\
+        96A & 900 & Scan/Find & Reset biến đếm sai \\
+        58A & 1000 & Greedy Subsequence & Nhầm với Substring \\
+        556A & 1000 & Math Observation & Mô phỏng gây TLE \\
+        \bottomrule
+    \end{tabular}
+\end{frame}
+
+\begin{frame}{Lời khuyên Chuyên gia}
+    \begin{itemize}
+        \item \textbf{Thành thạo STL:} \texttt{std::set}, \texttt{sort}, \texttt{reverse}, \texttt{find}.
+        \item \textbf{Chuẩn hóa sớm:} Đưa về lowercase ngay sau khi đọc input.
+        \item \textbf{Phân biệt rõ:} \textit{Substring} (liên tiếp) và \textit{Subsequence} (không nhất thiết liên tiếp).
+        \item \textbf{Tư duy tối ưu:} Luôn tìm quy luật toán học trước khi thực hiện mô phỏng tốn kém.
+    \end{itemize}
+    \begin{block}{}
+        \centering \textbf{Chúc các bạn thành công trên con đường CP!}
+    \end{block}
+\end{frame}
+
+\end{document}

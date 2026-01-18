@@ -1,0 +1,162 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} 
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{D. Print Digits using Recursion}
+\subtitle{Huấn luyện viên tư duy thuật toán}
+\author{Learning How to Learn}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Briefing)}
+    \begin{block}{Nhiệm vụ cốt lõi}
+        Cho một số tự nhiên $N$, hãy in ra từng chữ số của nó, cách nhau bởi một khoảng trắng.
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Ràng buộc đặc biệt:} Bắt buộc phải sử dụng \textbf{Đệ quy (Recursion)}.
+        \item \textbf{Dữ liệu:} Có $T$ bộ test, mỗi số $N$ có thể lên tới $10^{18}$ (khoảng 10-19 chữ số).
+    \end{itemize}
+
+    \begin{block}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item Cách lấy ra chữ số cuối cùng của một số.
+            \item Hiểu về "Thứ tự" trong đệ quy (In từ trái sang phải).
+            \item Điểm dừng (Base case) để tránh tràn bộ nhớ đệm.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bước 2: Mảnh ghép 1 - Nghệ thuật "Tách đuôi"}
+    Hãy tưởng tượng số $N$ giống như một đoàn tàu có nhiều toa:
+    
+    \begin{itemize}
+        \item \textbf{Phép chia lấy dư (\% 10)}: Lấy toa cuối cùng.
+        \begin{itemize}
+            \item $39 \% 10 = 9$ (Toa cuối).
+        \end{itemize}
+        \item \textbf{Phép chia nguyên (/ 10)}: Vứt bỏ toa cuối, giữ lại phần còn lại.
+        \begin{itemize}
+            \item $39 / 10 = 3$ (Phần còn lại).
+        \end{itemize}
+    \end{itemize}
+
+    \begin{alertblock}{Bẫy tư duy}
+        Nếu chỉ dùng \texttt{\% 10} liên tục, bạn sẽ nhận được thứ tự \textbf{ngược} (phải sang trái). Ví dụ $39$ sẽ thành $9 \ 3$ trong khi đề bài yêu cầu $3 \ 9$.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy}
+    \begin{exampleblock}{Câu hỏi}
+        Giả sử chúng ta có số $N = 121$. Nếu thực hiện phép toán: \texttt{N / 10} rồi lại lấy kết quả đó \texttt{(N / 10) \% 10}, ta sẽ thu được chữ số nào?
+    \end{exampleblock}
+    
+    \pause
+    \begin{block}{Giải đáp}
+        \begin{itemize}
+            \item $121 / 10 = 12$
+            \item $12 \% 10 = \mathbf{2}$
+            \item Đây là cách chúng ta truy cập dần vào các chữ số ở giữa.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Điểm dừng và Thứ tự in}
+    \begin{block}{Điều kiện dừng}
+        Khi $N$ chỉ còn một chữ số (nghĩa là $N < 10$), ta chạm đến "đáy" của đệ quy. In chữ số đó ra và dừng lại.
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{Trường hợp $N=0$}: Cần in ra chữ số $0$.
+        \item \textbf{Khoảng trắng}: Cần xử lý để không bị dư dấu cách gây lỗi \textit{Presentation Error}.
+    \end{itemize}
+
+    \textbf{Luồng chạy của số 121:}
+    \begin{enumerate}
+        \item \texttt{printDigits(121)} gọi \texttt{printDigits(12)}.
+        \item \texttt{printDigits(12)} gọi \texttt{printDigits(1)}.
+        \item \texttt{printDigits(1)}: In \textbf{1}.
+        \item Quay lại \texttt{printDigits(12)}: In \textbf{2}.
+        \item Quay lại \texttt{printDigits(121)}: In \textbf{1}.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Bước 3: Tổng kết Thuật toán}
+    \begin{block}{Hàm đệ quy \texttt{solve(n)}}
+        \begin{itemize}
+            \item \textbf{Bước dừng}: Nếu $n < 10$, in $n$ và kết thúc.
+            \item \textbf{Bước đệ quy}:
+            \begin{enumerate}
+                \item Gọi \texttt{solve(n / 10)} để xử lý các số phía trước.
+                \item Sau khi hàm con kết thúc, in một dấu cách.
+                \item In chữ số cuối cùng: \texttt{n \% 10}.
+            \end{enumerate}
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Ví dụ với $n=39$}
+        \begin{itemize}
+            \item \texttt{solve(39)} gọi \texttt{solve(3)}.
+            \item \texttt{solve(3)} in \textbf{3}.
+            \item \texttt{solve(39)} tiếp tục: in \textbf{dấu cách}, sau đó in \textbf{9}.
+            \item Kết quả: \texttt{3 9}
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Câu hỏi cuối cùng}
+    \begin{block}{Kiểm tra kiến thức}
+        Trong phần Input, $N$ có thể lên tới $10^{18}$. Trong C++, kiểu dữ liệu nào phù hợp nhất để tránh tràn số?
+    \end{block}
+
+    \begin{itemize}
+        \item A. \texttt{int}
+        \item B. \texttt{long long}
+        \item C. \texttt{char}
+    \end{itemize}
+
+    \pause
+    \begin{exampleblock}{Đáp án đúng: B}
+        Kiểu \texttt{long long} có thể chứa giá trị lên tới khoảng $9 \times 10^{18}$, phù hợp với yêu cầu đề bài.
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

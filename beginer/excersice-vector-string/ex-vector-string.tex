@@ -1,0 +1,459 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin slide
+\title{Phân tích Giải thuật String/Vector trên Codeforces}
+\subtitle{Elo 800-1000: Nền tảng cho Newbie/Pupil}
+\author{Báo cáo Nghiên cứu Chuyên sâu}
+\date{\today}
+
+\begin{document}
+
+% 1. Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% 2. Slide Tổng quan
+\begin{frame}{Tổng quan Điều hành}
+    \begin{block}{Mục tiêu}
+        Trang bị kiến thức vững chắc về \texttt{std::string} và \texttt{std::vector} trong C++ thông qua 20 bài tập chọn lọc.
+    \end{block}
+    
+    \begin{alertblock}{Trọng tâm kỹ thuật}
+        \begin{itemize}
+            \item Không yêu cầu thuật toán phức tạp (DP, Graph).
+            \item Tập trung vào chuyển đổi ý tưởng thành mã nguồn sạch.
+            \item Kỹ năng: Truy cập chỉ số, quản lý bộ nhớ, tư duy tham lam (Greedy) và mô phỏng (Simulation).
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% --- BẮT ĐẦU CÁC BÀI TẬP ---
+
+% Bài 1
+\begin{frame}{1. Way Too Long Words (71A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/71/A}
+    
+    \begin{block}{Tóm tắt đề bài}
+        Các từ có độ dài \textbf{thực sự lớn hơn 10} ký tự cần được viết tắt. Quy tắc: Ký tự đầu + số lượng ký tự ở giữa + ký tự cuối (ví dụ: "localization" $\rightarrow$ "l10n"). Từ ngắn giữ nguyên.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Truy cập ngẫu nhiên chuỗi, điều kiện rẽ nhánh.
+            \item \textbf{Logic:} Ký tự đầu là \texttt{s[0]}, ký tự cuối là \texttt{s[n-1]}. Số ở giữa là \texttt{length() - 2}.
+            \item \textbf{Lưu ý quan trọng:} Điều kiện đề bài là ``strictly more than 10''. Dùng toán tử \texttt{>} thay vì \texttt{>=}.
+            \item Độ phức tạp: $O(1)$ cho mỗi từ.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 2
+\begin{frame}{2. Word (59A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/59/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Chuẩn hóa từ về toàn bộ chữ hoa hoặc toàn bộ chữ thường dựa trên số lượng hiện có. 
+        \begin{itemize}
+            \item Số chữ hoa $>$ Số chữ thường $\rightarrow$ Viết hoa toàn bộ.
+            \item Ngược lại $\rightarrow$ Viết thường toàn bộ.
+        \end{itemize}
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Kỹ thuật:} Duyệt mảng (Iteration) và thao tác ASCII.
+            \item \textbf{Thư viện:} Sử dụng \texttt{<cctype>} với \texttt{isupper()}, \texttt{tolower()}, \texttt{toupper()}.
+            \item \textbf{Quy trình:} 
+            1. Đếm số lượng hoa/thường (Pass 1). 
+            2. Quyết định và biến đổi chuỗi (Pass 2).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 3
+\begin{frame}{3. Word Capitalization (281A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/281/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Viết hoa ký tự đầu tiên của một từ. Nếu đã viết hoa thì giữ nguyên.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Tính chất:} Chuỗi trong C++ có tính khả biến (mutable). Ta có thể sửa trực tiếp \texttt{s[0]}.
+            \item \textbf{Tối ưu:} Hàm \texttt{toupper(c)} có tính lũy đẳng (idempotent). 
+            \item \textbf{Hành động:} Gọi \texttt{s[0] = toupper(s[0])} vô điều kiện, không cần kiểm tra \texttt{if}, giúp code gọn và tránh branch prediction sai.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 4
+\begin{frame}{4. Translation (41A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/41/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Kiểm tra xem chuỗi $t$ có phải là dạng viết ngược của chuỗi $s$ hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Cách 1 (Constructive):} Đảo ngược $s$ bằng \texttt{std::reverse} rồi so sánh \texttt{s == t}.
+            \item \textbf{Cách 2 (Two Pointers - Tối ưu):} So sánh \texttt{s[i]} với \texttt{t[len - 1 - i]}.
+            \item \textbf{Lưu ý:} Kiểm tra độ dài trước. Nếu khác độ dài $\rightarrow$ NO ngay lập tức.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 5
+\begin{frame}{5. Petya and Strings (112A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/112/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        So sánh hai chuỗi theo thứ tự từ điển (lexicographical), không phân biệt hoa thường. In ra -1, 1 hoặc 0.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Vấn đề ASCII:} 'Z' (90) nhỏ hơn 'a' (97). Cần chuẩn hóa về cùng một kiểu (thường là lowercase) trước khi so sánh.
+            \item \textbf{Giải pháp:}
+            1. Duyệt và chuyển cả 2 chuỗi về chữ thường.
+            2. Dùng toán tử so sánh chuỗi hoặc hàm \texttt{strcmp}.
+            \item Đây là bài tập kinh điển về Data Normalization.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 6
+\begin{frame}{6. Amusing Joke (141A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/141/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Cho 3 chuỗi: Khách, Chủ nhà, và một chuỗi hỗn loạn. Kiểm tra xem chuỗi hỗn loạn có phải là tổ hợp chính xác của tên Khách và Chủ nhà không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Dạng bài:} Anagram / Bảo toàn số lượng ký tự.
+            \item \textbf{Cách 1 (Sorting):} Gộp tên Khách + Chủ $\rightarrow$ Sort. Sort chuỗi hỗn loạn. So sánh 2 chuỗi đã sort. $O(N \log N)$.
+            \item \textbf{Cách 2 (Frequency Map):} Đếm tần suất ký tự (mảng đếm hoặc map). Đảm bảo số lượng từng ký tự 'A'-'Z' khớp nhau hoàn toàn. $O(N)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 7
+\begin{frame}{7. Pangram (520A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/520/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Kiểm tra xem chuỗi có chứa đủ tất cả các chữ cái từ A đến Z (không phân biệt hoa thường) hay không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Bao phủ tập hợp (Set coverage).
+            \item \textbf{Cách dùng Set:} Chèn các ký tự (đã \texttt{tolower}) vào \texttt{std::set}. Kiểm tra \texttt{size() == 26}.
+            \item \textbf{Cách dùng Mảng đánh dấu:} \texttt{bool visited[26]}. Duyệt chuỗi và đánh dấu. Kiểm tra toàn bộ mảng phải là \texttt{true}.
+            \item \textbf{Early Exit:} Nếu độ dài chuỗi $< 26$, chắc chắn in "NO".
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 8
+\begin{frame}{8. Boy or Girl (236A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/236/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Đếm số lượng ký tự \textbf{phân biệt} trong tên. Số lẻ $\rightarrow$ Nam (IGNORE HIM), số chẵn $\rightarrow$ Nữ (CHAT WITH HER).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Tương tự Pangram:} Cần đếm Cardinality của Set các ký tự.
+            \item \textbf{Phương pháp:}
+            1. Dùng \texttt{std::set} hoặc \texttt{std::sort} + \texttt{std::unique}.
+            2. Lấy kích thước tập hợp chia lấy dư cho 2.
+            \item Lưu ý: Đề bài yêu cầu đếm ký tự phân biệt, không phải độ dài chuỗi gốc.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 9
+\begin{frame}{9. Stones on the Table (266A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/266/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Đếm số lượng tối thiểu các viên đá cần loại bỏ để không có hai viên đá nào cạnh nhau cùng màu (R, G, B).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Dạng bài:} Tham lam (Greedy) trên cấu trúc tuyến tính.
+            \item \textbf{Mục tiêu:} Phá vỡ mọi cặp \texttt{s[i] == s[i+1]}.
+            \item \textbf{Thực hiện:} Duyệt từ đầu đến sát cuối. Nếu \texttt{s[i] == s[i+1]} thì tăng biến đếm.
+            \item Độ phức tạp: $O(N)$ thời gian, $O(1)$ không gian.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 10
+\begin{frame}{10. Anton and Danik (734A)}
+    \footnotesize \url{https://codeforces.com/contest/734/problem/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Đếm số trận thắng của Anton ('A') và Danik ('D'). So sánh xem ai thắng nhiều hơn hoặc hòa.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Tổng hợp dữ liệu (Aggregation).
+            \item \textbf{Giải pháp:} Dùng 2 biến đếm tích lũy. Duyệt chuỗi 1 lần.
+            \item Sử dụng cấu trúc điều khiển \texttt{if - else if - else} để xử lý 3 trường hợp kết quả (Anton, Danik, Friendship).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 11
+\begin{frame}{11. Queue at the School (266B)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/266/B}
+
+    \begin{block}{Tóm tắt đề bài}
+        Mô phỏng hàng đợi: Nếu bé trai ('B') đứng trước bé gái ('G'), họ đổi chỗ. Việc này xảy ra đồng thời mỗi giây. Tìm trạng thái sau $t$ giây.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Mô phỏng (Simulation).
+            \item \textbf{Cạm bẫy:} Hiệu ứng "dồn toa" nếu xử lý không khéo trong 1 vòng lặp.
+            \item \textbf{Giải pháp:}
+            1. Vòng lặp ngoài đếm thời gian $t$.
+            2. Vòng lặp trong duyệt hàng đợi. Nếu gặp "BG" $\rightarrow$ đổi thành "GB" và \textbf{tăng chỉ số thêm 1} để nhảy qua vị trí vừa đổi (tránh đổi tiếp người đó trong cùng 1 giây).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 12
+\begin{frame}{12. Chat Room (58A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/58/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Kiểm tra xem có thể xóa một số ký tự trong chuỗi đã cho để thu được từ "hello" hay không (Subsequence).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Khái niệm:} Subsequence Matching (khác với Substring).
+            \item \textbf{Mô hình:} Máy trạng thái (State Machine) hoặc con trỏ tham lam.
+            \item \textbf{Thực hiện:} Dùng biến trỏ vào "hello". Duyệt chuỗi đầu vào, nếu khớp ký tự đang cần thì trỏ sang ký tự tiếp theo của "hello".
+            \item Nếu trỏ hết "hello" $\rightarrow$ YES.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 13
+\begin{frame}{13. Dubstep (208A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/208/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Khôi phục bài hát gốc bằng cách loại bỏ các từ "WUB" chèn vào giữa/đầu/cuối. Các từ gốc cách nhau 1 dấu cách.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Tokenization / Parsing.
+            \item \textbf{Xử lý:} "WUB" là dấu phân cách (delimiter).
+            \item \textbf{Logic:}
+            1. Nếu gặp "WUB" $\rightarrow$ bỏ qua, bật cờ \texttt{needs\_space}.
+            2. Nếu gặp từ thường $\rightarrow$ in dấu cách (nếu cờ đang bật và không phải đầu câu), in từ, tắt cờ.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 14
+\begin{frame}{14. String Task (118A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/118/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Xóa nguyên âm (A, O, Y, E, U, I), chèn dấu "." trước phụ âm, chuyển tất cả về chữ thường.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Kỹ thuật:} Lọc (Filtering) và Biến đổi (Transformation).
+            \item \textbf{Lưu ý:} Chữ 'Y' được tính là nguyên âm trong bài này.
+            \item \textbf{Tối ưu:} Nên tạo chuỗi kết quả mới (StringBuilder pattern) thay vì xóa/chèn trực tiếp trên chuỗi gốc (tránh $O(N^2)$).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 15
+\begin{frame}{15. Twins (160A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/160/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Lấy số lượng đồng xu ít nhất sao cho tổng giá trị lớn hơn tổng giá trị các đồng xu còn lại.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Thuật toán Tham lam (Greedy) kết hợp Sắp xếp.
+            \item \textbf{Chiến lược:} Luôn lấy đồng xu mệnh giá cao nhất.
+            \item \textbf{Các bước:}
+            1. Tính tổng toàn bộ.
+            2. Sắp xếp vector giảm dần.
+            3. Lấy lần lượt đến khi \texttt{current\_sum > total\_sum / 2}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 16
+\begin{frame}{16. Arrival of the General (144A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/144/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Tính số lần đổi chỗ tối thiểu (chỉ đổi 2 người cạnh nhau) để người cao nhất về đầu hàng, người thấp nhất về cuối hàng.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Tìm cực trị (Min/Max) và khoảng cách chỉ số.
+            \item \textbf{Chọn chỉ số:} Max (ưu tiên chỉ số nhỏ nhất), Min (ưu tiên chỉ số lớn nhất).
+            \item \textbf{Công thức:} $Cost = Index_{Max} + (N - 1 - Index_{Min})$.
+            \item \textbf{Điều chỉnh:} Nếu $Index_{Max} > Index_{Min}$, trừ đi 1 (do hoán đổi chéo nhau).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 17
+\begin{frame}{17. Helpful Maths (339A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/339/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Sắp xếp lại các số hạng trong phép cộng (ví dụ "3+2+1" $\rightarrow$ "1+2+3").
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Quy trình:} String $\rightarrow$ Vector $\rightarrow$ String.
+            \item \textbf{Parsing:} Tách các số (bỏ qua dấu '+'). Đẩy vào \texttt{vector<int>} hoặc \texttt{vector<char>}.
+            \item \textbf{Sort:} Dùng \texttt{std::sort}.
+            \item \textbf{Output:} In lại kèm dấu '+' ở giữa.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 18
+\begin{frame}{18. Magnets (344A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/344/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Đếm số nhóm nam châm liên tiếp. Nhóm mới hình thành khi hai cực gặp nhau đẩy nhau (0-0 hoặc 1-1).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Phát hiện chuyển đổi (Transition detection).
+            \item \textbf{Logic:} Một nhóm mới được tính khi mã nam châm hiện tại \textbf{khác} nam châm trước đó.
+            \item \textbf{Code:} Duyệt $i$ từ 1 đến $n$, nếu \texttt{magnet[i] != magnet[i-1]} thì tăng đếm.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 19
+\begin{frame}{19. Tram (116A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/116/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Tính sức chứa tối thiểu của tàu điện dựa trên số người lên/xuống tại các trạm (tìm số khách cực đại tại một thời điểm).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Chủ đề:} Tổng tiền tố (Prefix Sum) / Biến tích lũy.
+            \item \textbf{Thực hiện:}
+            \texttt{current -= exit; current += enter;}
+            \texttt{max\_cap = max(max\_cap, current);}
+            \item Kết quả là giá trị lớn nhất ghi nhận được trong suốt hành trình.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 20
+\begin{frame}{20. Ultra-Fast Mathematician (61A)}
+    \footnotesize \url{https://codeforces.com/problemset/problem/61/A}
+
+    \begin{block}{Tóm tắt đề bài}
+        Thực hiện XOR hai số nhị phân có độ dài lớn (lên tới 100 chữ số).
+    \end{block}
+    \pause
+    \begin{exampleblock}{Phân tích & Chiến lược}
+        \begin{itemize}
+            \item \textbf{Vấn đề:} Số quá lớn (Big Integer), không thể lưu bằng \texttt{long long}.
+            \item \textbf{Giải pháp:} Xử lý dưới dạng chuỗi ký tự.
+            \item \textbf{Logic:} Duyệt từng vị trí $i$:
+            Nếu \texttt{s1[i] == s2[i]} $\rightarrow$ in '0'.
+            Nếu \texttt{s1[i] != s2[i]} $\rightarrow$ in '1'.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Kết luận
+\begin{frame}{Tổng kết & Lộ trình phát triển}
+    \begin{block}{Kỹ năng đạt được}
+        \begin{itemize}
+            \item Thao tác String: ASCII, Mutation, Normalization.
+            \item Tư duy Vector: Sắp xếp, biến đổi dữ liệu.
+            \item Tối ưu hóa: Phân biệt $O(N)$ vs $O(N^2)$.
+        \end{itemize}
+    \end{block}
+    
+    \begin{alertblock}{Bước tiếp theo}
+        \begin{enumerate}
+            \item Lý thuyết Số cơ bản (Nguyên tố, GCD).
+            \item Tìm kiếm Nhị phân (Binary Search).
+            \item Cấu trúc dữ liệu nâng cao: Map, Stack, Queue.
+        \end{enumerate}
+    \end{alertblock}
+    
+    \begin{center}
+        \textbf{Chúc các bạn học tốt!}
+    \end{center}
+\end{frame}
+
+\end{document}

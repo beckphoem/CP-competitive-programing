@@ -1,0 +1,21 @@
+\frametitle{Chunk 3: Tổng kết \& Mã giả (Wrap Up)}
+\textbf{Thuật toán (Algorithm):}
+  \begin{enumerate}
+      \item Nhập $k, r$.
+      \item Vòng lặp đếm $i$ từ 1 tăng dần mãi.
+      \item Mỗi bước tính `Tổng tiền = k * i`.
+      \item Kiểm tra: Nếu (`% 10 == 0`) HOẶC (`% 10 == r`) $\rightarrow$ Chọn và Dừng.
+  \end{enumerate}
+
+  \textbf{Mã giả (Pseudocode):}
+\begin{lstlisting}
+Đọc k, r
+
+Cho i chạy từ 1 đến vô tận:
+    S = k * i
+    duoi = S % 10  // Lấy chữ số tận cùng
+
+    Nếu (duoi == 0) HOẶC (duoi == r):
+        In ra i
+        Dừng vòng lặp (Break)
+\end{lstlisting}

@@ -1,0 +1,196 @@
+\documentclass[10pt]{beamer}
+
+% --- Cấu hình Tiếng Việt và Giao diện ---
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+% Chọn Theme (Giao diện)
+\usetheme{Madrid} % Theme cơ bản, trang trọng
+\usecolortheme{dolphin} % Tông màu xanh dương dễ chịu
+
+% Tùy chỉnh màu sắc cho giống "Coach"
+\definecolor{CoachGreen}{RGB}{0, 100, 0}
+\definecolor{TrapRed}{RGB}{180, 0, 0}
+
+% Thông tin trang bìa
+\title[Codeforces 1154A]{Giải Mã Tư Duy Thuật Toán}
+\subtitle{Bài toán: Restoring Three Numbers (1154A)}
+\author{Coach Tư Duy (LHTL Edition)}
+\date{\today}
+
+\begin{document}
+
+% --- Slide 1: Trang bìa ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide 2: Mục lục lộ trình ---
+\begin{frame}{Lộ trình Tư duy}
+    \tableofcontents
+\end{frame}
+
+% =================================================================
+\section{Bước 1: Tiếp nhận \& Phẫu thuật}
+% =================================================================
+
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{1. Bản chất đề bài (Ngôn ngữ con người)}
+        \begin{itemize}
+            \item Có 3 số bí mật $a, b, c$ (đều $> 0$).
+            \item Input cho 4 con số đã bị xáo trộn:
+            \begin{itemize}
+                \item $a + b$
+                \item $a + c$
+                \item $b + c$
+                \item $a + b + c$
+            \end{itemize}
+            \item \textbf{Nhiệm vụ:} Từ 4 số lộn xộn này, tìm lại $a, b, c$.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{2. Lộ trình tư duy (Roadmap)}
+        Chúng ta sẽ đi qua 2 mảnh ghép (Chunks):
+        \begin{enumerate}
+            \item \textbf{Chunk 1:} Truy tìm "Trùm cuối" (Số lớn nhất là gì?).
+            \item \textbf{Chunk 2:} Công thức ngược (Tìm lại từng thành phần).
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+% =================================================================
+\section{Bước 2: Vòng lặp Tư duy (Chunk 1)}
+% =================================================================
+
+\begin{frame}{Chunk 1: Truy tìm "Trùm cuối"}
+    \begin{block}{Logic (Ẩn dụ hóa)}
+        \begin{itemize}
+            \item Tưởng tượng $a, b, c$ là cân nặng 3 quả tạ.
+            \item Người ta cân các cặp đôi và cân cả 3 quả cùng lúc.
+            \item Vì $a, b, c > 0$ $\rightarrow$ Lần cân \textbf{cả 3 quả} chắc chắn nặng nhất.
+        \end{itemize}
+    \end{block}
+
+    \vspace{0.5cm}
+    \centering
+    \textbf{\textcolor{blue}{QUY LUẬT:}} \\
+    Trong 4 số đầu vào, số có giá trị \textbf{LỚN NHẤT (MAX)} chính là tổng:
+    \[ S = a + b + c \]
+\end{frame}
+
+\begin{frame}{Chunk 1: Bẫy \& Thử thách}
+    \begin{alertblock}{Bẫy (Trap) \textbf{⚠️}}
+        Đừng nghĩ số đầu tiên hay số cuối cùng là Max. \\
+        Đề bài nói 4 số bị \textbf{xáo trộn ngẫu nhiên}. Số Max có thể nằm bất cứ đâu.
+    \end{alertblock}
+
+    \begin{exampleblock}{Thử thách tư duy (Mental Check) \textbf{❓}}
+        \textbf{Input:} \texttt{3  6  5  4}
+        
+        \textbf{Phân tích:}
+        \begin{itemize}
+            \item Số lớn nhất là \textbf{6}.
+            \item Vậy: $a + b + c = 6$.
+            \item Ba số còn lại (\texttt{3, 5, 4}) là tổng của các cặp ($a+b, b+c, c+a$).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% =================================================================
+\section{Bước 2: Vòng lặp Tư duy (Chunk 2)}
+% =================================================================
+
+\begin{frame}{Chunk 2: Tháo gỡ (Tìm lại a, b, c)}
+    \begin{block}{Logic (Phép toán trừ) \textbf{➖}}
+        Chúng ta có:
+        \begin{itemize}
+            \item Tổng lớn (Max): $a + b + c$
+            \item Số nhỏ (Ví dụ): $a + b$
+        \end{itemize}
+        
+        \textbf{Công thức tìm số còn thiếu:}
+        \[ (a + b + c) - (a + b) = c \]
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{Nôm na:} Lấy cái \textbf{Tổng lớn nhất} trừ đi \textbf{từng số nhỏ}, phần dư ra chính là $a, b, c$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 2: Kiểm chứng thực tế}
+    \begin{exampleblock}{Ví dụ: Input \texttt{3 6 5 4}}
+        \begin{enumerate}
+            \item Tìm Max = \textbf{6}.
+            \item Ba số còn lại là: \texttt{3, 5, 4}.
+            \item Áp dụng công thức trừ:
+            \begin{itemize}
+                \item $6 - 3 = \mathbf{3}$
+                \item $6 - 5 = \mathbf{1}$
+                \item $6 - 4 = \mathbf{2}$
+            \end{itemize}
+        \end{enumerate}
+    \end{exampleblock}
+    
+    \begin{block}{Kết quả}
+        Ba số cần tìm là: \textbf{3, 1, 2}. \\
+        (Kiểm tra lại: $3+1+2 = 6$, khớp với Max).
+    \end{block}
+\end{frame}
+
+% =================================================================
+\section{Bước 3: Tổng kết chiến thuật}
+% =================================================================
+
+\begin{frame}{Bước 3: Tổng kết chiến thuật (Wrap Up)}
+    Để máy tính giải quyết bài này gọn gàng nhất (tránh \texttt{if/else} lằng nhằng), ta dùng chiến thuật:
+    
+    \begin{center}
+        \LARGE \textbf{"XẾP HÀNG" (SORTING)}
+    \end{center}
+
+    \vspace{0.5cm}
+    
+    \begin{enumerate}
+        \item Nhận 4 số vào Mảng (Array).
+        \item \textbf{Sắp xếp tăng dần:} Số bé đứng trước, số lớn đứng sau.
+        \item Số ở vị trí cuối cùng (index 3) chắc chắn là \textbf{MAX}.
+        \item Ba số đầu (index 0, 1, 2) là các cặp tổng.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Bản đồ Code (Blueprint)}
+    \begin{block}{Chiến thuật lập trình}
+        \begin{enumerate}
+            \item \textbf{INPUT:} Nhập mảng \texttt{arr}.
+            \item \textbf{SORT:} Sắp xếp \texttt{arr} tăng dần.
+            \item \textbf{OUTPUT:} In ra kết quả phép trừ:
+            \begin{itemize}
+                \item $\texttt{arr}[3] - \texttt{arr}[0]$
+                \item $\texttt{arr}[3] - \texttt{arr}[1]$
+                \item $\texttt{arr}[3] - \texttt{arr}[2]$
+            \end{itemize}
+        \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Lưu ý cho Coder}
+        \begin{itemize}
+            \item \textbf{Python:} Dùng \texttt{list.sort()}
+            \item \textbf{C++:} Dùng \texttt{std::sort(a, a+4)}
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% --- Slide Cuối ---
+\begin{frame}{Nhiệm vụ cuối cùng}
+    \centering
+    \Huge
+    \textbf{Code thôi!} \\
+    \vspace{1cm}
+    \normalsize
+    Hãy mở IDE lên và hiện thực hóa chiến thuật này.\\
+    Chúc bạn \textbf{Accepted (AC)} ngay lần nộp đầu tiên! 🚀
+\end{frame}
+
+\end{document}

@@ -1,0 +1,20 @@
+\frametitle{Bản đồ Code (Blueprint)}
+\begin{block}{Chiến thuật lập trình}
+        \begin{enumerate}
+            \item \textbf{INPUT:} Nhập mảng \texttt{arr}.
+            \item \textbf{SORT:} Sắp xếp \texttt{arr} tăng dần.
+            \item \textbf{OUTPUT:} In ra kết quả phép trừ:
+            \begin{itemize}
+                \item $\texttt{arr}[3] - \texttt{arr}[0]$
+                \item $\texttt{arr}[3] - \texttt{arr}[1]$
+                \item $\texttt{arr}[3] - \texttt{arr}[2]$
+            \end{itemize}
+        \end{enumerate}
+    \end{block}
+
+    \begin{alertblock}{Lưu ý cho Coder}
+        \begin{itemize}
+            \item \textbf{Python:} Dùng \texttt{list.sort()}
+            \item \textbf{C++:} Dùng \texttt{std::sort(a, a+4)}
+        \end{itemize}
+    \end{alertblock}

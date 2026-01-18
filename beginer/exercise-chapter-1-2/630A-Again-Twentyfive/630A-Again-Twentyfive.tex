@@ -1,0 +1,187 @@
+\documentclass{beamer}
+
+% Cấu hình gói ngôn ngữ và mã hóa
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{listings} % Để hiển thị code C++
+\usepackage{xcolor}
+
+% Cấu hình giao diện (Theme)
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Cấu hình hiển thị code
+\lstset{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{green!60!black},
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    breaklines=true
+}
+
+% Thông tin bài thuyết trình
+\title[Codeforces 630A]{Phân tích Tư duy Thuật toán: Codeforces 630A}
+\subtitle{Again Twenty Five! - LHTL Edition}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Slide Mở đầu ---
+\begin{frame}{Lời dẫn}
+    \begin{block}{Giới thiệu}
+        Chúng ta sẽ khởi động ngay với bài toán \textbf{Codeforces 630A - Again Twenty Five!}
+        
+        Đây là một bài toán cực kỳ thú vị vì nó là ví dụ điển hình cho việc: \textit{"Code trâu bò (Brute force) thì chết, mà tư duy đúng thì chỉ mất 1 giây".}
+    \end{block}
+\end{frame}
+
+% --- BƯỚC 1: TIẾP NHẬN ---
+\section{Bước 1: Tiếp nhận \& Phẫu thuật đề bài}
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật đề bài (Briefing)}
+    \begin{block}{1. Tóm tắt đề bài (Ngôn ngữ con người)}
+        Đề bài cho bạn một số nguyên $n$ (với $n \ge 2$). Số $n$ này có thể cực kỳ lớn (lên tới $2 \cdot 10^{18}$).
+        
+        Nhiệm vụ của bạn là tính kết quả của phép tính lũy thừa $5^n$, nhưng \textbf{chỉ cần in ra 2 chữ số tận cùng} của kết quả đó.
+    \end{block}
+
+    \begin{block}{2. Lộ trình tư duy (Roadmap)}
+        Để giải quyết bài này, chúng ta cần đi qua 2 mảnh ghép tư duy:
+        \begin{itemize}
+            \item \textbf{Chunk 1:} Quan sát quy luật "cái đuôi" của số 5.
+            \item \textbf{Chunk 2:} Đối mặt với cạm bẫy "Số khổng lồ" (Big Integer).
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+% --- CHUNK 1: Logic & Trap ---
+\section{Chunk 1: Truy tìm quy luật}
+\begin{frame}{Chunk 1: Truy tìm quy luật (Logic \& Bẫy)}
+    \begin{exampleblock}{Logic (Ẩn dụ)}
+        Hãy tưởng tượng bạn có một cái máy tính cũ kỹ bị hỏng màn hình. Dù bạn tính ra con số hàng tỷ tỷ, màn hình của nó bé xíu chỉ hiển thị được \textbf{đúng 2 con số cuối cùng} bên phải mà thôi.
+        
+        Thay vì cố gắng tính toán những con số khổng lồ, chúng ta hãy thử làm "thám tử" bằng cách tính tay vài phép tính nhỏ.
+    \end{exampleblock}
+
+    \begin{alertblock}{Bẫy (Trap)}
+        Sai lầm chết người là nghĩ: \textit{"Phải dùng vòng lặp nhân $n$ lần"} hoặc \textit{"Dùng hàm `pow(5, n)`"}.
+        
+        Nếu $n$ là 1 tỷ tỷ, máy tính sẽ chạy đến hết đời hoặc bị tràn bộ nhớ (Overflow).
+    \end{alertblock}
+\end{frame}
+
+% --- CHUNK 1: Mental Check ---
+\begin{frame}{Chunk 1: Thử thách tư duy (Mental Check)}
+    Hãy lấy giấy bút và điền vào chỗ trống (chỉ quan tâm 2 số cuối):
+    \begin{enumerate}
+        \item $5^2$ ($5 \times 5$) = $25 \rightarrow$ 2 số cuối là: \textbf{25}
+        \item $5^3$ ($25 \times 5$) = $125 \rightarrow$ 2 số cuối là: \textbf{??}
+        \item $5^4$ ($125 \times 5$) = $625 \rightarrow$ 2 số cuối là: \textbf{??}
+    \end{enumerate}
+
+    \vspace{0.5cm}
+    \pause
+    \begin{block}{Kết quả phân tích}
+        \textbf{Chính xác tuyệt đối!} Bạn đã phát hiện ra "lời nguyền" của con số 25.
+        
+        Cứ đuôi là $25$ mà đem nhân với $5$, thì kết quả mới lại sinh ra đuôi $125$ (tức là 2 số cuối vẫn hoàn lại là $25$).
+        $\rightarrow$ Nó là một vòng lặp vĩnh cửu.
+    \end{block}
+\end{frame}
+
+% --- CHUNK 2: Logic & Trap ---
+\section{Chunk 2: Đối mặt với Input}
+\begin{frame}{Chunk 2: Đối mặt với Input (Ignore The Beast)}
+    \begin{exampleblock}{Logic (Ẩn dụ)}
+        Hãy tưởng tượng $n$ là tiếng gầm của một con quái vật. Con quái vật có thể gầm to ($n$ cực lớn) hoặc gầm nhỏ ($n$ nhỏ), nhưng \textbf{phản ứng} của bạn chỉ có một chiêu duy nhất là ném ra lá bùa số "25".
+        
+        $n$ chỉ đóng vai trò là "tín hiệu bắt đầu". Giá trị cụ thể của nó \textbf{vô nghĩa}.
+    \end{exampleblock}
+
+    \begin{alertblock}{Bẫy (Trap)}
+        Rất nhiều bạn lo lắng: \textit{"Dùng int có tràn không?", "Có cần dùng string không?"}
+        
+        Sự thật là: Nếu bạn không dùng $n$ để tính toán, bạn không cần quan tâm nó lớn thế nào!
+    \end{alertblock}
+\end{frame}
+
+% --- CHUNK 2: Mental Check ---
+\begin{frame}{Chunk 2: Thử thách tư duy (Mental Check)}
+    Giả sử Input: \texttt{999999999999999999}. Chọn phương án xử lý:
+    
+    \begin{itemize}
+        \item \textbf{A:} Dùng \texttt{string} đọc vào, kiểm tra độ dài, in 25.
+        \item \textbf{B:} Khai báo biến tạm (\texttt{long long n}), đọc input cho đúng thủ tục, sau đó \textbf{kệ xác nó} và in ra 25.
+        \item \textbf{C:} Không thèm đọc input, in luôn 25.
+    \end{itemize}
+
+    \vspace{0.3cm}
+    \pause
+    \textbf{Tại sao C "nguy hiểm"? (The "Sync" Trap)}
+    \begin{itemize}
+        \item Nếu bạn chọn C: Bạn lờ đi tờ giấy Input. Nó vẫn nằm trong bộ nhớ đệm (buffer).
+        \item Nếu đề có nhiều test cases: Bạn sẽ bị "lệch nhịp" ở các bài sau.
+    \end{itemize}
+    \textbf{$\rightarrow$ Phương án B là "Chuẩn cơm mẹ nấu".}
+\end{frame}
+
+% --- BƯỚC CUỐI: TỔNG KẾT ---
+\section{Bước cuối: Tổng kết chiến thuật}
+\begin{frame}{Bước cuối: Tổng kết chiến thuật (The Solution)}
+    \begin{block}{Mã giả (Pseudocode)}
+    \begin{enumerate}
+        \item \textbf{Chuẩn bị:} Tạo một chỗ chứa (biến) để nhận quả bom $n$ (dù biết thừa không dùng). Dùng \texttt{long long} hoặc \texttt{string}.
+        \item \textbf{Nhập:} Đọc giá trị từ bàn phím vào biến đó.
+        \item \textbf{Xử lý:} Không làm gì cả! (Bước này trống).
+        \item \textbf{Xuất:} In ra màn hình số \texttt{25}.
+    \end{enumerate}
+    \end{block}
+\end{frame}
+
+% --- CODE C++ ---
+\begin{frame}[fragile]{Code C++ "Chuẩn mực" (Tham khảo)}
+Đây là cách chúng ta hiện thực hóa tư duy trên:
+
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+int main() {
+    // 1. Chuan bi bien (Dung long long cho an toan)
+    long long n; 
+    
+    // 2. Doc input (Nhan hang cho dung thu tuc)
+    cin >> n;
+    
+    // 3. In ra ket qua (Bat chap n la gi)
+    cout << 25;
+    
+    return 0;
+}
+\end{lstlisting}
+\textit{Lưu ý: Bạn cũng có thể dùng \texttt{string n; cin >> n;} để an toàn tuyệt đối.}
+\end{frame}
+
+% --- Lời kết ---
+\begin{frame}{Lời kết}
+    \begin{center}
+        \Huge \textbf{Chúc mừng!}
+    \end{center}
+    \vspace{0.5cm}
+    Bạn đã giải quyết xong bài toán bằng tư duy thay vì sức mạnh cơ bắp.
+    
+    \vspace{0.5cm}
+    \textit{Bạn có muốn thử sức ngay với một bài toán khác đòi hỏi tư duy logic "lắt léo" hơn một chút không? (Ví dụ: Codeforces 4A - Watermelon)?}
+\end{frame}
+
+\end{document}

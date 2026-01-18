@@ -1,0 +1,16 @@
+\frametitle{Bài toán cuối khóa: Đảo ngược chuỗi}
+\begin{exampleblock}{Đề bài}
+        Nhập: "HOC SINH CAP HAI" $\rightarrow$ Xuất: "IAH PAC HNIS COH".
+    \end{exampleblock}
+    \begin{lstlisting}[language=C++]
+string text = "HOC SINH CAP HAI";
+stack<char> sentence;
+for (auto x : text) sentence.push(x);
+
+for (; !sentence.empty(); sentence.pop()) {
+    cout << sentence.top();
+}
+    \end{lstlisting}
+    \begin{block}{Tổng kết}
+        Bạn đã làm chủ Stack từ bản chất LIFO đến kỹ thuật duyệt C++17 chuyên nghiệp!
+    \end{block}

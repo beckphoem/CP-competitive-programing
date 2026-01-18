@@ -1,0 +1,188 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Huấn luyện tư duy thuật toán}
+\subtitle{Bài toán: Print from 1 to N (Recursion)}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Tóm tắt đề bài}
+        Máy tính cho bạn một số nguyên dương $N$. Nhiệm vụ của bạn là in ra các số từ $1$ đến $N$, mỗi số nằm trên một dòng riêng biệt.
+    \end{block}
+
+    \begin{alertblock}{Yêu cầu bắt buộc}
+        Phải sử dụng \textbf{Đệ quy (Recursion)} để giải quyết.
+    \end{alertblock}
+
+    \textbf{Lộ trình tư duy:}
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Hiểu về đệ quy qua hình ảnh thực tế.
+        \item \textbf{Chunk 2:} Xác định điểm dừng (Base case).
+        \item \textbf{Chunk 3:} Quy luật "Gửi thông điệp" và thứ tự thực hiện.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chunk 1: Đệ quy là gì? (Ẩn dụ "Búp bê Nga")}
+    \begin{itemize}
+        \item Tưởng tượng Đệ quy giống như bộ \textbf{Búp bê Nga (Matryoshka)}. 
+        \item Khi mở một con búp bê lớn, bên trong lại có một con búp bê nhỏ hơn y hệt nó.
+        \item Quá trình tiếp diễn cho đến khi chạm đến con búp bê nhỏ nhất.
+    \end{itemize}
+
+    \begin{exampleblock}{Định nghĩa trong lập trình}
+        Đệ quy là một hàm \textbf{tự gọi lại chính nó} nhưng với một phiên bản bài toán nhỏ hơn (giá trị truyền vào giảm dần).
+    \end{exampleblock}
+
+    \textbf{Ví dụ:} \texttt{in\_so(5)} nhờ \texttt{in\_so(4)} làm giúp phần việc phía trước, sau đó nó mới làm phần của mình.
+\end{frame}
+
+\begin{frame}{Thử thách tư duy: Điểm dừng}
+    \begin{block}{Câu hỏi}
+        Nếu chúng ta cứ "nhờ" mãi như vậy (\texttt{in\_so(4)} nhờ \texttt{in\_so(3)},...), đến số mấy thì chúng ta phải dừng lại để tránh việc máy tính chạy mãi không nghỉ?
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Giải đáp: Điểm dừng (Base case)}
+        Điểm dừng quan trọng nhất chính là \textbf{số 1} (hoặc số 0 tùy cách cài đặt).
+        \begin{itemize}
+            \item Vì đề bài yêu cầu in từ $1$ đến $N$.
+            \item Nếu tiếp tục lùi xuống các số âm, chúng ta sẽ làm sai yêu cầu đề bài.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 2: Quy luật "Gửi thông điệp"}
+    Có hai cách để chúng ta sắp xếp công việc trong đệ quy:
+    
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{1. Làm xong rồi mới gọi}
+                In số hiện tại ra, sau đó mới nhờ "đệ tử" tiếp theo làm phần còn lại.
+            \end{block}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{block}{2. Gọi xong mới làm}
+                Nhờ "đệ tử" làm hết mọi việc phía trước, khi nào xong mới quay lại in số của mình.
+            \end{block}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.5cm}
+    \textbf{Trắc nghiệm:} Để in theo thứ tự tăng dần ($1 \rightarrow N$), ta chọn cách nào?
+    \begin{itemize}
+        \item \textbf{A.} In số $N$ trước, sau đó mới gọi \texttt{print(N-1)}.
+        \item \textbf{B.} Gọi \texttt{print(N-1)} trước, sau đó mới in số $N$.
+    \end{itemize}
+    \pause
+    \textbf{Đáp án: B} - Vì ta muốn các số nhỏ hơn hiện ra trước.
+\end{frame}
+
+\begin{frame}{Phân tích luồng thực thi}
+    Cấu trúc của hàm đệ quy:
+    \begin{enumerate}
+        \item \textbf{Kiểm tra điểm dừng:} Nếu $N < 1$, thoát ra.
+        \item \textbf{Gọi đệ quy:} Nhờ hàm giải quyết bài toán với $N - 1$.
+        \item \textbf{Thực hiện công việc:} In số $N$ ra màn hình.
+    \end{enumerate}
+
+    \begin{exampleblock}{Diễn biến khi $N=3$}
+        \begin{itemize}
+            \item \texttt{print(3)} gọi \texttt{print(2)}
+            \item \texttt{print(2)} gọi \texttt{print(1)}
+            \item \texttt{print(1)} gọi \texttt{print(0)} $\rightarrow$ \textbf{Dừng!}
+            \item Quay lại \texttt{print(1)}: In ra \textbf{1}
+            \item Quay lại \texttt{print(2)}: In ra \textbf{2}
+            \item Quay lại \texttt{print(3)}: In ra \textbf{3}
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Cơ chế Ngăn xếp (Stack)}
+    \begin{itemize}
+        \item \textbf{Giai đoạn "Vào" (Calling phase):} Máy tính "tạm dừng" các hàm và xếp chúng vào một chiếc hộp (Stack).
+        \item \textbf{Giai đoạn "Ra" (Returning phase):} Khi chạm điểm dừng, máy tính lấy các hàm ra theo thứ tự ngược lại (từ trên xuống).
+    \end{itemize}
+
+    \begin{alertblock}{Ghi nhớ}
+        Lệnh in đặt \textbf{sau} lời gọi đệ quy sẽ được thực hiện trong giai đoạn "Ra", tạo nên thứ tự tăng dần.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chunk 3: Chốt thuật toán}
+    Dưới đây là cấu trúc logic (Mã giả) chúng ta đã xây dựng:
+
+\begin{lstlisting}[language=C++, caption=Mã giả cho bài toán Print 1 to N]
+Hàm Print_Numbers(N):
+    // 1. Diem dung (Base case)
+    Neu N == 0: 
+        Ket thuc 
+    
+    // 2. Goi de quy truoc de in cac so nho hon
+    Print_Numbers(N - 1)  
+    
+    // 3. Thuc hien in so hien tai (Giai doan "Ra")
+    In N ra man hinh
+\end{lstlisting}
+
+    \textbf{Kết quả với $N=5$:}
+    \texttt{1 2 3 4 5} (mỗi số một dòng).
+\end{frame}
+
+\begin{frame}{Thử thách mở rộng}
+    \begin{block}{Câu hỏi mở rộng}
+        Nếu bài toán yêu cầu in \textbf{ngược lại} từ $N$ về $1$ ($5, 4, 3, 2, 1$), bạn sẽ thay đổi vị trí của lệnh \textbf{In N} như thế nào?
+    \end{block}
+
+    \begin{itemize}
+        \item \textbf{A.} Giữ nguyên (In $N$ sau khi gọi đệ quy).
+        \item \textbf{B.} Đảo lên trên (In $N$ trước khi gọi đệ quy).
+    \end{itemize}
+
+    \pause
+    \begin{exampleblock}{Giải đáp}
+        \textbf{Đáp án B:} In trước khi gọi đệ quy sẽ thực hiện lệnh in ngay trong giai đoạn "Vào", giúp in từ số lớn đến số bé.
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

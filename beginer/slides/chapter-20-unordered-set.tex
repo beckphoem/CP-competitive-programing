@@ -1,0 +1,200 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} 
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[C++ unordered\_map]{Chiếc Tủ Thần Kỳ: Bí mật tìm đồ trong chớp mắt}
+\subtitle{Khám phá unordered\_map trong C++17/20}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lộ trình Khám phá (The Map)}
+    \begin{enumerate}
+        \item \textbf{Chương 1:} \texttt{unordered\_map} là gì? (Chiếc tủ có nhãn dán).
+        \item \textbf{Chương 2:} Cỗ máy băm thức ăn (Hash Function).
+        \item \textbf{Chương 3:} Các thao tác cơ bản (Thêm, sửa, xóa nhãn).
+        \item \textbf{Chương 4:} Điểm mới trong C++17/20 (Ngăn kéo thông minh).
+        \item \textbf{Chương 5:} Iterator - Ngón tay chỉ đường.
+        \item \textbf{Tổng kết:} Ứng dụng trong Lập trình thi đấu (CP).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{\texttt{unordered\_map} là gì?}
+    \begin{block}{Ẩn dụ: Danh bạ điện thoại}
+        Nó giống như danh bạ điện thoại. \textbf{Tên bạn bè} là cái nhãn (\textbf{Key}), còn \textbf{Số điện thoại} là món đồ (\textbf{Value}). Bạn chỉ cần nhớ tên là tìm được số ngay lập tức.
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Mảng (vector):} Phải tìm từ đầu đến cuối (mệt và chậm).
+        \item \textbf{\texttt{unordered\_map}:} Dẫn thẳng bạn tới món đồ thông qua nhãn dán.
+        \item \textbf{Tại sao "Unordered"?} Ưu tiên tốc độ tìm kiếm hơn là việc xếp hàng ngay ngắn.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Ví dụ sống động (Khai báo và Truy xuất)}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <unordered_map>
+#include <string>
+using namespace std;
+
+int main() {
+    // Key: Ten (string), Value: Diem so (int)
+    unordered_map<string, int> bang_diem;
+
+    // 1. Cat do vao tu (Them du lieu)
+    bang_diem["An"] = 9;
+    bang_diem["Ba"] = 7;
+    bang_diem["Chi"] = 10;
+
+    // 2. Lay do ra (Truy xuat)
+    cout << "Diem cua Chi la: " << bang_diem["Chi"] << endl;
+    return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Chương 2: Cỗ máy băm (Hash Function)}
+    \begin{exampleblock}{Bí mật của tốc độ ánh sáng}
+        Làm sao để biết chính xác ngăn kéo nào chứa tên "An"?
+    \end{exampleblock}
+    
+    \begin{enumerate}
+        \item Bạn đưa nhãn \textbf{"An"} vào máy băm.
+        \item Máy băm chữ thành số (ví dụ: số \textbf{5}).
+        \item Chiếc tủ mở đúng ngăn số \textbf{5} để cất/lấy đồ.
+    \end{enumerate}
+    
+    \begin{alertblock}{Lưu ý về Key}
+        Nhãn dán (Key) là \textbf{duy nhất}. Nếu bạn dán đè nhãn mới lên cùng một tên, giá trị cũ sẽ bị thay thế.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Thao tác Sửa, Xóa và Kiểm tra}
+\begin{lstlisting}[language=C++]
+// Kiem tra ton tai (C++20)
+if (ds_lop.contains("Lan")) { ... }
+
+// Kiem tra ton tai (Truoc C++20)
+if (ds_lop.count("Lan")) { ... }
+
+// Sua du lieu
+ds_lop["An"] = "MA_MOI";
+
+// Xoa du lieu
+ds_lop.erase("An"); 
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Chương 4: Siêu năng lực C++17 và C++20}
+    \begin{block}{C++17: Structured Bindings}
+        Giúp lấy cả Nhãn và Đồ ra cùng lúc cực kỳ gọn gàng.
+    \end{block}
+    
+\begin{lstlisting}[language=C++]
+// Dung dau ngoac vuong [ten, ma]
+for (auto const& [ten, ma] : ds_lop) {
+    cout << "Ban " << ten << " co ma: " << ma << endl;
+}
+\end{lstlisting}
+
+    \begin{block}{C++20: Contains}
+        Sử dụng \texttt{.contains("Key")} thay vì dùng \texttt{.find()} hoặc \texttt{.count()}.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chương 5: Iterator - Ngón tay chỉ đường}
+    \begin{itemize}
+        \item \textbf{Iterator (\texttt{it}):} Đóng vai trò như một con trỏ chỉ vào từng ngăn kéo.
+        \item \textbf{\texttt{it->first}:} Truy cập vào cái Nhãn (\textbf{Key}).
+        \item \textbf{\texttt{it->second}:} Truy cập vào món đồ (\textbf{Value}).
+    \end{itemize}
+    
+    \begin{alertblock}{Tại sao dùng dấu \texttt{->}?}
+        Vì \texttt{it} giống như con trỏ, ta dùng \texttt{->} để "chỉ tay" vào thuộc tính bên trong ngăn kéo thay vì dùng dấu chấm \texttt{.} thông thường.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Kiểm tra kiến thức}
+    \textbf{Câu hỏi:} Nếu có 2 người cùng tên "An", ta thực hiện:
+    \begin{itemize}
+        \item \texttt{ds\_lop["An"] = "001";}
+        \item \texttt{ds\_lop["An"] = "002";}
+    \end{itemize}
+    Kết quả cuối cùng trong ngăn "An" là gì?
+    
+    \vspace{0.5cm}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Là \textbf{"002"}. Vì Key trong \texttt{unordered\_map} là duy nhất, giá trị sau sẽ ghi đè giá trị trước.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Cạm bẫy trong Lập trình thi đấu (CP)}
+    \begin{alertblock}{Anti-hash Test trên Codeforces}
+        Kẻ xấu có thể tạo bộ dữ liệu gây xung đột băm (Collision), khiến tốc độ giảm từ $O(1)$ xuống $O(n)$, gây lỗi \textbf{TLE}.
+    \end{alertblock}
+    
+    \textbf{Giải pháp: Custom Hash với Random Seed}
+\begin{lstlisting}[language=C++]
+struct custom_hash {
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+// Khai bao an toan
+unordered_map<long long, int, custom_hash> safe_map;
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng: Inventory Game}
+    \begin{block}{Bài toán}
+        Bạn nhặt thêm 1 thanh "Kiem" trong khi đã có sẵn 2 thanh trong túi đồ (\texttt{unordered\_map<string, int> inventory}). Bạn sẽ xử lý thế nào?
+    \end{block}
+    \pause
+    \begin{exampleblock}{Gợi ý giải pháp}
+        \texttt{inventory["Kiem"] += 1;} \\
+        Chiếc tủ sẽ tìm ngăn "Kiem", lấy số lượng cũ (2) cộng thêm 1 và cất lại số 3 vào ngăn đó!
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

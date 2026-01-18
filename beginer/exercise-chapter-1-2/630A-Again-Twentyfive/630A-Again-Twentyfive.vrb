@@ -1,0 +1,21 @@
+\frametitle{Code C++ "Chuẩn mực" (Tham khảo)}
+Đây là cách chúng ta hiện thực hóa tư duy trên:
+
+\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+int main() {
+    // 1. Chuan bi bien (Dung long long cho an toan)
+    long long n;
+
+    // 2. Doc input (Nhan hang cho dung thu tuc)
+    cin >> n;
+
+    // 3. In ra ket qua (Bat chap n la gi)
+    cout << 25;
+
+    return 0;
+}
+\end{lstlisting}
+\textit{Lưu ý: Bạn cũng có thể dùng \texttt{string n; cin >> n;} để an toàn tuyệt đối.}

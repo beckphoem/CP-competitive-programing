@@ -1,0 +1,6 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}{4}{0}{1}
+\beamer@sectionintoc {2}{Chunk 1: Xác định ``Biên giới''}{6}{0}{2}
+\beamer@sectionintoc {3}{Chunk 2: Định vị \& Truy xuất}{11}{0}{3}
+\beamer@sectionintoc {4}{Chunk 3: Bẫy dữ liệu (Data Type Trap)}{17}{0}{4}
+\beamer@sectionintoc {5}{Tổng kết thuật toán (The Blueprint)}{18}{0}{5}

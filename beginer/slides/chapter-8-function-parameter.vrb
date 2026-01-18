@@ -1,0 +1,24 @@
+\frametitle{Thử thách Final Boss}
+\textbf{Đề bài:} Viết hàm \texttt{doiChoVaNhanDoi}:
+    \begin{itemize}
+        \item Nhận vào 2 số nguyên.
+        \item Hoán đổi vị trí của chúng.
+        \item SAU ĐÓ nhân đôi giá trị cả hai.
+        \item Ví dụ: Vào \texttt{a=1, b=2} $\rightarrow$ Ra \texttt{a=4, b=2}.
+    \end{itemize}
+
+    \pause
+    \begin{exampleblock}{Lời giải (Model Code)}
+\begin{lstlisting}
+void doiChoVaNhanDoi(int &a, int &b) {
+  // 1. Hoan doi (Swap)
+  int temp = a;
+  a = b;
+  b = temp;
+
+  // 2. Nhan doi (Double)
+  a *= 2; // a = a * 2
+  b *= 2; // b = b * 2
+}
+\end{lstlisting}
+    \end{exampleblock}

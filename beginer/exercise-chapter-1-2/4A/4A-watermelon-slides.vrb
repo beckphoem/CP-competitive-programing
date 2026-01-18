@@ -1,0 +1,19 @@
+\frametitle{5. Lời Giải Tham Khảo}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main() {
+    int w;
+    cin >> w;
+
+    // Kiem tra w chan VA w lon hon 2
+    if (w % 2 == 0 && w > 2) {
+        cout << "YES";
+    } else {
+        cout << "NO";
+    }
+
+    return 0;
+}
+\end{lstlisting}

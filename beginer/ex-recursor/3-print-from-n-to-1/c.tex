@@ -1,0 +1,159 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Coach Tư duy Thuật toán}
+\subtitle{Mổ xẻ Đệ quy: Bài toán Print from N to 1}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Phẫu thuật đề bài (Briefing)}
+    \begin{block}{Cốt lõi bài toán}
+        \begin{itemize}
+            \item \textbf{Dữ liệu vào:} Một số nguyên $n$ (tối đa 1000).
+            \item \textbf{Nhiệm vụ:} In dãy số giảm dần từ $n$ về 1.
+            \item \textbf{Ràng buộc:} 
+                \begin{itemize}
+                    \item Phải dùng \textbf{Đệ quy}.
+                    \item Các số cách nhau bởi 1 khoảng trắng.
+                    \item \textbf{Không} có khoảng trắng ở cuối cùng.
+                \end{itemize}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy (Micro-Chunks)}
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Hiểu về "Lời nguyền" của Đệ quy (Điểm dừng \& Bước lùi).
+        \item \textbf{Chunk 2:} Xử lý logic in ấn (In trước hay gọi đệ quy trước?).
+        \item \textbf{Chunk 3:} Giải quyết cái bẫy "Khoảng trắng thừa".
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chunk 1: Điểm dừng (Base Case)}
+    \begin{block}{Khái niệm}
+        Tưởng tượng đệ quy như đi xuống cầu thang tối. Nếu không có sàn nhà (điểm dừng), bạn sẽ bị lỗi \texttt{Stack Overflow}.
+    \end{block}
+
+    \begin{alertblock}{Thử thách tư duy}
+        Khi $n$ giảm xuống giá trị nào thì chúng ta nên \textbf{dừng hẳn}?
+        \begin{itemize}
+            \item A. Khi $n = 1$
+            \item B. Khi $n = 0$
+            \item C. Khi $n = -1$
+        \end{itemize}
+    \end{alertblock}
+    
+    \pause
+    \textbf{Đáp án: B ($n=0$)}. Vì tại $n=1$ ta vẫn cần in số, khi xuống 0 mới thực sự hết việc.
+\end{frame}
+
+\begin{frame}{Chunk 2: Thứ tự thực hiện}
+    \begin{block}{Hai lựa chọn logic}
+        \begin{itemize}
+            \item \textbf{Cách 1:} In số $n$ hiện tại, sau đó mới gọi đệ quy cho $n-1$.
+            \item \textbf{Cách 2:} Gọi đệ quy cho đến hết rồi mới in $n$ trên đường quay về.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Thử thách tư duy}
+        Để dãy số in ra theo đúng thứ tự $n \to 1$, bạn chọn cách nào?
+    \end{exampleblock}
+
+    \pause
+    \textbf{Đáp án: Cách 1}. In ngay lập tức rồi mới "đi sâu" vào bước tiếp theo sẽ tạo ra dãy giảm dần.
+\end{frame}
+
+\begin{frame}{Chunk 3: Cái bẫy "Khoảng trắng thừa"}
+    \begin{alertblock}{Vấn đề}
+        Lệnh \texttt{cout << n << " ";} sẽ để lại khoảng trắng sau số 1.
+    \end{alertblock}
+
+    \begin{block}{Giải pháp (Lựa chọn A)}
+        Sử dụng điều kiện để quyết định in dấu cách:
+        \begin{itemize}
+            \item Nếu $n > 1$: In số $n$ kèm một dấu cách.
+            \item Nếu $n = 1$: Chỉ in đúng số 1.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Tổng kết Thuật toán (Pseudocode)}
+    \begin{exampleblock}{Mã giả hàm \texttt{printNumbers(n)}}
+        \begin{lstlisting}[language=C++]
+void printNumbers(int n) {
+    // 1. Diem dung
+    if (n <= 0) return;
+
+    // 2. Than ham & Xu ly khoang trang
+    cout << n;
+    if (n > 1) {
+        cout << " ";
+    }
+
+    // 3. Goi de quy
+    printNumbers(n - 1);
+}
+        \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng: Chạy tay (Dry Run)}
+    \begin{block}{Với trường hợp $n = 2$}
+        \begin{enumerate}
+            \item Vào hàm với $n=2$. In \textbf{2}.
+            \item Vì $2 > 1$, in thêm \textbf{dấu cách}.
+            \item Gọi đệ quy với $n=1$. In \textbf{1}.
+            \item Vì $1$ không lớn hơn $1$, \textbf{không} in dấu cách.
+            \item Gọi đệ quy với $n=0$. Gặp điểm dừng $\to$ Thoát.
+        \end{enumerate}
+    \end{block}
+    \centering
+    \textbf{Kết quả: "2 1" - Thành công!}
+\end{frame}
+
+\begin{frame}
+    \centering
+    \Huge \textcolor{blue}{Bạn đã sẵn sàng tự mình "chốt hạ" bài này bằng code chưa? 😊}
+\end{frame}
+
+\end{document}

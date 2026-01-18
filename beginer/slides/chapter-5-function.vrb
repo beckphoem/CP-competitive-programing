@@ -1,0 +1,14 @@
+\frametitle{Năng lực 2: Sự Gọn Gàng (Chia để trị)}
+Thay vì viết 1000 dòng code lộn xộn trong \texttt{main()}, chúng ta chia nhỏ vấn đề:
+
+\begin{lstlisting}
+int main() {
+   xayMongNha();   // Ham xay mong
+   dungCotNha();   // Ham dung cot
+   lopMaiNha();    // Ham lop mai
+   sonTuong();     // Ham son tuong
+   return 0;
+}
+\end{lstlisting}
+
+    Nhìn vào đây, ai cũng hiểu quy trình xây nhà mà không cần biết chi tiết trát vôi vữa thế nào (Tư duy trừu tượng hóa).

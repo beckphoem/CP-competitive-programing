@@ -1,0 +1,431 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+% Định nghĩa màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình hiển thị code C++
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C++,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài giảng
+\title{C++ Function Parameters}
+\subtitle{Biến mã tĩnh lặng trở nên linh hoạt}
+\author{Hành trình chinh phục C++}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Mở đầu: Bức tranh toàn cảnh
+\begin{frame}{Bức Tranh Toàn Cảnh (The Big Picture)}
+    \begin{block}{Ẩn dụ: Chiếc máy xay sinh tố}
+        Hãy tưởng tượng một hàm (Function) giống như một \textbf{Chiếc máy xay sinh tố}.
+        \begin{itemize}
+            \item Nếu không có tham số: Máy bị "hàn chết", chỉ xay đúng một quả chuối có sẵn.
+            \item \textbf{Function Parameters}: Chính là cái \textbf{phiễu (khe nạp)} phía trên.
+        \end{itemize}
+    \end{block}
+    
+    \vspace{0.5cm}
+    Nhờ nó, bạn có thể thả dâu tây, xoài, táo vào. Cùng một chiếc máy, nhưng nguyên liệu khác nhau sẽ tạo ra kết quả khác nhau.
+\end{frame}
+
+% Slide Lộ trình
+\begin{frame}{Lộ Trình Khám Phá (Roadmap)}
+    Chúng ta sẽ đi qua 6 chặng để nắm vững từng viên gạch:
+    \begin{enumerate}
+        \item \textbf{Parameters và Arguments:} Phân biệt "Cái Phiễu" và "Trái Cây".
+        \item \textbf{Default Parameters:} Cài đặt mặc định (Khi lười chọn món).
+        \item \textbf{Multiple Parameters:} Công thức pha chế hỗn hợp.
+        \item \textbf{Return Values:} Shipper giao hàng tận tay.
+        \item \textbf{Pass by Reference:} Sửa trực tiếp vào bản gốc (Quan trọng).
+        \item \textbf{Passing Arrays:} Xử lý cả một thùng hàng.
+    \end{enumerate}
+\end{frame}
+
+% --- CHƯƠNG 1 ---
+\section{Chương 1: Parameters và Arguments}
+
+\begin{frame}{Chương 1: Parameters và Arguments}
+    \textbf{Tư duy cốt lõi:}
+    \begin{itemize}
+        \item \textbf{Parameter (Tham số):} Biến được định nghĩa lúc \textbf{thiết kế} hàm (Cái nhãn "Bỏ trái cây vào đây").
+        \item \textbf{Argument (Đối số):} Dữ liệu thực tế truyền vào lúc \textbf{sử dụng} hàm (Quả táo thật).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Syntax: Parameters và Arguments}
+\begin{lstlisting}
+#include <iostream>
+#include <string>
+using namespace std;
+
+// CACH THIET KE:
+// "tenNguoi" o day chinh la PARAMETER (Cai khuon)
+void chaoHoi(string tenNguoi) {
+  cout << "Xin chao " << tenNguoi << "!\n";
+}
+
+int main() {
+  // CACH SU DUNG:
+  // "Nam" va "Lan" o day chinh la ARGUMENT (Du lieu that)
+  chaoHoi("Nam");
+  chaoHoi("Lan");
+  
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra sự hiểu biết (Active Recall)}
+    Cho đoạn code sau:
+\begin{lstlisting}
+void tinhTong(int soA) {
+  cout << soA + 10;
+}
+int main() {
+  int x = 5;
+  tinhTong(x);
+  return 0;
+}
+\end{lstlisting}
+    
+    Trong dòng \texttt{tinhTong(x);}:
+    \begin{itemize}
+        \item \texttt{soA} được gọi là gì?
+        \item \texttt{x} được gọi là gì?
+    \end{itemize}
+
+    \pause
+    \begin{alertblock}{Đáp án}
+        \textbf{soA} là Parameter (Cái khuôn). \\
+        \textbf{x} là Argument (Nguyên liệu thực tế).
+    \end{alertblock}
+\end{frame}
+
+% --- CHƯƠNG 2 ---
+\section{Chương 2: Default Parameters}
+
+\begin{frame}{Chương 2: Default Parameters (Tham số mặc định)}
+    \begin{block}{Tình huống quán cà phê}
+        \begin{itemize}
+            \item Khách gọi "Cho ly cà phê": Nhân viên làm theo \textbf{công thức chuẩn} (Mặc định).
+            \item Khách gọi "Cà phê 100\% đường": Nhân viên \textbf{ghi đè} công thức chuẩn.
+        \end{itemize}
+    \end{block}
+    
+    Trong C++, \textbf{Default Parameter} dùng giá trị có sẵn nếu người dùng không truyền tham số.
+\end{frame}
+
+\begin{frame}[fragile]{Syntax: Default Parameters}
+    Bí mật nằm ở dấu bằng \texttt{=} khi khai báo hàm.
+
+\begin{lstlisting}
+// Gan gia tri mac dinh "Viet Nam" ngay tai day
+void xuatXu(string quocGia = "Viet Nam") {
+  cout << "Toi den tu " << quocGia << "\n";
+}
+
+int main() {
+  // Truong hop 1: CO truyen tham so -> Ghi de
+  xuatXu("Nhat Ban"); // In ra: Toi den tu Nhat Ban
+  
+  // Truong hop 2: KHONG truyen tham so -> Dung mac dinh
+  xuatXu();           // In ra: Toi den tu Viet Nam
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra sự hiểu biết}
+    Đoạn code sau in ra màn hình những gì?
+\begin{lstlisting}
+void thoiTiet(int nhietDo = 25) {
+  cout << "Nhiet do la: " << nhietDo << " do C\n";
+}
+int main() {
+  thoiTiet(30);
+  thoiTiet(); 
+}
+\end{lstlisting}
+
+    \pause
+    \begin{alertblock}{Đáp án}
+        1. Nhiet do la: 30 do C \\
+        2. Nhiet do la: 25 do C
+    \end{alertblock}
+\end{frame}
+
+% --- CHƯƠNG 3 ---
+\section{Chương 3: Multiple Parameters}
+
+\begin{frame}{Chương 3: Multiple Parameters (Nhiều tham số)}
+    Để pha chế phức tạp, hàm cần nhiều nguyên liệu: Loại trái cây, Lượng đường, Đá...
+    
+    \begin{alertblock}{Quy tắc vàng}
+        \begin{itemize}
+            \item Các tham số ngăn cách bởi dấu phẩy \texttt{,}.
+            \item \textbf{Thứ tự là mệnh lệnh!} Phải truyền đúng thứ tự định nghĩa.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{Syntax: Multiple Parameters}
+\begin{lstlisting}
+// Ham can 2 nguyen lieu theo thu tu: Chu truoc, So sau
+void thongTinNhanVien(string ten, int tuoi) {
+  cout << ten << " nam nay " << tuoi << " tuoi.\n";
+}
+
+int main() {
+  // ĐÚNG:
+  thongTinNhanVien("Tung", 25);
+  
+  // SAI (Lỗi ngay lập tức):
+  // thongTinNhanVien(25, "Tung"); 
+  
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+% --- CHƯƠNG 4 ---
+\section{Chương 4: Return Values}
+
+\begin{frame}{Chương 4: Return Values (Giá trị trả về)}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Hàm Void (Hư vô)}
+            Giống như hét lên một câu rồi thôi.
+            Không thể "cầm nắm" kết quả để dùng tiếp.
+        \end{block}
+        
+        \column{0.5\textwidth}
+        \begin{block}{Hàm Return (Shipper)}
+            Giống như thợ làm bánh.
+            Họ làm xong và \textbf{trả lại (return)} cái bánh cho bạn để bạn mang đi đâu tùy ý.
+        \end{block}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Syntax: Return Values}
+    Thay \texttt{void} bằng kiểu dữ liệu (\texttt{int}, \texttt{string}...) và dùng lệnh \texttt{return}.
+
+\begin{lstlisting}
+int tinhTong(int x, int y) {
+  return x + y; // Tra ve ket qua, khong in ra
+}
+
+int main() {
+  // Cat ket qua vao bien
+  int ketQua = tinhTong(5, 3); 
+  cout << "Tong: " << ketQua;
+  
+  // Hoac dung truc tiep trong phep tinh khac
+  cout << "Tong + 10: " << (tinhTong(5, 3) + 10);
+  return 0;
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Kiểm tra sự hiểu biết}
+    Điền vào chỗ trống để tính tổng diện tích 2 hình vuông:
+\begin{lstlisting}
+int dienTichVuong(int canh) { return canh * canh; }
+
+int main() {
+  int hinhA = dienTichVuong(5); // 25
+  int hinhB = dienTichVuong(3); // 9
+  
+  int tongDienTich = ...? 
+  cout << tongDienTich;
+}
+\end{lstlisting}
+
+    \pause
+    \begin{alertblock}{Đáp án}
+        Code: \texttt{int tongDienTich = hinhA + hinhB;} \\
+        Kết quả in ra: \textbf{34}
+    \end{alertblock}
+\end{frame}
+
+% --- CHƯƠNG 5 ---
+\section{Chương 5: Pass by Reference}
+
+\begin{frame}{Chương 5: Pass by Reference (Truyền tham chiếu)}
+    Đây là phần quan trọng nhất!
+    
+    \begin{itemize}
+        \item \textbf{Pass by Value (Mặc định):} Gửi file đính kèm email. Bạn sửa bản copy, bản gốc máy tôi vẫn y nguyên.
+        \item \textbf{Pass by Reference (Tham chiếu):} Gửi \textbf{link Google Docs}. Bạn sửa trên link, bản gốc của tôi thay đổi ngay lập tức.
+    \end{itemize}
+    
+    \textbf{Dấu hiệu nhận biết:} Ký tự \texttt{\&} khi khai báo tham số.
+\end{frame}
+
+\begin{frame}[fragile]{Syntax: Pass by Reference (\&)}
+    Ví dụ kinh điển: Hoán đổi (Swap).
+
+\begin{lstlisting}
+// int &x: "Toi muon lay duong link toi bien x"
+void hoanDoi(int &x, int &y) {
+  int tam = x;
+  x = y;
+  y = tam;
+}
+
+int main() {
+  int a = 10, b = 20;
+  hoanDoi(a, b);
+  cout << a << " - " << b; // In ra: 20 - 10
+}
+\end{lstlisting}
+    \vspace{0.2cm}
+    \textit{Nếu không có dấu \&, a và b vẫn sẽ là 10 - 20.}
+\end{frame}
+
+\begin{frame}[fragile]{Cạm bẫy (Kiểm tra sự hiểu biết)}
+    Hãy cẩn thận với đoạn code sau!
+\begin{lstlisting}
+void tangGiaTri(int &a, int b) { // Chi a co dau &, b thi khong
+  a = a + 1;
+  b = b + 1;
+}
+
+int main() {
+  int x = 5;
+  int y = 5;
+  tangGiaTri(x, y);
+  cout << "x=" << x << ", y=" << y;
+}
+\end{lstlisting}
+
+    \pause
+    \begin{alertblock}{Đáp án}
+        \textbf{x = 6} (Do có \texttt{\&} nên bản gốc bị sửa). \\
+        \textbf{y = 5} (Do không có \texttt{\&}, chỉ là bản copy bị sửa, bản gốc y nguyên).
+    \end{alertblock}
+\end{frame}
+
+% --- CHƯƠNG 6 ---
+\section{Chương 6: Passing Arrays}
+
+\begin{frame}{Chương 6: Passing Arrays (Truyền mảng)}
+    \begin{block}{Đặc biệt}
+        Mảng (Array) \textbf{MẶC ĐỊNH} luôn luôn là tham chiếu (Google Docs).
+        Không cần dấu \texttt{\&}.
+    \end{block}
+    
+    Khi đưa một mảng vào hàm, mọi thay đổi bên trong hàm đều tác động trực tiếp lên mảng gốc.
+\end{frame}
+
+\begin{frame}[fragile]{Syntax: Passing Arrays}
+\begin{lstlisting}
+// mangSo[]: Nhan vao mot mảng
+void inMang(int mangSo[], int kichThuoc) {
+  for (int i = 0; i < kichThuoc; i++) {
+    // Thu sua doi gia tri truc tiep
+    mangSo[i] = mangSo[i] * 2; 
+    cout << mangSo[i] << " ";
+  }
+}
+
+int main() {
+  int soYeuThich[3] = {1, 2, 3};
+  inMang(soYeuThich, 3); // In ra: 2 4 6
+  
+  // Mang goc da bi thay doi vinh vien!
+  cout << "\nSo dau tien: " << soYeuThich[0]; // In ra: 2
+}
+\end{lstlisting}
+\end{frame}
+
+% --- TỔNG KẾT ---
+\section{Tổng kết & Thử thách}
+
+\begin{frame}{Tổng kết hành trình}
+    \begin{enumerate}
+        \item \textbf{Parameters vs Arguments:} Cái khuôn và nguyên liệu.
+        \item \textbf{Default Parameters:} Chế độ cho người "lười".
+        \item \textbf{Multiple Parameters:} Đúng thứ tự là chân ái.
+        \item \textbf{Return Values:} Shipper giao hàng.
+        \item \textbf{Pass by Reference (\&):} Sửa bản gốc (Google Docs).
+        \item \textbf{Passing Arrays:} Luôn sửa bản gốc (Mặc định).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Thử thách Final Boss}
+    \textbf{Đề bài:} Viết hàm \texttt{doiChoVaNhanDoi}:
+    \begin{itemize}
+        \item Nhận vào 2 số nguyên.
+        \item Hoán đổi vị trí của chúng.
+        \item SAU ĐÓ nhân đôi giá trị cả hai.
+        \item Ví dụ: Vào \texttt{a=1, b=2} $\rightarrow$ Ra \texttt{a=4, b=2}.
+    \end{itemize}
+
+    \pause
+    \begin{exampleblock}{Lời giải (Model Code)}
+\begin{lstlisting}
+void doiChoVaNhanDoi(int &a, int &b) {
+  // 1. Hoan doi (Swap)
+  int temp = a;
+  a = b;
+  b = temp;
+  
+  // 2. Nhan doi (Double)
+  a *= 2; // a = a * 2
+  b *= 2; // b = b * 2
+}
+\end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bước tiếp theo}
+    Bạn đã hoàn thành xuất sắc chủ đề Function Parameters!
+    
+    \vspace{1cm}
+    
+    \begin{exampleblock}{Next Step}
+        Chủ đề tiếp theo: \textbf{Function Overloading} (Nạp chồng hàm) - Nghệ thuật dùng 1 cái tên cho nhiều hàm khác nhau.
+    \end{exampleblock}
+    
+    \vspace{0.5cm}
+    \centering \textit{Chúc bạn học tốt!}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,17 @@
+\frametitle{Chương Đặc Biệt: Phép Toán Log}
+\begin{block}{Định nghĩa cho học sinh}
+        $\log_2(n)$ là: \textbf{"Số lần bạn cần chia $n$ cho 2 để kết quả bằng 1"}.
+    \end{block}
+
+    \begin{exampleblock}{Code minh họa tư duy Log}
+\begin{lstlisting}[language=C++]
+int dem_so_lan_chia_doi(int n) {
+    int count = 0;
+    while (n > 1) {
+        n = n / 2;
+        count++;
+    }
+    return count;
+}
+\end{lstlisting}
+    \end{exampleblock}

@@ -1,0 +1,236 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Đệ quy Codeforces]{Chiến lược rèn luyện tư duy đệ quy}
+\subtitle{Hệ thống bài tập Codeforces cấp độ Newbie và Pupil}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Tổng quan về Đệ quy}
+    \begin{itemize}
+        \item Đệ quy là triết lý giải quyết vấn đề dựa trên việc chia nhỏ bài toán lớn thành các bài toán con đồng dạng.
+        \item Quan trọng đối với cấp độ \textbf{Newbie (Rating 800-1100)}.
+        \item Nền tảng cho: Quy hoạch động (DP), Quay lui (Backtracking), Đồ thị.
+    \end{itemize}
+    \begin{alertblock}{Cơ chế hoạt động}
+        Dựa trên cấu trúc ngăn xếp (stack). Mỗi lời gọi hàm tạo ra một \texttt{stack\_frame} mới. Cần kiểm soát để tránh \textbf{stack overflow}.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Phân loại năng lực Đệ quy}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{l|l}
+            \textbf{Rating} & \textbf{Đặc điểm tư duy} \\ \hline
+            800 - 900 & Đệ quy tuyến tính, mô phỏng vòng lặp \\
+            900 - 1000 & Phân nhánh đơn giản, xử lý chuỗi \\
+            1100 - 1400 & Quay lui cơ bản, duyệt cây \\
+            1500+ & Kết hợp tối ưu hóa (DP, Chia để trị) \\
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+% Bài 1
+\begin{frame}{1. In ấn đệ quy (Print Recursion)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/A}{CF - 223339A}
+    \begin{block}{Yêu cầu}
+        Cho số nguyên $N$. In ra dòng chữ "I love Recursion" đúng $N$ lần bằng đệ quy.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        \begin{itemize}
+            \item \textbf{Base case}: Nếu $N = 0$, kết thúc.
+            \item \textbf{Thực hiện}: In dòng chữ trước, sau đó gọi đệ quy $N-1$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 2
+\begin{frame}{2. In số từ 1 đến N (Print from 1 to N)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/B}{CF - 223339B}
+    \begin{block}{Yêu cầu}
+        Cho số nguyên $N$, in các số từ 1 đến $N$, mỗi số trên một dòng.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        \textbf{Đệ quy ngược}: Đặt lệnh in sau lời gọi đệ quy $N-1$. Quá trình giải phóng ngăn xếp (unwinding) sẽ in theo thứ tự từ 1 đến $N$.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 3
+\begin{frame}{3. In số từ N về 1 (Print from N to 1)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/C}{CF - 223339C}
+    \begin{block}{Yêu cầu}
+        Cho số nguyên $N$, in các số từ $N$ về 1 trên cùng một dòng.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        In giá trị $N$ hiện tại ngay lập tức, sau đó mới gọi đệ quy cho $N-1$.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 4
+\begin{frame}{4. In các chữ số (Print Digits)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/D}{CF - 223339D}
+    \begin{block}{Yêu cầu}
+        Cho số nguyên không âm $N$, in ra các chữ số từ trái sang phải.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Gọi đệ quy với $N / 10$ để tiến tới chữ số đầu bên trái, sau đó in $N \% 10$ khi hàm quay lui.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 5
+\begin{frame}{5. Chuyển đổi hệ cơ số (Base Conversion)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/E}{CF - 223339E}
+    \begin{block}{Yêu cầu}
+        In biểu diễn nhị phân của số nguyên $N$.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Gọi đệ quy $N / 2$ và in $N \% 2$ để tự động đảo ngược thứ tự các số dư về đúng dạng nhị phân.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 6
+\begin{frame}{6. In mảng tại chỉ số chẵn (Print Even Indices)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/F}{CF - 223339F}
+    \begin{block}{Yêu cầu}
+        Cho mảng $A$, in các phần tử ở vị trí chỉ số chẵn theo thứ tự đảo ngược.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Sử dụng đệ quy tiến tới cuối mảng. Khi quay lui, kiểm tra nếu chỉ số là chẵn thì thực hiện in.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 7 & 8
+\begin{frame}{7 \& 8. Vẽ kim tự tháp (Pyramid)}
+    \textbf{Link}: CF - 223339G \& 223339H
+    \begin{block}{Yêu cầu}
+        Vẽ kim tự tháp thuận và ngược với độ cao $N$.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        \begin{itemize}
+            \item \textbf{Thuận}: In dòng hiện tại ($N - i$ khoảng trắng, $2i-1$ dấu sao) rồi gọi đệ quy.
+            \item \textbf{Ngược}: Gọi đệ quy đến dòng sâu hơn trước khi thực hiện in dòng hiện tại.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 9
+\begin{frame}{9. Đếm nguyên âm (Count Vowels)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/I}{CF - 223339I}
+    \begin{block}{Yêu cầu}
+        Đếm số lượng nguyên âm (a, e, i, o, u) trong chuỗi.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Duyệt qua từng ký tự bằng chỉ số $i$. Nếu là nguyên âm trả về $1 + \text{gọi đệ quy}$, ngược lại trả về $0 + \text{gọi đệ quy}$.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 10
+\begin{frame}{10. Tính giai thừa (Factorial)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/J}{CF - 223339J}
+    \begin{block}{Yêu cầu}
+        Tính giá trị $N!$.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Công thức truy hồi: $f(n) = n \times f(n-1)$. Lưu ý dùng kiểu dữ liệu \texttt{long long}.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 11 & 12
+\begin{frame}{11 \& 12. Max và Sum của mảng}
+    \textbf{Link}: CF - 223339K \& 223339L
+    \begin{block}{Yêu cầu}
+        Tìm phần tử lớn nhất và tính tổng các phần tử trong mảng.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        \begin{itemize}
+            \item \textbf{Max}: So sánh $A[i]$ với kết quả đệ quy của phần còn lại.
+            \item \textbf{Sum}: Trả về $A[i] + \text{sum}(i+1)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 15
+\begin{frame}{15. Số Fibonacci (Fibonacci)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/O}{CF - 223339O}
+    \begin{block}{Yêu cầu}
+        Tìm số Fibonacci thứ $n$.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Sử dụng công thức $f(n) = f(n-1) + f(n-2)$. Có thể thảo luận về \textbf{Memoization} để tối ưu.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 18
+\begin{frame}{18. Mảng đối xứng (Palindrome Array)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/R}{CF - 223339R}
+    \begin{block}{Yêu cầu}
+        Kiểm tra mảng có phải là Palindrome không.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        So sánh cặp $A[left]$ và $A[right]$. Nếu khác trả về NO, nếu giống tiếp tục thu hẹp vào bên trong.
+    \end{exampleblock}
+\end{frame}
+
+% Bài 20
+\begin{frame}{20. Tổ hợp (Combination)}
+    \textbf{Link}: \href{https://codeforces.com/group/MWSDmqGsZm/contest/223339/problem/T}{CF - 223339T}
+    \begin{block}{Yêu cầu}
+        Tính giá trị $C(n, r)$.
+    \end{block}
+    \begin{exampleblock}{Chiến lược}
+        Dựa trên tính chất tam giác Pascal: $C(n, r) = C(n-1, r-1) + C(n-1, r)$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Lời kết và Lộ trình}
+    \begin{itemize}
+        \item \textbf{Giai đoạn 1}: Mô phỏng vòng lặp (In ấn).
+        \item \textbf{Giai đoạn 2}: Xử lý mảng/chuỗi & giá trị trả về.
+        \item \textbf{Giai đoạn 3}: Đệ quy đa chiều & Chia để trị.
+    \end{itemize}
+    \begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=Lời khuyên]
+        Nắm vững đệ quy là chìa khóa để tiến tới Quy hoạch động và Đồ thị sau này.
+    \end{tcolorbox}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,25 @@
+\frametitle{Ví dụ: Boy or Girl (236A)}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+#include <set>
+#include <string>
+
+int main() {
+    std::string s;
+    std::cin >> s;
+    std::set<char> distinct_chars;
+    for(char c : s) {
+        distinct_chars.insert(c);
+    }
+
+    if(distinct_chars.size() % 2 == 0)
+        std::cout << "CHAT WITH HER!";
+    else
+        std::cout << "IGNORE HIM!";
+    return 0;
+}
+\end{lstlisting}
+\pause
+\begin{block}{Kết quả}
+    Chương trình sẽ đếm số ký tự duy nhất và đưa ra quyết định.
+\end{block}
