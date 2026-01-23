@@ -1,0 +1,15 @@
+\frametitle{Chunk 4: Tổng kết thuật toán (The Logic Flow)}
+\begin{block}{Hoàn thiện Logic}
+    Hãy điền vào chỗ trống để hoàn thiện quy trình:
+  \end{block}
+
+  \begin{itemize}
+    \item \textbf{B1:} Nếu độ dài chuỗi $s \le$ \dots \pause \textbf{2} \dots thì loại.
+    \item \textbf{B2:} Kiểm tra $s[0], s[1]$ có phải là \dots \pause \textbf{"10"} \dots không?
+    \item \textbf{B3:} Lấy phần còn lại gọi là \texttt{expo\_str}.
+    \begin{itemize}
+      \item Nếu ký tự đầu của \texttt{expo\_str} là \dots \pause \textbf{'0'} \dots thì loại.
+      \item Chuyển \texttt{expo\_str} sang số $a$. Nếu $a <$ \dots \pause \textbf{2} \dots thì loại.
+    \end{itemize}
+    \item \textbf{B4:} Nếu vượt qua tất cả, in ra "YES".
+  \end{itemize}

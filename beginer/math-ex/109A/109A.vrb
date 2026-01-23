@@ -1,0 +1,23 @@
+\frametitle{Ma gia tu duy }
+\begin{lstlisting}[language=C++]
+1. Nhap so nguyen n.
+2. Khoi tao cac gia tri ban dau:
+   - seven = n / 7 (Gia dinh dung toi da chu so 7)
+   - four = (n % 7) / 4 (Lay phan du cua n cho 7 roi chia cho 4)
+
+3. Vong lap kiem tra dieu kien khop tong:
+   Chung nao (seven * 7 + four * 4 != n) VA (seven >= 0):
+   a. Giam bot mot chu so 7: seven = seven - 1
+   b. Tinh lai so luong chu so 4 can thiet:
+      - remainder = n - (seven * 7)
+      - four = remainder / 4
+
+4. Ket luan va in ket qua:
+   - Neu seven >= 0 (Tim thay ket qua):
+     + In ra chu so 4 voi so luong la 'four'.
+     + In ra chu so 7 voi so luong la 'seven'.
+   - Neu seven < 0 (Khong co cach ket hop):
+     + In ra -1.
+\end{lstlisting}
+
+

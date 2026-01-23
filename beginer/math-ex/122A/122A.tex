@@ -1,0 +1,190 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Phân tích bài toán: 122A - Lucky Division}
+\subtitle{Tư duy thuật toán từng bước}
+\author{Codeforces Solving}
+\date{\today}
+
+\begin{document}
+
+% Slide Tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Bước 1: Phẫu thuật đề bài
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Briefing)}
+    \begin{block}{Các định nghĩa cốt lõi}
+        \begin{enumerate}
+            \item \textbf{Số may mắn (Lucky Number):} Là những số chỉ chứa các chữ số $4$ và $7$. Ví dụ: $47, 744, 4$.
+            \item \textbf{Số suýt may mắn (Almost Lucky Number):} Một số $n$ được gọi là "suýt may mắn" nếu nó \textbf{chia hết} cho bất kỳ một "số may mắn" nào đó.
+            \item \textbf{Nhiệm vụ:} Nhập $n$ ($1 \le n \le 1000$). Kiểm tra xem $n$ có phải là "số suýt may mắn" hay không.
+        \end{enumerate}
+    \end{block}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{itemize}
+            \item \textbf{Chunk 1:} Nhận diện "Số may mắn" trong phạm vi cho phép.
+            \item \textbf{Chunk 2:} Kiểm tra tính chia hết (Chiến thuật "Bắn hạ mục tiêu").
+            \item \textbf{Chunk 3:} Tổng kết và chốt phương án.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Chunk 1: Nhận diện số may mắn
+\begin{frame}{Chunk 1: Nhận diện "Số may mắn"}
+    Vì đề bài giới hạn $n$ trong khoảng từ $1$ đến $1000$, chúng ta chỉ cần quan tâm các số may mắn trong khoảng này.
+    
+    \vspace{0.5cm}
+    Liệt kê theo số lượng chữ số:
+    \begin{itemize}
+        \item \textbf{Có 1 chữ số:} $4, 7$
+        \item \textbf{Có 2 chữ số:} $44, 47, 74, 77$
+        \item \textbf{Có 3 chữ số:} $444, 447, 474, 477, 744, 747, 774, 777$
+    \end{itemize}
+\end{frame}
+
+% Thử thách tư duy 1
+\begin{frame}{Thử thách tư duy: Số nào KHÔNG phải "Lucky"?}
+    Trong các số sau đây, số nào \textbf{KHÔNG PHẢI} là "số may mắn"?
+    
+    \begin{itemize}
+        \item A. $47$
+        \item B. $744$
+        \item C. $467$
+        \item D. $7$
+    \end{itemize}
+
+    \pause
+    \vspace{1cm}
+    \begin{alertblock}{Đáp án}
+        \textbf{C. 467}. \\
+        Giải thích: Con số $6$ đã "tố cáo" nó không phải là số may mắn (chỉ được chứa $4$ và $7$).
+    \end{alertblock}
+\end{frame}
+
+% Chunk 2: Chiến thuật
+\begin{frame}{Chunk 2: Chiến thuật "Bắn hạ mục tiêu"}
+    Để kiểm tra $n$ có phải là "số suýt may mắn" hay không, ta xem $n$ có chia hết cho \textbf{bất kỳ} số may mắn nào trong danh sách dưới đây không:
+    
+    \vspace{0.5cm}
+    \texttt{List = \{4, 7, 44, 47, 74, 77, 444, 447, 474, 477, 744, 747, 774, 777\}}
+    
+    \vspace{0.5cm}
+    \begin{alertblock}{Cạm bẫy (Trap)}
+        Chỉ cần chia hết cho \textbf{MỘT} số trong danh sách trên là đủ để kết luận \texttt{YES}. Không cần phải chia hết cho tất cả!
+    \end{alertblock}
+\end{frame}
+
+% Thử thách tư duy 2
+\begin{frame}{Thử thách tư duy: Kiểm tra số 47}
+    Giả sử người dùng nhập vào số \textbf{47}.
+    
+    \begin{enumerate}
+        \item 47 có chia hết cho số nào trong danh sách số may mắn không?
+        \item Kết quả cuối cùng bài này nên in ra là \texttt{YES} hay \texttt{NO}?
+    \end{enumerate}
+
+    \pause
+    \vspace{0.5cm}
+    \begin{exampleblock}{Kết quả}
+        \textbf{YES}. \\
+        Giải thích: $47$ chia hết cho $47$ (chính nó là một số may mắn). Theo định nghĩa, $47$ là "số suýt may mắn".
+    \end{exampleblock}
+\end{frame}
+
+% Chunk 3: Ví dụ số 79
+\begin{frame}{Chunk 3: Kiểm tra số 79}
+    Nếu nhập vào số \textbf{79}. Hãy nhìn lại danh sách:
+    
+    \texttt{4, 7, 44, 47, 74, 77, ...}
+    
+    \vspace{0.5cm}
+    Theo bạn, với $n = 79$, máy tính sẽ in ra \texttt{YES} hay \texttt{NO}?
+    
+    \pause
+    \vspace{0.5cm}
+    \begin{alertblock}{Kết quả}
+        \textbf{NO}. \\
+        Giải thích: $79$ không chia hết cho $4$, không chia hết cho $7$, và cũng không chia hết cho bất kỳ số nào lớn hơn trong danh sách.
+    \end{alertblock}
+\end{frame}
+
+% Mã giả (Pseudocode) - Slide quan trọng
+\begin{frame}[fragile]{Mã giả (Tư duy lập trình)}
+    Chiến thuật "Duyệt danh sách" được thể hiện như sau (Tiếng Việt không dấu):
+
+\begin{lstlisting}[language=Python, caption=Mã giả giải thuật]
+BUOC 1: Tao mot mang (danh sach) chua cac so: 
+        4, 7, 44, 47, 74, 77, 444, 447, 474, 477, 744, 747...
+
+BUOC 2: Nhap so nguyen n tu ban phim.
+
+BUOC 3: Tao bien "kiem_tra" va dat la False (chua tim thay).
+
+BUOC 4: Chay vong lap qua tung so "x" trong danh sach o Buoc 1:
+        Neu n chia cho x du 0:
+           Dat "kiem_tra" thanh True.
+           Dung vong lap (break).
+
+BUOC 5: Neu "kiem_tra" la True:
+           In ra "YES".
+        Nguoc lai:
+           In ra "NO".
+\end{lstlisting}
+\end{frame}
+
+% Câu hỏi cuối cùng
+\begin{frame}{Câu hỏi chốt thuật toán}
+    Trong Bước 4, tại sao chúng ta nên dùng lệnh "Dừng vòng lặp" (\texttt{break}) ngay khi tìm thấy một số mà $n$ chia hết?
+
+    \begin{enumerate}
+        \item Để tiết kiệm thời gian chạy của máy tính.
+        \item Vì nếu không dừng, máy tính sẽ bị lỗi.
+        \item Vì đề bài yêu cầu chỉ được chia hết cho đúng một số duy nhất.
+    \end{enumerate}
+
+    \pause
+    \vspace{1cm}
+    \begin{exampleblock}{Đáp án chính xác}
+        \textbf{1. Để tiết kiệm thời gian chạy của máy tính.} \\
+        Khi đã tìm thấy một ước số may mắn, điều kiện đề bài đã thỏa mãn. Việc kiểm tra tiếp là dư thừa.
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

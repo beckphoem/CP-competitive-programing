@@ -1,0 +1,161 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Beat The Odds - Codeforces 1691A}
+\subtitle{Tư duy thuật toán theo phong cách "Learning How to Learn"}
+\author{Coach Tư Duy Thuật Toán}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Briefing)}
+    \begin{block}{Cốt lõi vấn đề}
+        \begin{itemize}
+            \item \textbf{Dữ liệu:} Một dãy số nguyên (mảng $a$).
+            \item \textbf{Yêu cầu:} Loại bỏ một số lượng \textbf{ít nhất} các con số sao cho: Với mọi cặp số nằm cạnh nhau trong dãy còn lại, \textbf{tổng của chúng phải là một số chẵn}.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item Mảnh ghép 1: Bản chất của việc "Tổng hai số là số chẵn".
+            \item Mảnh ghép 2: Hiệu ứng dây chuyền trong một dãy số.
+            \item Mảnh ghép 3: Chiến thuật "Hy sinh ít nhất".
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Quy luật của sự "Chẵn hóa"}
+    Để tổng của 2 số là một số \textbf{Chẵn}, có hai kịch bản xảy ra:
+    \begin{itemize}
+        \item \textbf{Chẵn + Chẵn = Chẵn} (Ví dụ: $2 + 4 = 6$)
+        \item \textbf{Lẻ + Lẻ = Chẵn} (Ví dụ: $3 + 5 = 8$)
+    \end{itemize}
+
+    \begin{alertblock}{Bẫy logic}
+        Nếu bạn để một số Chẵn đứng cạnh một số Lẻ ($2 + 3 = 5$), tổng của chúng sẽ là số Lẻ. Đây là điều đề bài "cấm".
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 1}
+    Giả sử chúng ta có một dãy gồm 3 số đứng cạnh nhau: $a_1, a_2, a_3$. Để cả hai cặp $(a_1, a_2)$ và $(a_2, a_3)$ đều có tổng là số chẵn, thì mối quan hệ của $a_1$ và $a_3$ phải như thế nào?
+    
+    \begin{itemize}
+        \item \textbf{A.} $a_1$ và $a_3$ có thể khác tính chẵn lẻ.
+        \item \textbf{B.} $a_1$ và $a_3$ bắt buộc phải cùng tính chẵn lẻ với nhau.
+    \end{itemize}
+    
+    \pause
+    \begin{block}{Đáp án: B}
+        \textbf{Hệ quả:} Trong một dãy thỏa mãn yêu cầu, \textbf{tất cả các số trong dãy phải có cùng tính chẵn lẻ} (tất cả cùng chẵn hoặc tất cả cùng lẻ).
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 2: Chiến thuật "Hy sinh ít nhất"}
+    Bạn chỉ có 2 lựa chọn (Option) để dãy hợp lệ:
+    \begin{itemize}
+        \item \textbf{Option 1:} Giữ lại toàn bộ số \textbf{Chẵn}, xóa sạch số \textbf{Lẻ}.
+        \item \textbf{Option 2:} Giữ lại toàn bộ số \textbf{Lẻ}, xóa sạch số \textbf{Chẵn}.
+    \end{itemize}
+
+    \begin{block}{Ẩn dụ hóa}
+        Rổ trái cây gồm Cam (Chẵn) và Táo (Lẻ). Bạn muốn vứt đi \textbf{ít nhất} để trong rổ chỉ còn 1 loại quả.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 2}
+    Giả sử trong rổ (mảng $a$) có:
+    \begin{itemize}
+        \item 7 quả Cam (7 số chẵn)
+        \item 3 quả Táo (3 số lẻ)
+    \end{itemize}
+
+    \textbf{Câu hỏi:} Số lượng quả \textbf{ít nhất} bạn phải vứt đi là bao nhiêu?
+    
+    \pause
+    \begin{exampleblock}{Kết luận}
+        \textbf{Kết quả là 3.} Ta sẽ cho phe "yếu thế" hơn (số lượng ít hơn) bay màu để giữ lại phe đông đảo hơn.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 3: Tổng kết \& Thuật toán}
+    Bài toán đưa về 3 bước đơn giản:
+    \begin{enumerate}
+        \item \textbf{Bước 1:} Đếm xem trong dãy có bao nhiêu số \textbf{Chẵn}.
+        \item \textbf{Bước 2:} Đếm xem trong dãy có bao nhiêu số \textbf{Lẻ}.
+        \item \textbf{Bước 3:} Kết quả chính là \textbf{số nhỏ hơn} trong hai kết quả đếm trên.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Mã giả (Pseudocode)}
+\begin{lstlisting}[language=Python]
+Nhap vao so bo test (t)
+Voi moi bo test:
+    Nhap vao so luong phan tu (n)
+    Bien dem_le = 0
+    Bien dem_chan = 0
+    
+    Voi moi so x trong day:
+        Neu x chia het cho 2:
+            dem_chan = dem_chan + 1
+        Neu khong:
+            dem_le = dem_le + 1
+            
+    In ra gia tri nho nhat giua (dem_chan, dem_le)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    \begin{alertblock}{Tư duy biên (Edge Cases)}
+        Nếu dãy chỉ có đúng 2 số và cả hai đều là số lẻ (ví dụ: $[3, 5]$), thì theo thuật toán trên, bạn sẽ phải xóa bao nhiêu số? Và dãy còn lại có thỏa mãn đề bài không?
+    \end{alertblock}
+    
+    \pause
+    \begin{block}{Gợi ý}
+        Dãy còn lại 1 số mặc định là thỏa mãn vì không còn cặp nào kề nhau để vi phạm. Thuật toán trả về 0 (vì \texttt{dem\_chan} = 0).
+    \end{block}
+    
+    \begin{center}
+        \textbf{Chúc bạn lập trình thành công!}
+    \end{center}
+\end{frame}
+
+\end{document}

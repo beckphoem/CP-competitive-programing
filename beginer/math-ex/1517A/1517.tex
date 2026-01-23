@@ -1,0 +1,206 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Codeforces 1517A - Sum of 2050}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào}
+    \begin{block}{Đồng hành cùng bạn}
+        Chào bạn! Tôi đã sẵn sàng đồng hành cùng bạn để "mổ xẻ" tư duy thuật toán cho bài \textbf{Codeforces 1517A - Sum of 2050}.
+    \end{block}
+    
+    \begin{itemize}
+        \item Chúng ta sẽ không bắt đầu bằng những dòng code khô khan.
+        \item Hãy cùng biến những con số thành những mảnh ghép logic!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{🏗️ PHÁT THẢO LỘ TRÌNH (BRIEFING)}
+    \textbf{Tóm tắt đề bài:}
+    \begin{itemize}
+        \item Bạn có túi vô tận các số dạng $2050 \times 10^k$ (như $2050, 20500, 205000 \dots$).
+        \item Nhiệm vụ: Lấy ra ít số nhất sao cho tổng bằng $n$.
+        \item Nếu không thể: Trả về -1.
+    \end{itemize}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item \textbf{Chunk 1:} Tấm vé thông hành (Điều kiện cần và đủ).
+            \item \textbf{Chunk 2:} Chiến thuật "đổi tiền" (Phân rã số $n$).
+            \item \textbf{Chunk 3:} Tìm ra con số tối ưu (Tổng kết quy luật).
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{🧩 CHUNK 1: TẤM VÉ THÔNG HÀNH}
+    \textbf{Logic:}
+    Mọi số hạng đều có dạng $2050 \times 10^k$, nghĩa là chúng đều chia hết cho $2050$. Do đó, tổng của chúng ($n$) cũng phải chia hết cho $2050$.
+
+    \begin{alertblock}{Bẫy (Trap)}
+        Nhiều bạn sẽ cố gắng lấy $n$ trừ đi số 2050 lớn nhất có thể, rồi lại trừ tiếp... nhưng nếu ngay từ đầu $n$ đã không chia hết cho 2050 thì mọi nỗ lực đều vô ích.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{❓ Thử thách tư duy (Mental Check)}
+    Trong các trường hợp sau, trường hợp nào chúng ta có thể khẳng định ngay là \textbf{không thể} (trả về -1)?
+    
+    \begin{itemize}
+        \item A. $n = 4100$
+        \item B. $n = 205$
+        \item C. $n = 2051$
+        \item D. Cả B và C
+    \end{itemize}
+
+    \pause
+    \begin{block}{Đáp án: D}
+        Cả B ($n < 2050$) và C ($n$ không chia hết cho 2050) đều không thể tạo ra được.
+    \end{block}
+\end{frame}
+
+\begin{frame}{🧩 CHUNK 2: CHIẾN THUẬT "ĐỔI TIỀN"}
+    \textbf{Logic:}
+    Giả sử $n$ chia hết cho 2050. Gọi $q = n / 2050$.
+    Bài toán trở thành: Cần ít nhất bao nhiêu số có dạng $10^k$ để cộng lại vừa bằng $q$?
+
+    \begin{block}{Ẩn dụ: Đổi tiền}
+        Bạn có $q$ đô la, ngân hàng chỉ có các tờ mệnh giá $1, 10, 100, 1000 \dots$
+        Để dùng \textbf{ít tờ nhất}, bạn sẽ đổi các tờ mệnh giá lớn nhất có thể.
+    \end{block}
+
+    \textbf{Ví dụ:} Với $q = 123$, ta cần:
+    \begin{itemize}
+        \item 1 tờ mệnh giá 100.
+        \item 2 tờ mệnh giá 10.
+        \item 3 tờ mệnh giá 1.
+        \item Tổng cộng: $1 + 2 + 3 = 6$ tờ.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{❓ Thử thách tư duy (Mental Check)}
+    Nếu sau khi chia $n$ cho $2050$, bạn nhận được thương số $q = 4021$.
+    Theo logic trên, bạn cần ít nhất bao nhiêu số hạng?
+
+    \begin{itemize}
+        \item A. 3
+        \item B. 7
+        \item C. 4
+        \item D. 4021
+    \end{itemize}
+
+    \pause
+    \begin{block}{Đáp án: B}
+        Tổng các chữ số: $4 + 0 + 2 + 1 = 7$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{🧩 CHUNK 3: TỔNG KẾT THUẬT TOÁN}
+    \begin{enumerate}
+        \item \textbf{Kiểm tra tính chia hết}: Nếu $n \% 2050 \neq 0$, kết quả là $-1$.
+        \item \textbf{Tính thương số}: $q = n / 2050$.
+        \item \textbf{Tính kết quả}: Tổng các chữ số của $q$.
+    \end{enumerate}
+
+    \begin{alertblock}{Kỹ thuật lập trình}
+        Để tách chữ số của $q$:
+        \begin{itemize}
+            \item Dùng \texttt{q \% 10} để lấy chữ số hàng đơn vị.
+            \item Dùng \texttt{q / 10} để bỏ chữ số đã lấy.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{❓ Thử thách cuối cùng}
+    Tính nhanh cho trường hợp $n = 6150$:
+    \begin{enumerate}
+        \item $n$ có chia hết cho 2050 không? Nếu có, $q$ bằng bao nhiêu?
+        \item Tổng các chữ số của $q$ là bao nhiêu?
+    \end{enumerate}
+
+    \pause
+    \begin{block}{Kết quả}
+        \begin{itemize}
+            \item $6150 / 2050 = 3$.
+            \item Tổng các chữ số là $3$.
+            \item In ra: $3$.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{📝 MÃ GIẢ (PSEUDOCODE)}
+\begin{lstlisting}[language=Python]
+Nhap n
+Neu n khong chia het cho 2050:
+    In ra -1
+Nguoc lai:
+    Gan q = n / 2050
+    Gan tong_chu_so = 0
+    
+    Trong khi q > 0:
+        tong_chu_so = tong_chu_so + (q chia lay du cho 10)
+        q = q chia lay nguyen cho 10
+        
+    In ra tong_chu_so
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{q \% 10} lấy số ở hàng đơn vị.
+    \item \texttt{q / 10} vứt bỏ hàng đơn vị để tiếp tục vòng lặp.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{🏁 BƯỚC CUỐI CÙNG}
+    Bạn muốn thực hiện bước nào tiếp theo?
+    
+    \begin{enumerate}
+        \item \textbf{Chuyển sang code C++ hoặc Python}: Giải quyết vấn đề kiểu dữ liệu lớn ($n \le 10^{18}$).
+        \item \textbf{Phân tích độ phức tạp (Big O)}: Tại sao cách này lại chạy rất nhanh.
+        \item \textbf{Thử thách bài mới}: Chuyển sang bài \textbf{71A - Way Too Long Words}.
+    \end{enumerate}
+    
+    \begin{block}{Lưu ý}
+        Vì $n$ có thể lên đến $10^{18}$, hãy sử dụng kiểu dữ liệu \texttt{long long} trong C++ nhé!
+    \end{block}
+\end{frame}
+
+\end{document}

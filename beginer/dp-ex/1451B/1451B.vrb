@@ -1,0 +1,17 @@
+\frametitle{Tổng kết thuật toán \& Mã giả}
+\begin{lstlisting}[language=C++, caption=Mã giả logic bài toán]
+Cho mỗi bộ test:
+  Đọc n, q và chuỗi S
+  Với mỗi truy vấn (l, r):
+    Biến can_jump = false
+    // Kiểm tra phía trước (l-1 vì string index 0)
+    Duyệt từ i = 0 đến l-2:
+      Nếu S[i] == S[l-1] thì can_jump = true
+
+    // Kiểm tra phía sau
+    Duyệt từ i = r đến n-1:
+      Nếu S[i] == S[r-1] thì can_jump = true
+
+    Nếu can_jump là true: In "YES"
+    Ngược lại: In "NO"
+    \end{lstlisting}

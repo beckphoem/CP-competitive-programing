@@ -1,0 +1,16 @@
+\frametitle{Mảnh ghép cuối cùng: Mã giả (Pseudocode)}
+Hãy điền vào logic còn thiếu:
+  \begin{lstlisting}[language=C++, style=mystyle]
+1. @\texttt{vi\_tri\_hien\_tai}@ = 0
+2. @\texttt{so\_buoc}@ = 0
+3. Lap cho den khi @\texttt{vi\_tri\_hien\_tai}@ == @\texttt{dich}@:
+   - @\texttt{xa\_nhat}@ = @\texttt{vi\_tri\_hien\_tai}@ + d
+   - Neu @\texttt{xa\_nhat}@ > @\texttt{dich}@, @\texttt{xa\_nhat}@ = @\texttt{dich}@
+   - Vong lap tim kiem: Tu @\texttt{xa\_nhat}@ lùi dần về @\texttt{vi\_tri\_hien\_tai}@ + 1:
+     + Neu gap '1':
+        * Cap nhat @\texttt{vi\_tri\_hien\_tai}@ = vi tri do
+        * Tang @\texttt{so\_buoc}@ len 1
+        * Thoat vong lap tim kiem
+   - Neu khong tim thay '1' nao:
+     + Tra ve [...] va dung chuong trinh.
+  \end{lstlisting}

@@ -1,0 +1,14 @@
+\frametitle{🏁 Chien luoc tong quat (Grand Strategy)}
+\begin{lstlisting}[language=Python, caption=Ma gia thuat toan]
+1. Neu n chia het cho 7:
+   In ra n va dung lai.
+2. Neu khong:
+   - Tim n_base = (n / 10) * 10 (vi du 48 -> 40)
+   - Lap i tu 0 den 9:
+     - Neu (n_base + i) chia het cho 7:
+       In ra (n_base + i) va dung lai.
+    \end{lstlisting}
+
+    \begin{block}{Uu diem}
+        Dam bao so chu so khong doi va so luong thay doi luon la toi uu (0 hoac 1 chu so).
+    \end{block}

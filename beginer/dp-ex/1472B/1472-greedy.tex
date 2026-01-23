@@ -1,0 +1,173 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} 
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Fair Division]{Huấn luyện viên Tư duy Thuật toán}
+\subtitle{Codeforces 1472B - Fair Division}
+\author{Gemini AI}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Phẫu thuật đề bài (Briefing)}
+    \begin{block}{Cốt lõi vấn đề}
+        \begin{itemize}
+            \item \textbf{Dữ liệu:} Túi kẹo gồm 2 loại: nặng 1g và nặng 2g.
+            \item \textbf{Mục tiêu:} Chia kẹo thành 2 phần có \textbf{tổng khối lượng} bằng nhau.
+            \item \textbf{Ràng buộc:} Không được cắt đôi viên kẹo.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item Điều kiện cần (Tổng khối lượng).
+            \item Khả năng lấp đầy (Sử dụng kẹo 2g và kẹo 1g).
+            \item Xử lý bẫy logic.
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Điều kiện "Tổng chẵn"}
+    \begin{itemize}
+        \item Để chia đôi thành 2 phần bằng nhau ($A$ và $B$), thì mỗi phần phải nặng đúng bằng $\frac{S}{2}$.
+        \item \textbf{Ẩn dụ:} Nếu có tổng 7 viên kẹo 1g, không thể chia đều mà không bẻ đôi.
+    \end{itemize}
+
+    \begin{alertblock}{Thử thách tư duy}
+        Túi có: 1 viên 2g và 1 viên 1g. Tổng khối lượng là 3g. Có thể chia đều không?
+    \end{alertblock}
+    
+    \pause
+    \textbf{Đáp án:} Không! Vì 3 là số lẻ.
+    \begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=Điều kiện 1]
+        Tổng khối lượng tất cả viên kẹo phải là một \textbf{số chẵn}.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{Chunk 2: "Bẫy" kẹo 2g}
+    \begin{alertblock}{Trường hợp ngang trái}
+        Bạn có 1 viên kẹo 2g và 0 viên kẹo 1g. Tổng là 2 (số chẵn). Có chia được không?
+    \end{alertblock}
+
+    \pause
+    \textbf{Đáp án:} Không! Vì chỉ có 1 khối 2g, không thể chia cho 2 người mỗi người 1g.
+
+    \begin{block}{Quan sát quan trọng}
+        \begin{itemize}
+            \item Nếu số lượng kẹo 2g là \textbf{chẵn}: Chia đều dễ dàng.
+            \item Nếu số lượng kẹo 2g là \textbf{lẻ}: Dư ra một viên 2g. Cần kẹo 1g để bù đắp.
+        \end{itemize}
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Câu hỏi}
+        Cần ít nhất bao nhiêu viên 1g để bù cho 1 viên 2g dư?
+    \end{exampleblock}
+    \pause
+    \textbf{Chính xác:} Cần ít nhất \textbf{2 viên 1g}.
+\end{frame}
+
+\begin{frame}{Chunk 3: Tổng kết logic}
+    Gọi $n_1$ là số lượng kẹo 1g, $n_2$ là số lượng kẹo 2g.
+    
+    \begin{itemize}
+        \item \textbf{Trường hợp A:} Nếu $n_2$ chẵn. Chỉ cần $n_1$ chẵn là xong.
+        \item \textbf{Trường hợp B:} Nếu $n_2$ lẻ. Cần ít nhất 2 viên 1g để cân bằng, sau đó số kẹo 1g còn lại ($n_1 - 2$) cũng phải chẵn.
+    \end{itemize}
+
+    \begin{alertblock}{Thử thách chốt hạ}
+        $n_2 = 3$ và $n_1 = 1$. Tổng = 7g. Có chia được không?
+    \end{alertblock}
+    \pause
+    \textbf{Đáp án:} Không! Vì tổng khối lượng lẻ.
+\end{frame}
+
+\begin{frame}[fragile]{Mã giả (Pseudocode)}
+    \begin{lstlisting}[language=Python, caption=Logic kiểm tra điều kiện]
+    Neu (Tong_khoi_luong la so le):
+        In ra "NO"
+    Neu (So_luong_keo_2g la so le VA So_luong_keo_1g == 0):
+        In ra "NO"
+    Con lai:
+        In ra "YES"
+    \end{lstlisting}
+    
+    \begin{block}{Giải thích}
+        Nếu tổng chẵn và có đủ kẹo 1g để bù đắp cho sự lẻ loi của kẹo 2g (nếu có), chúng ta luôn chia được.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Mở rộng: Tư duy Quy hoạch động (DP)}
+    \begin{block}{Bản chất DP}
+        Sử dụng mảng \texttt{dp[i]} để đánh dấu xem có thể tạo ra tổng khối lượng bằng \texttt{i} hay không.
+    \end{block}
+
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}lll@{}}
+        \toprule
+        Đặc điểm & Greedy/Math & Quy hoạch động (DP) \\ \midrule
+        Tốc độ & Cực nhanh $O(1)$ & Chậm hơn $O(n \cdot \text{target})$ \\
+        Độ linh hoạt & Thấp & \textbf{Rất cao} (nhiều loại tạ) \\ \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Cấu trúc mã giả DP}
+    \begin{lstlisting}[language=C++, caption=Thuật toán Dynamic Programming]
+    target = tong_khoi_luong / 2
+    dp[0] = True
+    Cac dp[1...target] = False
+
+    Voi moi vien keo v trong danh sach:
+        Chay i tu target xuong den v:
+            dp[i] = dp[i] HOAC dp[i - v]
+
+    Ket qua: Neu dp[target] la True thi YES, nguoc lai NO
+    \end{lstlisting}
+
+    \begin{alertblock}{Câu hỏi tư duy}
+        Tại sao biến \texttt{i} phải chạy \textbf{ngược} từ \texttt{target} về \texttt{v}?
+    \end{alertblock}
+    \pause
+    \textbf{Gợi ý:} Để đảm bảo mỗi viên kẹo chỉ được sử dụng \textbf{một lần} duy nhất.
+\end{frame}
+
+\end{document}

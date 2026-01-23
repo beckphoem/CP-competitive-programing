@@ -1,0 +1,159 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Huấn luyện Tư duy Thuật toán}
+\subtitle{Codeforces 1633A - Div. 7}
+\author{Slide Learning CPP}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Chào mừng bạn!}
+    \begin{block}{Triết lý Learning How to Learn}
+        Chào mừng bạn đến với lộ trình "mổ xẻ" bài toán chuyên sâu. Chúng ta sẽ không chỉ học Code, chúng ta học cách tư duy để giải quyết vấn đề.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Briefing)}
+    \begin{itemize}
+        \item \textbf{Đầu vào:} Một số nguyên $n$.
+        \item \textbf{Nhiệm vụ:} Tìm số $m$ sao cho $m \vdots 7$ và $m$ khác biệt với $n$ ở \textbf{ít chữ số nhất}.
+        \item \textbf{Ràng buộc:} 
+        \begin{itemize}
+            \item Không thay đổi số lượng chữ số (ví dụ: $n$ có 2 chữ số thì $m$ phải có 2 chữ số).
+            \item Không được có số 0 ở đầu (trừ khi chính nó là số 0).
+        \end{itemize}
+    \end{itemize}
+    \begin{exampleblock}{Lộ trình tư duy}
+        1. Kiểm tra trạng thái "Lý tưởng".\\
+        2. Chiến thuật "Sửa chữa tối thiểu".\\
+        3. Tìm quy luật trên vạch số.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Trạng thái "Lý tưởng" \& Khoảng cách số}
+    Hãy tưởng tượng số 7 giống như một cái trạm xe buýt xuất hiện đều đặn: 7, 14, 21, 28...
+    
+    \begin{alertblock}{Bẫy logic}
+        Nếu số $n$ đã chia hết cho 7, mục tiêu của chúng ta là \textbf{thay đổi ít nhất có thể} (tức là thay đổi 0 chữ số).
+    \end{alertblock}
+
+    \pause
+    
+    \begin{exampleblock}{Thử thách tư duy}
+        Nếu tôi đưa cho bạn số $n = 42$. Bạn có cần thay đổi chữ số nào không? Kết quả trả về là bao nhiêu?
+    \end{exampleblock}
+    
+    \pause
+    \textbf{Trả lời:} Không cần đổi. Kết quả là 42 (vì $42 \vdots 7$).
+\end{frame}
+
+\begin{frame}{Trường hợp "Không lý tưởng"}
+    Xét $n = 48$. Số này không chia hết cho 7.
+    Các trạm xe buýt gần đó:
+    \begin{itemize}
+        \item Số nhỏ hơn gần nhất: 42 (thay 8 thành 2 - đổi 1 chữ số).
+        \item Số lớn hơn gần nhất: 49 (thay 8 thành 9 - đổi 1 chữ số).
+    \end{itemize}
+
+    \begin{block}{Vùng an toàn}
+        Khoảng cách giữa các số chia hết cho 7 chỉ là \textbf{7 đơn vị}. Điều này cực kỳ quan trọng cho chiến thuật tiếp theo.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 2: Chiến thuật "Giữ nguyên hàng chục"}
+    \begin{itemize}
+        \item Mục tiêu: Chỉ tìm một chữ số hàng đơn vị mới để $m \vdots 7$.
+        \item Ví dụ với $n = 48$: Thử các số từ 40 đến 49.
+    \end{itemize}
+
+    \begin{exampleblock}{Thử thách tư duy}
+        Tại sao trong một dãy 10 số liên tiếp (ví dụ từ 40 đến 49), chúng ta \textbf{luôn luôn} tìm được ít nhất một số chia hết cho 7?
+    \end{exampleblock}
+    
+    \pause
+    \textbf{Gợi ý:} Khoảng cách giữa các số chia hết cho 7 là 7 đơn vị, nhỏ hơn độ dài dãy (10 đơn vị).
+\end{frame}
+
+\begin{frame}{Chunk 3: Xử lý "Bẫy" hàng đơn vị}
+    \begin{alertblock}{Rủi ro}
+        Nếu ta thay đổi chữ số bằng cách cộng/trừ đơn thuần, có thể vô tình làm thay đổi hàng chục (ví dụ: $48 + 3 = 51$).
+    \end{alertblock}
+
+    \begin{block}{Chiến thuật an toàn}
+        Chỉ tìm kiếm trong phạm vi các số có cùng chữ số hàng chục với $n$.
+        \begin{enumerate}
+            \item $n = 48 \rightarrow$ Quét dãy $[40, 49]$.
+            \item Tìm thấy 42 hoặc 49. Cả hai đều chỉ khác $n$ đúng 1 chữ số.
+        \end{enumerate}
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Thử thách cuối}
+        Nếu $n = 882$, bạn sẽ "quét" qua dãy số nào?
+    \end{exampleblock}
+    \pause
+    \textbf{Đáp án:} Dãy từ 880 đến 889.
+\end{frame}
+
+\begin{frame}[fragile]{🏁 Chien luoc tong quat (Grand Strategy)}
+    \begin{lstlisting}[language=Python, caption=Ma gia thuat toan]
+1. Neu n chia het cho 7:
+   In ra n va dung lai.
+2. Neu khong:
+   - Tim n_base = (n / 10) * 10 (vi du 48 -> 40)
+   - Lap i tu 0 den 9:
+     - Neu (n_base + i) chia het cho 7:
+       In ra (n_base + i) va dung lai.
+    \end{lstlisting}
+
+    \begin{block}{Uu diem}
+        Dam bao so chu so khong doi va so luong thay doi luon la toi uu (0 hoac 1 chu so).
+    \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách thực thi}
+    \begin{exampleblock}{Tới lượt bạn!}
+        Bạn hãy thử viết code cho bài này bằng ngôn ngữ bạn thích (C++, Python, Java...). 
+        
+        Bạn muốn tự tay thực hiện hay muốn xem mã nguồn mẫu từ Coach?
+    \end{exampleblock}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,155 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Primary Task]{Huấn luyện viên tư duy thuật toán}
+\subtitle{Codeforces 2000A - Primary Task}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Khởi đầu: Phương pháp Micro-Chunks}
+  \begin{block}{Mục tiêu}
+    Chúng ta sẽ không sa đà vào việc viết code ngay lập tức. Thay vào đó, chúng ta sẽ "phẫu thuật" từng lớp của bài toán theo phương pháp \textbf{Micro-Chunks} (chia nhỏ tư duy).
+  \end{block}
+  
+  \begin{itemize}
+    \item \textbf{Mảnh ghép 1:} Cách tách số $n$ thành "Tiền tố" và "Số mũ".
+    \item \textbf{Mảnh ghép 2:} Kiểm tra "Tiền tố" có đúng chuẩn không.
+    \item \textbf{Mảnh ghép 3:} Xử lý các điều kiện của "Số mũ".
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+  \begin{exampleblock}{Định dạng bắt buộc: $10^a$}
+    Số nguyên $n$ phải có dạng: \textbf{10...}, với các điều kiện:
+  \end{exampleblock}
+  
+  \begin{enumerate}
+    \item Bắt đầu bằng hai chữ số \textbf{"10"}.
+    \item Phần còn lại (số mũ $a$) phải thỏa mãn:
+    \begin{itemize}
+      \item Giá trị của $a$ phải \textbf{lớn hơn hoặc bằng 2} ($a \ge 2$).
+      \item $a$ \textbf{không được bắt đầu bằng chữ số 0}.
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chunk 1: Định dạng cơ bản (The Structure)}
+  \begin{block}{Thử thách tư duy}
+    Dựa trên quy tắc: "Bắt đầu bằng 10" và "Có phần số mũ $a$". Trong các số sau, số nào \textbf{vi phạm}?
+    \begin{enumerate}
+      \item \texttt{101}
+      \item \texttt{2010}
+      \item \texttt{10}
+      \item \texttt{1015}
+    \end{enumerate}
+  \end{block}
+
+  \pause
+  
+  \begin{alertblock}{Đáp án & Giải thích}
+    \begin{itemize}
+      \item \textbf{Số 2 (\texttt{2010})}: Vi phạm vì bắt đầu bằng "20".
+      \item \textbf{Số 3 (\texttt{10})}: Vi phạm vì "cụt đuôi" — không có phần số mũ $a$.
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Chunk 2: Điều kiện của "Số mũ" (The Exponent)}
+  \begin{block}{2 Điều kiện khắt khe}
+    \begin{enumerate}
+      \item \textbf{Giá trị}: $a \ge 2$.
+      \item \textbf{Hình thức}: Không có số 0 vô nghĩa ở đầu (ví dụ: "05" là sai).
+    \end{enumerate}
+  \end{block}
+
+  \textbf{Ví dụ:}
+  \begin{itemize}
+    \item Số A: \texttt{10} + \texttt{1} $\rightarrow$ $a=1$ (Loại vì $1 < 2$).
+    \item Số B: \texttt{10} + \texttt{02} $\rightarrow$ Bắt đầu bằng \texttt{0} (Loại).
+    \item Số C: \texttt{10} + \texttt{14} $\rightarrow$ \textbf{Hợp lệ}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 3: Cách "tóm" lấy phần số mũ}
+  \begin{block}{Tư duy lập trình}
+    Coi số $n$ là một \textbf{Chuỗi ký tự (String)} $s$:
+    \begin{itemize}
+      \item \textbf{Tiền tố}: 2 ký tự đầu tiên ($s[0], s[1]$).
+      \item \textbf{Số mũ}: Các ký tự từ vị trí thứ 3 trở đi.
+    \end{itemize}
+  \end{block}
+
+  \begin{exampleblock}{Phân tích số $n = 1005$}
+    \begin{enumerate}
+      \item Tiền tố: \texttt{10} (Hợp lệ).
+      \item Số mũ: Chuỗi \texttt{05}.
+      \item Vi phạm: Bắt đầu bằng số \texttt{0}.
+    \end{enumerate}
+    \textbf{Kết luận:} $1005$ không phải là Primary Task.
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Chunk 4: Tổng kết thuật toán (The Logic Flow)}
+  \begin{block}{Hoàn thiện Logic}
+    Hãy điền vào chỗ trống để hoàn thiện quy trình:
+  \end{block}
+
+  \begin{itemize}
+    \item \textbf{B1:} Nếu độ dài chuỗi $s \le$ \dots \pause \textbf{2} \dots thì loại.
+    \item \textbf{B2:} Kiểm tra $s[0], s[1]$ có phải là \dots \pause \textbf{"10"} \dots không?
+    \item \textbf{B3:} Lấy phần còn lại gọi là \texttt{expo\_str}.
+    \begin{itemize}
+      \item Nếu ký tự đầu của \texttt{expo\_str} là \dots \pause \textbf{'0'} \dots thì loại.
+      \item Chuyển \texttt{expo\_str} sang số $a$. Nếu $a <$ \dots \pause \textbf{2} \dots thì loại.
+    \end{itemize}
+    \item \textbf{B4:} Nếu vượt qua tất cả, in ra "YES".
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Lời kết}
+  \begin{block}{Bước tiếp theo}
+    Bạn đã nắm vững logic của bài toán! Bạn có muốn tôi hỗ trợ chuyển đổi các bước logic này thành mã nguồn C++ hoàn chỉnh không?
+  \end{block}
+\end{frame}
+
+\end{document}

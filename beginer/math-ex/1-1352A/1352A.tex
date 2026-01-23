@@ -1,0 +1,179 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Sum of Round Numbers]{Huấn luyện Tư duy Thuật toán}
+\subtitle{Codeforces 1352A - Sum of Round Numbers}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    \begin{itemize}
+        \item \textbf{Định nghĩa "Số Tròn" (Round Number):} Là số chỉ có đúng \textbf{một} chữ số khác 0.
+        \begin{itemize}
+            \item Ví dụ đúng: 5, 400, 70, 9000.
+            \item Ví dụ sai: 110, 42, 1001 (vì có từ 2 chữ số khác 0 trở lên).
+        \end{itemize}
+        \item \textbf{Nhiệm vụ:} Cho số nguyên $n$, phân tích thành tổng của \textbf{ít nhất} các số tròn.
+    \end{itemize}
+    
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item Hiểu cách tách số thành hàng đơn vị, chục, trăm...
+            \item Lọc ra các "nguyên liệu" là số tròn.
+            \item Đếm và trình bày kết quả.
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Hiểu về "Giá trị vị trí" (Place Value)}
+    Hãy tưởng tượng số $n$ giống như một \textbf{số tiền} bạn đang có trong ví:
+    \begin{itemize}
+        \item Ví dụ số $9876$:
+        \item $9876 = 9000 + 800 + 70 + 6$
+    \end{itemize}
+    
+    \begin{block}{Ẩn dụ}
+        Mỗi vị trí đại diện cho một "tờ tiền" có mệnh giá khác nhau. Số 0 nghĩa là bạn không có tờ tiền ở mệnh giá đó.
+    \end{block}
+
+    \begin{alertblock}{Thử thách tư duy}
+        Nếu có số $50302$, bạn sẽ tách thành những số tròn nào?
+    \end{alertblock}
+    \pause
+    \textbf{Đáp án:} $50000, 300, 2$.
+\end{frame}
+
+\begin{frame}{Chunk 2: Chiến thuật "Quét sạch" (The Scanning Strategy)}
+    Sử dụng một chiếc \textbf{máy quét} từ phải sang trái (từ hàng đơn vị lên):
+    \begin{enumerate}
+        \item \textbf{Lần quét 1:} Lấy chữ số cuối. Nhân với $1$. Nếu $>0$, bỏ vào "giỏ".
+        \item \textbf{Lần quét 2:} Lấy chữ số tiếp theo. Nhân với $10$. Nếu $>0$, bỏ vào "giỏ".
+        \item \textbf{Lần quét 3:} Lấy chữ số tiếp theo. Nhân với $100$. Nếu $>0$, bỏ vào "giỏ".
+    \end{enumerate}
+
+    \begin{alertblock}{Bẫy logic (The Trap)}
+        Đừng cố biến số thành chuỗi (string). Hãy dùng toán học:
+        \begin{itemize}
+            \item \texttt{n \% 10}: Lấy chữ số cuối.
+            \item \texttt{n / 10}: Bỏ chữ số cuối.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách quét số 703}
+    Giả sử ta dùng toán học để "quét" số \textbf{703}:
+    \begin{itemize}
+        \item \textbf{Bước 1:} $703 \pmod{10} = 3$. Mệnh giá: $1$. Số tròn: $3 \times 1 = 3$.
+        \item \textbf{Bước 2:} $n$ thành $70$. $70 \pmod{10} = 0$. Mệnh giá: $10$.
+    \end{itemize}
+    \pause
+    \begin{exampleblock}{Kết quả Bước 2}
+        Ở bước này ta gặp số $0$, nên \textbf{không} nhặt gì bỏ vào giỏ. Số $70$ sẽ biến thành $7$ và mệnh giá nâng lên $100$ để quét tiếp.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 3: Tổng kết thuật toán}
+    \begin{enumerate}
+        \item Nhập số lượng bộ test $t$.
+        \item Với mỗi số $n$:
+        \begin{itemize}
+            \item Tạo một \textbf{danh sách} trống.
+            \item Biến \texttt{he\_so} = 1.
+            \item \textbf{Vòng lặp} khi $n > 0$:
+            \begin{enumerate}
+                \item \texttt{chu\_so = n \% 10}.
+                \item Nếu \texttt{chu\_so > 0}: Thêm \texttt{(chu\_so * he\_so)} vào danh sách.
+                \item \texttt{n = n / 10}.
+                \item \texttt{he\_so = he\_so * 10}.
+            \end{enumerate}
+        \end{itemize}
+        \item In ra số lượng phần tử và các số trong danh sách.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{🏆 Thử thách cuối cùng (The Final Boss)}
+    Vận hành thuật toán với số \textbf{4002}:
+    \begin{itemize}
+        \item Trong "giỏ" của bạn sẽ có bao nhiêu số tròn?
+        \item Đó là những số nào?
+    \end{itemize}
+    \pause
+    \begin{exampleblock}{Đáp án}
+        Có \textbf{2} số tròn: \textbf{2} (hàng đơn vị) và \textbf{4000} (hàng nghìn).
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Từ Tư duy sang Ngôn ngữ (Pseudocode)}
+\begin{lstlisting}[language=Python, caption=Mã giả Tiếng Việt]
+Doc vao so luong bo test (t)
+Lap lai t lan:
+    Doc vao so n
+    Tao mot mang de chua cac so tron
+    Bien he_so = 1
+    
+    Trong khi n > 0:
+        chu_so = n % 10
+        Neu chu_so != 0:
+            Luu (chu_so * he_so) vao mang
+        n = n / 10
+        he_so = he_so * 10
+    
+    In ra kich thuoc cua mang
+    In ra cac phan tu trong mang
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Lời kết và Gợi ý kỹ thuật}
+    \begin{itemize}
+        \item \textbf{Trong C++:} Dùng \texttt{std::vector<int>} để lưu kết quả vì số lượng số tròn không cố định.
+        \item \textbf{Trong Python:} Sử dụng một \texttt{list} đơn giản.
+    \end{itemize}
+    
+    \begin{block}{Bước tiếp theo}
+        Bạn có muốn thử tự viết code cho bài này không? Hay chúng ta sẽ sang bài tiếp theo: \textbf{"Way Too Long Words (71A)"}?
+    \end{block}
+\end{frame}
+
+\end{document}

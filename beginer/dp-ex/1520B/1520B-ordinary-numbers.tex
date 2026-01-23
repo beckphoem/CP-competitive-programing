@@ -1,0 +1,190 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Ordinary Numbers]{Giải quyết bài toán Ordinary Numbers}
+\subtitle{Codeforces 1520B}
+\author{Algorithmic Coach}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Định nghĩa: Số bình thường}
+        Một số được gọi là "bình thường" nếu \textbf{tất cả các chữ số của nó đều giống nhau}.
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Ví dụ:} $1, 2, 11, 333$ là số bình thường.
+        \item \textbf{Phản ví dụ:} $12, 121$ \textbf{không} phải là số bình thường.
+        \item \textbf{Nhiệm vụ:} Cho số nguyên $n$, đếm số lượng số bình thường trong khoảng từ $1$ đến $n$.
+    \end{itemize}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item Nhận diện quy luật theo từng "bậc".
+            \item Công thức hóa để tính nhanh với $n \le 10^9$.
+            \item Xây dựng thuật toán tối ưu.
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Quy luật của những "vị khách giống hệt nhau"}
+    Hãy tưởng tượng các số bình thường theo từng nhóm chữ số:
+    \begin{itemize}
+        \item \textbf{Đoàn có 1 chữ số:} $1, 2, 3, 4, 5, 6, 7, 8, 9$ (9 số).
+        \item \textbf{Đoàn có 2 chữ số:} $11, 22, 33, 44, 55, 66, 77, 88, 99$ (9 số).
+        \item \textbf{Đoàn có 3 chữ số:} $111, 222, \dots, 999$ (9 số).
+    \end{itemize}
+
+    \begin{alertblock}{Bẫy tư duy}
+        Mỗi "bậc" (số chữ số) luôn chỉ có tối đa 9 số bình thường, dù $n$ có lớn đến đâu.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy số 1}
+    \begin{exampleblock}{Câu hỏi}
+        Nếu cho số $n = 45$, có bao nhiêu số bình thường từ $1$ đến $45$?
+    \end{exampleblock}
+    
+    \pause
+    
+    \textbf{Đáp án:}
+    \begin{itemize}
+        \item Hàng đơn vị: $1, 2, 3, 4, 5, 6, 7, 8, 9$ (9 số).
+        \item Hàng chục: $11, 22, 33, 44$ (4 số).
+        \item \textbf{Tổng cộng: 13 số.}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Phát triển quy luật tổng quát}
+    Giả sử xét $n = 715$:
+    \begin{itemize}
+        \item \textbf{Bậc 1 chữ số:} $1 \dots 9$ (9 số).
+        \item \textbf{Bậc 2 chữ số:} $11 \dots 99$ (9 số).
+        \item \textbf{Bậc 3 chữ số:} Các số ứng viên $111, 222, 333, 444, 555, 666, 777 \dots$
+    \end{itemize}
+
+    \begin{exampleblock}{Thử thách}
+        Với $n = 715$, số bình thường lớn nhất có 3 chữ số thỏa mãn là bao nhiêu? Tổng cộng có bao nhiêu số từ $1 \dots 715$?
+    \end{exampleblock}
+
+    \pause
+    \textbf{Giải đáp:}
+    \begin{itemize}
+        \item Số lớn nhất là $666$ (vì $777 > 715$).
+        \item Tổng cộng: $9 + 9 + 6 = 24$ số.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 2: Công thức hóa "Siêu tốc"}
+    Để xử lý $n$ lên tới $10^9$:
+    \begin{enumerate}
+        \item Đếm số lượng chữ số của $n$ (gọi là $k$).
+        \item Với mỗi bậc nhỏ hơn $k$, cộng thêm $9$ số.
+        \item Với bậc cuối cùng (bậc có $k$ chữ số), kiểm tra các số dạng $x, xx, xxx \dots$
+    \end{enumerate}
+
+    \begin{block}{Ví dụ với $n = 210$}
+        \begin{itemize}
+            \item Bậc 1 chữ số: 9 số.
+            \item Bậc 2 chữ số: 9 số.
+            \item Bậc 3 chữ số: Chỉ có $111 \le 210$ (1 số).
+            \item \textbf{Tổng: $9 + 9 + 1 = 19$ số.}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 3: Xây dựng giải pháp tổng quát}
+    Xét ví dụ $n = 332$:
+    \begin{enumerate}
+        \item Số chữ số $k = 3$.
+        \item Phần "chắc chắn có": $(3 - 1) \times 9 = 18$ số.
+        \item Bậc có 3 chữ số: Kiểm tra các số $\{111, 222, 333\}$.
+    \end{enumerate}
+
+    \begin{exampleblock}{Câu hỏi}
+        Trong các số $\{111, 222, 333\}$, số nào $\le 332$? Tổng kết quả là bao nhiêu?
+    \end{exampleblock}
+
+    \pause
+    \textbf{Đáp án:}
+    \begin{itemize}
+        \item Thỏa mãn: $111, 222$ (2 số).
+        \item Tổng cộng: $18 + 2 = 20$ số.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Chunk 4: Tổng kết thuật toán (Final Logic)}
+    \begin{block}{Mã giả (Pseudocode)}
+        \begin{enumerate}
+            \item Nhập $n$, khởi tạo \texttt{dem = 0}.
+            \item Lặp \texttt{chu\_so} từ $1$ đến $9$:
+            \begin{itemize}
+                \item Khởi tạo \texttt{so\_tao\_ra = chu\_so}.
+                \item Trong khi \texttt{so\_tao\_ra <= n}:
+                \begin{itemize}
+                    \item Tăng \texttt{dem}.
+                    \item \texttt{so\_tao\_ra = so\_tao\_ra * 10 + chu\_so}.
+                \end{itemize}
+            \end{itemize}
+            \item In ra \texttt{dem}.
+        \end{enumerate}
+    \end{block}
+
+    \begin{exampleblock}{Ví dụ tạo số với \texttt{chu\_so = 2}}
+        $2 \rightarrow (2 \times 10 + 2) = 22 \rightarrow (22 \times 10 + 2) = 222 \dots$
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Kết luận}
+    \begin{itemize}
+        \item Cách tiếp cận này giúp "quét" sạch mọi số bình thường mà không cần quan tâm $n$ lớn hay nhỏ.
+        \item Độ phức tạp cực thấp: Chỉ khoảng $9 \times 9$ lần lặp cho $n = 10^9$.
+    \end{itemize}
+
+    \begin{center}
+        \begin{tcolorbox}[colback=blue!5,colframe=blue!75,title=Bước tiếp theo]
+            Bạn có muốn xem mã nguồn chi tiết bằng C++ hay Python không, hay chúng ta sẽ thử sức với một bài toán mới?
+        \end{tcolorbox}
+    \end{center}
+\end{frame}
+
+\end{document}

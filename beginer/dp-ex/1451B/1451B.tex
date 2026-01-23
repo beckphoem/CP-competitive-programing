@@ -1,0 +1,167 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 1451B]{Phân tích bài toán Codeforces 1451B}
+\subtitle{Non-Substring Subsequence}
+\author{Algorithmic Coach}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào đầu}
+    \begin{block}{Mục tiêu}
+        Chào bạn! Tôi là \textbf{Algorithmic Coach}. Chúng ta sẽ cùng "mổ xẻ" bài \textbf{Codeforces 1451B}. Chúng ta sẽ không vội vàng viết code ngay mà sẽ bóc tách lớp vỏ bài toán để tìm ra bản chất.
+    \end{block}
+\end{frame}
+
+\section{Phẫu thuật đề bài}
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruction)}
+    Yêu cầu cốt lõi:
+    \begin{itemize}
+        \item \textbf{Dữ liệu:} Chuỗi $S$ chỉ gồm ký tự '0' và '1'.
+        \item \textbf{Truy vấn:} Đoạn con từ vị trí $l$ đến $r$ (gọi là $S[l..r]$).
+        \item \textbf{Mục tiêu:} Kiểm tra tồn tại một \textbf{dãy con} (subsequence) bằng $S[l..r]$ nhưng \textbf{không phải là đoạn liền mạch}.
+    \end{itemize}
+    
+    \begin{exampleblock}{Ẩn dụ hóa}
+        Tưởng tượng chuỗi hạt màu. Bạn chọn một đoạn hạt liên tiếp. Bạn cần tìm cách "nhặt" các hạt khác (giữ đúng thứ tự) nhưng phải "nhảy cóc" ít nhất một lần.
+    \end{exampleblock}
+\end{frame}
+
+\section{Bản chất sự nhảy cóc}
+\begin{frame}{Mảnh ghép 1: Bản chất của sự "Nhảy cóc"}
+    Để dãy con không phải chuỗi con liền mạch, ta cần ít nhất một "khoảng trống".
+    
+    \begin{alertblock}{Bẫy (Trap)}
+        Không nhất thiết phải thay đổi các ký tự ở giữa. Chỉ cần thay đổi "điểm bắt đầu" hoặc "điểm kết thúc" là đủ phá vỡ tính liên tiếp.
+    \end{alertblock}
+    
+    \textbf{Thử thách tư duy:}
+    Cho chuỗi \texttt{001010}. Xét đoạn $S[2..4]$ (là \texttt{010}). Nếu chọn các vị trí $\{2, 3, 6\}$, dãy thu được là \texttt{010}.
+    \pause
+    \begin{itemize}
+        \item Dãy này thỏa mãn vì giữa hạt số 3 và 6 có "khoảng trống" (hạt 4, 5 bị bỏ qua).
+    \end{itemize}
+\end{frame}
+
+\section{Điều kiện tối thiểu}
+\begin{frame}{Mảnh ghép 2: Điều kiện tối thiểu để "Nhảy cóc"}
+    Chiến thuật đơn giản nhất:
+    \begin{enumerate}
+        \item Giữ nguyên hầu hết các hạt trong đoạn $S[l..r]$.
+        \item Thay thế \textbf{hạt đầu tiên} ($S[l]$) hoặc \textbf{hạt cuối cùng} ($S[r]$) bằng hạt cùng màu ở xa hơn.
+    \end{enumerate}
+
+    \textbf{Thử thách tư duy:}
+    Chuỗi \texttt{111000}, truy vấn $S[3..4]$ (\texttt{10}).
+    \begin{itemize}
+        \item Vị trí $l=3$ (ký tự '1'). Phía trước ($1, 2$) có hạt '1' không?
+        \item Vị trí $r=4$ (ký tự '0'). Phía sau ($5, 6$) có hạt '0' không?
+    \end{itemize}
+    \pause
+    \begin{block}{Kết luận}
+        Chuẩn luôn! Chỉ cần mượn được ít nhất một hạt nằm ngoài phạm vi $[l, r]$ cùng màu, ta sẽ tạo được bước nhảy.
+    \end{block}
+\end{frame}
+
+\section{Thuật toán tối ưu}
+\begin{frame}{Mảnh ghép 3: Chốt hạ thuật toán}
+    Quy luật đơn giản cho mỗi truy vấn $(l, r)$:
+    \begin{enumerate}
+        \item \textbf{Kiểm tra phía trước:} Có ký tự nào giống $S[l]$ ở vị trí từ $1$ đến $l-1$ không?
+        \item \textbf{Kiểm tra phía sau:} Có ký tự nào giống $S[r]$ ở vị trí từ $r+1$ đến $n$ không?
+    \end{enumerate}
+    
+    \begin{exampleblock}{Kết quả}
+        Nếu \textbf{một trong hai} đúng $\rightarrow$ \texttt{YES}. Ngược lại $\rightarrow$ \texttt{NO}.
+    \end{exampleblock}
+    
+    \textbf{Câu hỏi chốt hạ:} Chuỗi \texttt{001100}, truy vấn $S[3..4]$ (\texttt{11}).
+    \pause
+    \begin{itemize}
+        \item Đáp án: \textbf{NO}. Vì phía trước chỉ có \texttt{00}, phía sau chỉ có \texttt{00}. Không có hạt '1' nào để "mượn".
+    \end{itemize}
+\end{frame}
+
+\section{Mã giả}
+\begin{frame}[fragile]{Tổng kết thuật toán \& Mã giả}
+    \begin{lstlisting}[language=C++, caption=Mã giả logic bài toán]
+Cho mỗi bộ test:
+  Đọc n, q và chuỗi S
+  Với mỗi truy vấn (l, r):
+    Biến can_jump = false
+    // Kiểm tra phía trước (l-1 vì string index 0)
+    Duyệt từ i = 0 đến l-2: 
+      Nếu S[i] == S[l-1] thì can_jump = true
+    
+    // Kiểm tra phía sau
+    Duyệt từ i = r đến n-1: 
+      Nếu S[i] == S[r-1] thì can_jump = true
+      
+    Nếu can_jump là true: In "YES"
+    Ngược lại: In "NO"
+    \end{lstlisting}
+\end{frame}
+
+\section{Mở rộng về DP}
+\begin{frame}{Tại sao không dùng Quy hoạch động (DP)?}
+    Dùng DP có thể là "dao mổ trâu giết gà":
+    \begin{itemize}
+        \item DP giúp trả lời: Có thể tạo tiền tố độ dài $i$ bằng cách dùng hạt đến vị trí $j$.
+        \item Trạng thái: $dp[i][j]$ là boolean.
+    \end{itemize}
+    \begin{alertblock}{Nhận xét quan trọng}
+        Nếu không thể thay đổi hạt ở đầu ($l$) và không thể thay đổi hạt ở cuối ($r$), thì việc thay đổi ở giữa không giúp tạo ra "dãy con không liên mạch".
+    \end{alertblock}
+    \textbf{Gợi ý tối ưu:}
+    Sử dụng \texttt{first[char]} và \texttt{last[char]} để kiểm tra trong $O(1)$ sau khi tiền xử lý $O(n)$.
+\end{frame}
+
+\begin{frame}{Kết thúc}
+    \begin{center}
+        \Large \textbf{Bạn có muốn tôi hỗ trợ viết mã C++ hoàn chỉnh hay bạn muốn tự thử sức trước?}
+        
+        \vspace{1cm}
+        \texttt{🚀 Chúc bạn thành công! 🚀}
+    \end{center}
+\end{frame}
+
+\end{document}

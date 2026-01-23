@@ -1,0 +1,171 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Codeforces 1884A - Simple Design}
+\subtitle{Algorithmic Coach - Learning How to Learn}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời chào đầu}
+    \begin{block}{Chào bạn!}
+        Tôi đã sẵn sàng nhập vai \textbf{Algorithmic Coach} để cùng bạn chinh phục bài toán này theo đúng tinh thần "Learning How to Learn".
+    \end{block}
+    
+    \begin{itemize}
+        \item Chúng ta sẽ không vội vàng viết code.
+        \item Hãy bắt đầu bằng việc "phẫu thuật" bài toán để hiểu rõ bản chất.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    \begin{itemize}
+        \item \textbf{Input:} Hai số nguyên $x$ (điểm xuất phát) và $k$ (mục tiêu về tổng các chữ số).
+        \item \textbf{Yêu cầu:} Tìm số $y$ nhỏ nhất sao cho:
+        \begin{enumerate}
+            \item $y \ge x$.
+            \item Tổng các chữ số của $y$ phải chia hết cho $k$.
+        \end{enumerate}
+    \end{itemize}
+
+    \begin{exampleblock}{Ẩn dụ}
+        Tưởng tượng bạn đứng ở bậc thang thứ $x$. Bạn bước lên từng bậc cho đến khi tìm được bậc "may mắn" mà tổng các chữ số ghi trên đó chia hết cho $k$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item \textbf{Chunk 1:} Cách tính tổng các chữ số.
+                \item \textbf{Chunk 2:} Chiến thuật tìm kiếm.
+                \item \textbf{Chunk 3:} Ước lượng giới hạn.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+                    \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Chunk 1: Cách "mổ bụng" một số để tính tổng}
+    \begin{itemize}
+        \item Ví dụ: Số $123$ có tổng là $1 + 2 + 3 = 6$.
+    \end{itemize}
+
+    \begin{alertblock}{Bẫy tư duy}
+        Đừng coi số đó là một khối liền mạch. Hãy coi nó là một chuỗi các "ngăn kéo", mỗi ngăn đựng một chữ số từ $0$ đến $9$.
+    \end{alertblock}
+
+    \begin{block}{Thử thách tư duy 1}
+        Nếu có $x = 432$ và $k = 10$:
+        \begin{enumerate}
+            \item Tổng các chữ số hiện tại của $x$ là bao nhiêu?
+            \item Tổng đó có chia hết cho $k$ không?
+        \end{enumerate}
+        \pause
+        \textbf{Đáp án:} Tổng là $4+3+2=9$. Vì $9$ không chia hết cho $10$, $x$ không phải số "may mắn".
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 2: Chiến thuật tìm kiếm (Brute Force)}
+    \begin{itemize}
+        \item Đề bài yêu cầu tìm $y$ \textbf{nhỏ nhất} mà $y \ge x$.
+        \item \textbf{Chiến thuật:} Thử với chính $x$. Nếu không thỏa mãn, tăng $x$ lên $1$ đơn vị và kiểm tra tiếp.
+    \end{itemize}
+
+    \begin{exampleblock}{Ẩn dụ: Cửa hàng mở cửa}
+        Đi bộ tuần tự trên phố, tạt vào từng cửa hàng kế tiếp cho đến khi thấy biển "Open". Cửa hàng đầu tiên thấy chắc chắn là gần nhất.
+    \end{exampleblock}
+
+    \begin{alertblock}{Bẫy logic}
+        Đừng cố dùng toán học phức tạp để "tính" ngay ra $y$. Brute Force ở đây cực kỳ hiệu quả vì khoảng cách giữa các số thỏa mãn thường rất ngắn.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 2}
+    \begin{block}{Ví dụ $x = 432$ và $k = 10$}
+        \begin{enumerate}
+            \item Sau số $432$, số tiếp theo bạn kiểm tra là số nào?
+            \item Số đó có tổng các chữ số bao nhiêu? Có chia hết cho $k$ không?
+        \end{enumerate}
+        \pause
+        \begin{itemize}
+            \item Tiếp theo là $433$ (tổng $10$).
+            \item Vì $10$ chia hết cho $k=10$, nên $433$ là kết quả nhỏ nhất!
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 3: Ước lượng giới hạn}
+    \begin{itemize}
+        \item \textbf{Câu hỏi:} Liệu máy tính có chạy kịp nếu $x$ rất lớn?
+        \item \textbf{Phân tích:} Với $k \le 40$, trong một khoảng ngắn các số liên tiếp (thường không quá $40$ số), chắc chắn sẽ có một số thỏa mãn.
+        \item Vòng lặp sẽ không bao giờ chạy quá lâu.
+    \end{itemize}
+    \end{frame}
+
+\begin{frame}[fragile]{Tổng kết thuật toán (Pseudocode)}
+    \begin{lstlisting}[language=Python, caption=Mã giả thuật toán]
+1. Nhap x va k.
+2. Tao mot vong lap bat dau tu y = x:
+   A. Tinh tong cac chu so cua y (dung % 10).
+   B. Kiem tra xem tong do co chia het cho k hay khong.
+   C. Neu CO: 
+        In ra y va dung vong lap.
+      Neu KHONG: 
+        Tang y len 1 va quay lai Buoc A.
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    \begin{exampleblock}{Đóng vai máy tính}
+        Nếu $x = 19$ và $k = 5$.
+        Hãy chạy từng bước vòng lặp và cho biết \textbf{số $y$ đầu tiên} thỏa mãn là số nào?
+    \end{exampleblock}
+    \pause
+    \begin{itemize}
+        \item $19 \rightarrow$ tổng $10$ (chia hết cho $5$).
+        \item \textbf{Kết quả:} $19$. (Đừng quên kiểm tra chính số $x$ đầu tiên nhé!)
+    \end{itemize}
+\end{frame}
+
+\end{document}

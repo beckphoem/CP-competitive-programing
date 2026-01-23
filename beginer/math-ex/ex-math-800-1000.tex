@@ -1,0 +1,477 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài trình bày
+\title[Codeforces Math 800-1000]{Chiến lược Giải bài toán Cấu tạo số \\ Codeforces Rating 800-1000}
+\author{Biên soạn từ Tài liệu Nghiên cứu}
+\date{\today}
+
+\begin{document}
+
+% ------------------------------------------------------------
+% Slide tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% ------------------------------------------------------------
+% Slide Giới thiệu
+\begin{frame}{Tổng quan về Phân khúc Rating 800-1000}
+    \begin{block}{Tầm quan trọng}
+        \begin{itemize}
+            \item Rating 800-900: Yêu cầu kỹ năng cài đặt (implementation) thuần túy.
+            \item Rating 1000: Bắt đầu yêu cầu quan sát toán học và tư duy tối ưu.
+            \item Mục tiêu: Rèn luyện phản xạ cho các kỳ thi Div. 2 hoặc Div. 3.
+        \end{itemize}
+    \end{block}
+
+    \begin{alertblock}{Kỹ thuật cốt lõi}
+        \begin{enumerate}
+            \item \textbf{Vòng lặp while:} Trích xuất chữ số ($n \% 10$, $n / 10$).
+            \item \textbf{Xử lý chuỗi (String):} Dùng cho số lớn vượt quá \texttt{long long} hoặc cần thao tác vị trí.
+            \item \textbf{Câu lệnh điều kiện:} Kiểm tra tính chia hết, số may mắn.
+        \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+% ============================================================
+% BẮT ĐẦU DANH SÁCH 20 BÀI TẬP
+% ============================================================
+
+% Bài 1
+\begin{frame}{1. Sum of Round Numbers (1352A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1352/A}
+    
+    \begin{block}{Đề bài}
+        Cho một số nguyên dương $n$. Hãy phân tích $n$ thành tổng của ít nhất các "số tròn" (số chỉ có 1 chữ số khác 0). In ra số lượng và các số hạng đó.
+        \\ Ví dụ: $5009 \rightarrow 5000 + 9$.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Duyệt $n$ từ hàng đơn vị lên (dùng $n \% 10$).
+            \item Duy trì biến đếm lũy thừa của 10 (1, 10, 100...).
+            \item Nếu chữ số hiện tại khác 0: nhân chữ số đó với lũy thừa 10 hiện tại và lưu vào kết quả.
+            \item Cập nhật $n = n / 10$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 2
+\begin{frame}[fragile]{2. Nearly Lucky Number (110A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/110/A}
+    
+    \begin{block}{Đề bài}
+        Số may mắn là số chỉ chứa các chữ số 4 và 7. Cho số $n$, hãy kiểm tra xem số lượng các chữ số may mắn trong $n$ có phải là một số may mắn hay không.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Đọc $n$ dưới dạng chuỗi hoặc dùng \texttt{while} để tách số.
+            \item Đếm số lượng chữ số 4 và 7 (gọi là \texttt{cnt}).
+            \item Kiểm tra: Nếu \texttt{cnt == 4} hoặc \texttt{cnt == 7} thì in "YES", ngược lại "NO".
+            \item Lưu ý: Không kiểm tra $n$, mà kiểm tra \texttt{cnt}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 3
+\begin{frame}{3. Wrong Subtraction (977A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/977/A}
+    
+    \begin{block}{Đề bài}
+        Thực hiện phép giảm số $n$ đi $k$ lần theo quy tắc:
+        \begin{itemize}
+            \item Nếu chữ số cuối của $n$ khác 0, giảm $n$ đi 1.
+            \item Nếu chữ số cuối của $n$ là 0, chia $n$ cho 10.
+        \end{itemize}
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Dùng vòng lặp chạy $k$ lần.
+            \item Trong mỗi lần lặp: kiểm tra \texttt{if (n \% 10 != 0) n--; else n /= 10;}.
+            \item Đây là bài toán mô phỏng trực tiếp.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 4
+\begin{frame}{4. Lucky Division (122A) - 1000}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/122/A}
+    
+    \begin{block}{Đề bài}
+        Kiểm tra xem số $n$ ($1 \le n \le 1000$) có chia hết cho bất kỳ "số may mắn" nào không. Số may mắn là số chỉ chứa 4 và 7 (vd: 4, 7, 44, 47, 74, 444...).
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Cách 1 (Pre-calculation): Liệt kê các số may mắn nhỏ hơn 1000: \{4, 7, 44, 47, 74, 77, 444, 447, 474, 477, 744, 747, 777\}.
+            \item Duyệt qua danh sách, nếu $n$ chia hết cho số nào thì in "YES".
+            \item Cách 2: Hàm đệ quy sinh số may mắn và kiểm tra.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 5
+\begin{frame}{5. Sum of Digits (102B) - 1000}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/102/B}
+    
+    \begin{block}{Đề bài}
+        Cho số nguyên $n$ (có thể rất lớn, tới $10^{100000}$). Thay thế $n$ bằng tổng các chữ số của nó. Lặp lại cho đến khi $n$ chỉ còn 1 chữ số. Đếm số lần thực hiện.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Bước 1: Đọc $n$ vào biến \texttt{string} (vì số quá lớn).
+            \item Bước 2: Nếu độ dài chuỗi bằng 1, kết quả là 0.
+            \item Bước 3: Tính tổng chữ số, gán lại vào một biến số nguyên \texttt{sum}. Tăng biến đếm.
+            \item Bước 4: Trong khi \texttt{sum >= 10}, tiếp tục tính tổng các chữ số của \texttt{sum}.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 6
+\begin{frame}{6. Lucky Sum of Digits (109A) - 1000}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/109/A}
+    
+    \begin{block}{Đề bài}
+        Tìm số nhỏ nhất chỉ gồm các chữ số 4 và 7 sao cho tổng các chữ số của nó đúng bằng $n$. Nếu không có, in -1.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Để số là nhỏ nhất, số lượng chữ số phải ít nhất $\rightarrow$ Ưu tiên dùng nhiều số 7 nhất có thể.
+            \item Giải phương trình $4x + 7y = n$.
+            \item Duyệt $y$ (số lượng số 7) giảm dần từ $n/7$ về 0.
+            \item Kiểm tra phần dư còn lại ($n - 7y$) có chia hết cho 4 không. Nếu có, đó là cấu hình tối ưu.
+            \item In ra $y$ số 4 và $x$ số 7 (Lưu ý: đề yêu cầu số nhỏ nhất, nên in ít chữ số nhất, nhưng theo thứ tự số học thì 4 đứng trước 7. Cần kiểm tra lại logic sắp xếp: Cần in 4 trước 7 để giá trị nhỏ nhất).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 7
+\begin{frame}{7. Digital Root (1107B) - 1000}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1107/B}
+    
+    \begin{block}{Đề bài}
+        Căn nguyên số (digital root) của $x$ là giá trị thu được khi liên tục tính tổng chữ số cho đến khi còn 1 chữ số (giống bài 102B). Tìm số nguyên dương thứ $k$ có căn nguyên số bằng $x$.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Nhận xét toán học: Căn nguyên số của $n$ chính là $n \% 9$ (nếu $n\%9 == 0$ thì là 9).
+            \item Các số có cùng căn nguyên số $x$ cách nhau 9 đơn vị: $x, x+9, x+18, \dots$
+            \item Công thức $O(1)$: Kết quả = $(k - 1) * 9 + x$.
+            \item Dùng \texttt{long long} vì $k$ có thể lớn.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 8
+\begin{frame}{8. Extremely Round (1766A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1766/A}
+    
+    \begin{block}{Đề bài}
+        Số "cực tròn" là số chỉ có đúng một chữ số khác 0 (ví dụ: 5, 9, 10, 300). Đếm xem có bao nhiêu số cực tròn $\le n$.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Các số cực tròn có dạng: $1, \dots, 9$ (9 số), $10, \dots, 90$ (9 số), $100, \dots, 900$...
+            \item Cách 1: Pre-calculate danh sách tất cả số cực tròn (chỉ có khoảng 90 số trong giới hạn $10^9$) rồi đếm.
+            \item Cách 2: Dựa vào độ dài $L$ của $n$ và chữ số đầu tiên $d$. Kết quả $\approx (L-1)*9 + d$. Xử lý biên cẩn thận.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 9
+\begin{frame}{9. Insert Digit (1811A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1811/A}
+    
+    \begin{block}{Đề bài}
+        Cho một số nguyên dương $n$ dưới dạng chuỗi và một chữ số $d$. Hãy chèn $d$ vào vị trí bất kỳ trong $n$ để thu được số lớn nhất có thể.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Nguyên tắc tham lam (Greedy): Để số lớn nhất, chữ số lớn phải đứng ở hàng cao nhất có thể.
+            \item Duyệt chuỗi từ trái sang phải. Chèn $d$ ngay trước ký tự đầu tiên nhỏ hơn $d$.
+            \item Nếu duyệt hết chuỗi mà chưa chèn (tức là $d$ nhỏ hơn hoặc bằng tất cả các số), chèn $d$ vào cuối cùng.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 10
+\begin{frame}{10. Digit Minimization (1684A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1684/A}
+    
+    \begin{block}{Đề bài}
+        Cho số $n$. Bạn thực hiện hoán đổi hai chữ số bất kỳ, sau đó xóa chữ số cuối cùng. Lặp lại cho đến khi còn 1 chữ số. Tìm chữ số nhỏ nhất có thể đạt được.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Trường hợp đặc biệt: Nếu $n$ chỉ có 2 chữ số (vd: 87), ta bắt buộc xóa số cuối sau khi hoán đổi (hoặc không). Chiến lược tối ưu là đưa số nhỏ ra sau để bị xóa? Không, lượt cuối còn 1 số.
+            \item Logic: Với $n$ có 2 chữ số $ab$, ta đổi thành $ba$ rồi xóa $a$, còn $b$. Vậy kết quả là chữ số hàng đơn vị ban đầu (số thứ 2).
+            \item Với $n > 2$ chữ số: Ta luôn có thể hoán đổi để giữ lại chữ số nhỏ nhất bất kỳ trong $n$ đến cuối cùng.
+            \item Kết quả: Min(các chữ số) nếu len > 2; Chữ số thứ 2 nếu len == 2.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 11
+\begin{frame}{11. Nearest Interesting Number (1183A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1183/A}
+    
+    \begin{block}{Đề bài}
+        Tìm số nguyên $x \ge a$ nhỏ nhất sao cho tổng các chữ số của $x$ chia hết cho 4.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Vì yêu cầu chia hết cho 4 (số nhỏ), khoảng cách giữa các số thỏa mãn rất ngắn.
+            \item Dùng vòng lặp \texttt{while(true)} bắt đầu từ $a$.
+            \item Viết hàm \texttt{sumDigits(x)}. Nếu \texttt{sumDigits(x) \% 4 == 0} thì in $x$ và dừng lại.
+            \item Tăng $x$ lên 1 sau mỗi lần kiểm tra.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 12
+\begin{frame}{12. Distinct Digits (1228A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1228/A}
+    
+    \begin{block}{Đề bài}
+        Tìm một số $x$ trong đoạn $[l, r]$ sao cho tất cả các chữ số của $x$ đều khác nhau. Nếu không có, in -1.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Giới hạn bài toán thường nhỏ hoặc mật độ số thỏa mãn cao.
+            \item Duyệt $i$ từ $l$ đến $r$.
+            \item Với mỗi $i$, chuyển sang chuỗi hoặc dùng mảng đánh dấu để kiểm tra trùng lặp chữ số.
+            \item Gặp số thỏa mãn đầu tiên thì in ra và kết thúc.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 13
+\begin{frame}{13. Sum of 2050 (1517A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1517/A}
+    
+    \begin{block}{Đề bài}
+        Một số được gọi là "số 2050" nếu nó là $2050 \times 10^k$. Cho số $n$, hãy biểu diễn $n$ thành tổng của ít nhất các số 2050. In ra số lượng số hạng, hoặc -1 nếu không thể.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Điều kiện cần: $n$ phải chia hết cho 2050. Nếu không $\rightarrow -1$.
+            \item Nếu chia hết, đặt $q = n / 2050$.
+            \item Bài toán trở thành: Phân tích $q$ thành tổng các lũy thừa của 10 ($10^k$).
+            \item Số lượng ít nhất chính là tổng các chữ số của $q$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 14
+\begin{frame}{14. Fair Numbers (1411B) - 1000}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1411/B}
+    
+    \begin{block}{Đề bài}
+        Số "công bằng" là số chia hết cho tất cả các chữ số khác 0 của nó. Tìm số công bằng nhỏ nhất $x \ge n$.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Duyệt $x$ bắt đầu từ $n, n+1, \dots$
+            \item Viết hàm kiểm tra: Tách từng chữ số $d$ của $x$. Nếu $d \neq 0$ và $x \% d \neq 0$, thì $x$ không thỏa mãn.
+            \item Tại sao không quá thời gian? Bội chung nhỏ nhất của các chữ số từ 1-9 là 2520. Ta chắc chắn sẽ tìm thấy một số thỏa mãn trong khoảng rất ngắn.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 15
+\begin{frame}{15. Digits Sum (1553A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1553/A}
+    
+    \begin{block}{Đề bài}
+        Đếm xem có bao nhiêu số $x$ ($1 \le x \le n$) thỏa mãn: Tổng chữ số của $x$ lớn hơn tổng chữ số của $x+1$.
+        \\ ($S(x) > S(x+1)$).
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Quan sát: $S(x+1)$ chỉ nhỏ hơn $S(x)$ khi phép cộng 1 gây ra nhớ (carry), tức là chữ số tận cùng của $x$ là 9.
+            \item Ví dụ: $19 \rightarrow 20$ (Tổng: $10 \rightarrow 2$, giảm). $18 \rightarrow 19$ (Tổng tăng).
+            \item Bài toán quy về: Đếm số lượng số kết thúc bằng 9 trong đoạn $[1, n]$.
+            \item Công thức: $(n + 1) / 10$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 16
+\begin{frame}{16. Simple Design (1884A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1884/A}
+    
+    \begin{block}{Đề bài}
+        Cho số nguyên $x$ và $k$. Tìm số nguyên nhỏ nhất $y \ge x$ sao cho tổng các chữ số của $y$ chia hết cho $k$.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Tương tự bài 1183A (Nearest Interesting Number).
+            \item Duyệt từ $x$ trở đi. Tính tổng chữ số.
+            \item Kiểm tra tính chia hết cho $k$.
+            \item Do $k$ thường nhỏ (trong các bài 800), vòng lặp sẽ kết thúc rất nhanh.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 17
+\begin{frame}{17. Ordinary Numbers (1520B) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1520/B}
+    
+    \begin{block}{Đề bài}
+        Số "bình thường" là số có tất cả các chữ số giống nhau (vd: 1, 2, 99, 333). Đếm số lượng số bình thường từ 1 đến $n$.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Thay vì duyệt $1 \to n$, hãy sinh các số bình thường.
+            \item Các số có dạng: $d \times \underbrace{11\dots1}_{k \text{ lần}}$.
+            \item Duyệt độ dài $k$ từ 1 đến 9 (hoặc 18). Duyệt chữ số $d$ từ 1 đến 9.
+            \item Tạo số \texttt{val}. Nếu \texttt{val} $\le n$, tăng biến đếm.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 18
+\begin{frame}{18. Dislike of Threes (1560A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1560/A}
+    
+    \begin{block}{Đề bài}
+        Polycarp không thích số chia hết cho 3 hoặc số có tận cùng là 3. Hãy tìm số thứ $k$ trong dãy số nguyên dương đã loại bỏ các số Polycarp ghét.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Dùng vòng lặp để sinh dãy số thỏa mãn.
+            \item Biến chạy $i$ (số tự nhiên), biến đếm \texttt{count} (số thứ tự trong dãy mới).
+            \item Nếu \texttt{i \% 3 == 0} hoặc \texttt{i \% 10 == 3}, bỏ qua.
+            \item Ngược lại, tăng \texttt{count}. Nếu \texttt{count == k}, in $i$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 19
+\begin{frame}{19. Div. 7 (1633A) - 800}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1633/A}
+    
+    \begin{block}{Đề bài}
+        Cho số nguyên $n$. Hãy thay đổi ít chữ số của $n$ nhất có thể để $n$ chia hết cho 7.
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Nếu $n \% 7 == 0$, in $n$.
+            \item Nếu không, ta luôn có thể thay đổi chỉ \textbf{chữ số hàng đơn vị} để số đó chia hết cho 7.
+            \item Duyệt các số từ $(n/10)*10$ đến $(n/10)*10 + 9$. Chắc chắn có ít nhất một số chia hết cho 7 trong mỗi khoảng 10 số liên tiếp.
+            \item Chọn số trong khoảng đó chia hết cho 7.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 20
+\begin{frame}{20. Primary Task (2000A) - 1000}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/2000/A}
+    
+    \begin{block}{Đề bài}
+        Kiểm tra xem số $n$ có dạng $10^k + x$ với $k \ge 2$ và $x \ge 2$ (được viết dưới dạng ghép chuỗi "10" và phần mũ $x$?)
+        \\ *Lưu ý: Đề bài thực tế của 2000A (Codeforces Round 962) yêu cầu kiểm tra định dạng "10" theo sau là một số mũ hợp lệ (số $\ge 2$ và không có số 0 vô nghĩa ở đầu).*
+    \end{block}
+    
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Chuyển $n$ thành chuỗi $s$.
+            \item Điều kiện 1: Độ dài $s \ge 3$.
+            \item Điều kiện 2: Hai ký tự đầu phải là "10".
+            \item Điều kiện 3: Ký tự thứ 3 không được là '0' (trừ khi số đó là 0, nhưng mũ phải $\ge 2$).
+            \item Điều kiện 4: Phần còn lại của chuỗi (từ index 2) chuyển thành số phải $\ge 2$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% ------------------------------------------------------------
+% Slide Tổng kết
+\begin{frame}{Tổng kết và Lưu ý}
+    \begin{alertblock}{Các lỗi thường gặp}
+        \begin{itemize}
+            \item \textbf{Tràn số:} Luôn kiểm tra xem biến có vượt quá $2 \times 10^9$ không. Dùng \texttt{long long} khi cần thiết.
+            \item \textbf{Biên (Corner cases):} Số 0, số 1, chuỗi rỗng, hoặc số có tận cùng là 0 khi đảo ngược.
+            \item \textbf{Thời gian:} Tránh vòng lặp lồng nhau quá lớn ($O(N^2)$) nếu $N > 10^4$.
+        \end{itemize}
+    \end{alertblock}
+
+    \begin{block}{Lời khuyên}
+        Hãy tự code lại 20 bài này mà không nhìn lời giải để thực sự nắm vững các cấu trúc điều khiển cơ bản.
+    \end{block}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,166 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 1328A]{Huấn luyện viên Tư duy Thuật toán}
+\subtitle{Phân tích bài 1328A - Divisibility Problem}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Chào bạn!}
+  \begin{block}{Sứ mệnh}
+    Chúng ta sẽ cùng nhau "mổ xẻ" các bài toán theo phong cách \textbf{Micro-Chunks}, tập trung hoàn toàn vào chiến thuật và logic thay vì chỉ nhìn vào code.
+  \end{block}
+\end{frame}
+
+% --- Slide 1 ---
+\begin{frame}{Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+  \begin{itemize}
+    \item \textbf{Đề bài:} Tìm số bước tối thiểu để biến $a$ thành một số chia hết cho $b$.
+    \item \textbf{Quy tắc:} Trong mỗi bước, chỉ được phép tăng $a$ lên 1 đơn vị ($a = a + 1$).
+    \item \textbf{Mục tiêu:} Tìm số bước tăng ít nhất sao cho $a \pmod b = 0$.
+  \end{itemize}
+
+  \begin{exampleblock}{Lộ trình tư duy}
+    \begin{enumerate}
+      \item \textbf{Chunk 1:} Bản chất phép chia hết và "khoảng cách".
+      \item \textbf{Chunk 2:} Xử lý trường hợp đặc biệt.
+      \item \textbf{Chunk 3:} Tối ưu hóa - Tại sao không dùng vòng lặp?
+    \end{enumerate}
+  \end{exampleblock}
+\end{frame}
+
+% --- Slide 2 ---
+\begin{frame}{Chunk 1: Khoảng cách tới "vạch đích"}
+  Hãy tưởng tượng số $b$ giống như \textbf{độ dài của một bước chân}. Bạn đang ở vị trí $a$ và muốn nhảy đến một vị trí là bội số của $b$.
+
+  \begin{alertblock}{Thử thách tư duy}
+    Nếu $a = 13$ và $b = 4$:
+    \begin{itemize}
+        \item Các mốc chia hết cho 4 gần đó là: 4, 8, 12, 16, 20...
+        \item Vì bạn chỉ có thể \textbf{tăng} $a$, mốc tiếp theo là bao nhiêu?
+    \end{itemize}
+  \end{alertblock}
+
+  \pause
+  \textbf{Đáp án:} Mốc tiếp theo là \textbf{16}. Cần $16 - 13 = 3$ bước.
+\end{frame}
+
+% --- Slide 3 ---
+\begin{frame}{Chunk 2: Công thức "Nhảy cóc"}
+  Trong lập trình thi đấu, nếu $a$ và $b$ rất lớn ($10^9$), dùng vòng lặp \texttt{while (a \% b != 0) a++;} sẽ bị \textbf{TLE} (Time Limit Exceeded).
+
+  \begin{block}{Tổng quát hóa}
+    Khi chia $a$ cho $b$:
+    \begin{itemize}
+      \item Phần nguyên: $a / b$.
+      \item Số dư: $r = a \pmod b$.
+    \end{itemize}
+  \end{block}
+
+  \begin{exampleblock}{Gợi ý}
+    Nếu có 13 cái kẹo ($a=13$), túi mỗi túi 4 cái ($b=4$), bạn dư 1 cái ($r=1$). Cần thêm bao nhiêu cái để đủ 1 túi nữa?
+  \end{exampleblock}
+
+  \pause
+  \textbf{Công thức:} $b - (a \pmod b)$.
+\end{frame}
+
+% --- Slide 4 ---
+\begin{frame}{Chunk 3: Xử lý "Bẫy" logic}
+  \begin{alertblock}{Vấn đề}
+    Nếu $a$ đã chia hết cho $b$ ngay từ đầu (VD: $a=8, b=4$)?
+  \end{alertblock}
+
+  \begin{itemize}
+    \item Số dư $a \pmod b = 0$.
+    \item Áp dụng công thức $b - (a \pmod b) \Rightarrow 4 - 0 = 4$.
+    \item \textbf{Thực tế:} Cần 0 bước.
+  \end{itemize}
+
+  \pause
+  \begin{block}{Giải pháp dùng IF}
+    \texttt{if (a \% b == 0) return 0;}\\
+    \texttt{else return b - (a \% b);}
+  \end{block}
+\end{frame}
+
+% --- Slide 5 ---
+\begin{frame}{Chunk 4: Công thức "Một dòng"}
+  \begin{exampleblock}{Mẹo toán học}
+    Để gộp cả hai trường hợp mà không cần \texttt{if}:\\
+    \centering \Large \texttt{(b - (a \% b)) \% b}
+  \end{exampleblock}
+
+  \pause
+  \textbf{Kiểm chứng:}
+  \begin{enumerate}
+    \item $a=13, b=4$: $(4 - (13 \% 4)) \% 4 = (4 - 1) \% 4 = 3 \% 4 = \mathbf{3}$.
+    \item $a=8, b=4$: $(4 - (8 \% 4)) \% 4 = (4 - 0) \% 4 = 4 \% 4 = \mathbf{0}$.
+  \end{enumerate}
+\end{frame}
+
+% --- Slide 6 ---
+\begin{frame}[fragile]{Bước cuối: Chốt thuật toán}
+  \begin{block}{Mã giả (Pseudo-code)}
+\begin{lstlisting}[language=C++]
+@\textbf{Nhap}@ t (so luong test case)
+@\textbf{Lap}@ t lan:
+    @\textbf{Nhap}@ a, b
+    @\textbf{Ket qua}@ = (b - (a % b)) % b
+    @\textbf{In ra}@ @\textbf{Ket qua}@
+\end{lstlisting}
+  \end{block}
+
+  \begin{alertblock}{Lưu ý Edge Case}
+    \begin{itemize}
+      \item $a, b \le 10^9$: Sử dụng kiểu dữ liệu \texttt{int} là đủ.
+      \item Luôn chú ý trường hợp $a < b$: Công thức vẫn hoạt động đúng.
+    \end{itemize}
+  \end{alertblock}
+  
+  \begin{center}
+    \textbf{Bạn đã sẵn sàng để tự viết Code chưa? 🚀}
+  \end{center}
+\end{frame}
+
+\end{document}

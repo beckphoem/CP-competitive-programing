@@ -1,0 +1,16 @@
+\frametitle{Mã giả (Pseudocode)}
+\begin{lstlisting}[language=Python]
+Nhap vao so bo test (t)
+Voi moi bo test:
+    Nhap vao so luong phan tu (n)
+    Bien dem_le = 0
+    Bien dem_chan = 0
+
+    Voi moi so x trong day:
+        Neu x chia het cho 2:
+            dem_chan = dem_chan + 1
+        Neu khong:
+            dem_le = dem_le + 1
+
+    In ra gia tri nho nhat giua (dem_chan, dem_le)
+\end{lstlisting}

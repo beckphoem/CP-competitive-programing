@@ -1,0 +1,11 @@
+\frametitle{Tổng kết thuật toán (Pseudocode)}
+\begin{lstlisting}[language=Python, caption=Mã giả thuật toán]
+1. Nhap x va k.
+2. Tao mot vong lap bat dau tu y = x:
+   A. Tinh tong cac chu so cua y (dung % 10).
+   B. Kiem tra xem tong do co chia het cho k hay khong.
+   C. Neu CO:
+        In ra y va dung vong lap.
+      Neu KHONG:
+        Tang y len 1 va quay lai Buoc A.
+    \end{lstlisting}

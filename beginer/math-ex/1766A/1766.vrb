@@ -1,0 +1,19 @@
+\frametitle{Bước 3: Hiện thực hóa thành thuật toán}
+\begin{block}{Cách lấy $d$ và $s$ bằng toán học}
+    Sử dụng biến tạm \texttt{go\_n} để không làm mất giá trị gốc của $n$.
+  \end{block}
+
+\begin{lstlisting}[language=Python, caption=Mã giả logic xử lý]
+Nhap t (so bo test)
+Lap lai t lan:
+    Nhap n
+    go_n = n
+    s = do_dai_chuoi(n) # Hoac dem trong khi chia 10
+
+    # Tim chu so dau tien d
+    Trong khi go_n >= 10:
+        go_n = go_n // 10
+    d = go_n
+
+    In ra (s - 1) * 9 + d
+\end{lstlisting}

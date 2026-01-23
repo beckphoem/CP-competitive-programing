@@ -1,0 +1,174 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Fair Numbers]{Giải bài 1411B - Fair Numbers}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Tiếp nhận \& Phẫu thuật bài toán}
+    \begin{block}{Dữ kiện cốt lõi}
+        Tìm số nguyên $x$ nhỏ nhất sao cho $x \ge n$ và $x$ là một \textbf{"số công bằng" (fair number)}.
+    \end{block}
+    
+    \begin{exampleblock}{Định nghĩa Số công bằng}
+        Một số được gọi là "công bằng" nếu nó \textbf{chia hết cho tất cả các chữ số khác 0} của chính nó.
+    \end{exampleblock}
+    
+    \begin{itemize}
+        \item \textbf{Ví dụ 1:} $120$ là số công bằng vì $120 \vdots 1$ và $120 \vdots 2$ (số 0 bỏ qua).
+        \item \textbf{Ví dụ 2:} $7$ là số công bằng vì $7 \vdots 7$.
+        \item \textbf{Ví dụ 3:} $23$ \textbf{không} phải số công bằng vì $23$ không chia hết cho $3$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy (Micro-chunking)}
+    Chúng ta sẽ chia bài toán thành 3 phần chính:
+    \begin{enumerate}
+        \item \textbf{Chunk 1:} Hiểu cách kiểm tra một số có "công bằng" hay không.
+        \item \textbf{Chunk 2:} Chiến thuật tìm số $x$ nhỏ nhất (Duyệt hay dùng công thức?).
+        \item \textbf{Chunk 3:} Ước lượng giới hạn (Liệu tìm kiếm có quá lâu không?).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chunk 1: Kiểm tra tính "Công bằng"}
+    Để biết một số $x$ có chia hết cho tất cả các chữ số của nó hay không:
+    \begin{enumerate}
+        \item \textbf{Tách từng chữ số} của $x$.
+        \item \textbf{Kiểm tra điều kiện:} Với mỗi chữ số $d \neq 0$, liệu $x \pmod d = 0$?
+    \end{enumerate}
+    
+    \begin{block}{Ẩn dụ}
+        Vị vua $x$ chỉ "công bằng" nếu có thể chia đều ngân khố cho tất cả các quan đại thần (chữ số) của mình (ngoại trừ quan tên "Không").
+    \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy}
+    \begin{exampleblock}{Câu hỏi}
+        Kiểm tra số $123$. Các chữ số là: $1, 2, 3$.
+    \end{exampleblock}
+    \begin{itemize}
+        \item $123 \vdots 1$? \pause \textbf{Có}
+        \item $123 \vdots 2$? \pause \textbf{Không} ($123$ là số lẻ)
+        \item $123 \vdots 3$? \pause \textbf{Có} ($1+2+3=6 \vdots 3$)
+    \end{itemize}
+    \pause
+    \begin{alertblock}{Kết luận}
+        Số $123$ \textbf{không} phải là số công bằng vì không chia hết cho 2.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Chunk 2: Tại sao duyệt trâu (Brute Force) lại nhanh?}
+    BCNN của các số từ $\{1, 2, 3, 4, 5, 6, 7, 8, 9\}$ là:
+    \[ 2^3 \times 3^2 \times 5 \times 7 = 2520 \]
+    
+    \begin{block}{Ý nghĩa con số 2520}
+        Cứ trong khoảng $2520$ số liên tiếp, \textbf{chắc chắn} sẽ có ít nhất một số chia hết cho tất cả các chữ số từ 1 đến 9.
+    \end{block}
+    
+    Vì khoảng cách tối đa chỉ là 2520 (thực tế còn nhỏ hơn), việc dùng vòng lặp \texttt{while} để tăng dần $n$ là cực kỳ hiệu quả!
+\end{frame}
+
+\begin{frame}[fragile]{Chunk 3: Tổng kết thuật toán \& Mã giả}
+    \begin{block}{Thuật toán}
+        \begin{enumerate}
+            \item Đọc số $n$.
+            \item Chừng nào $n$ chưa phải số công bằng, tăng $n$ lên 1.
+        \end{enumerate}
+    \end{block}
+
+    \begin{lstlisting}[language=C++, caption=Mã giả kiểm tra số công bằng]
+bool kiem_tra_cong_bang(long long x) {
+    long long temp = x;
+    while (temp > 0) {
+        int d = temp % 10;
+        if (d != 0 && x % d != 0) {
+            return false;
+        }
+        temp /= 10;
+    }
+    return true;
+}
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    \begin{exampleblock}{Câu hỏi}
+        Nếu đề bài cho $n=23$, máy tính sẽ thực hiện thế nào?
+    \end{exampleblock}
+    \begin{itemize}
+        \item \textbf{A.} Kiểm tra 23 (sai), tăng lên 24. Kiểm tra 24...
+        \item \textbf{B.} Nhảy một phát đến 2520.
+    \end{itemize}
+    \pause
+    \textbf{Đáp án: A}.
+    Kiểm tra $24$: $24 \vdots 2$ và $24 \vdots 4$. \textbf{Dừng lại!} Chỉ mất 2 bước.
+\end{frame}
+
+\begin{frame}{Bước cuối: Hiện thực hóa \& Lưu ý}
+    Đề bài cho $n \le 10^{18}$. 
+    
+    \begin{alertblock}{Lưu ý quan trọng về kiểu dữ liệu}
+        Bắt buộc dùng \texttt{long long} trong C++ để chứa $n$.
+        \begin{itemize}
+            \item \texttt{int}: Tối đa $\approx 2 \times 10^9$
+            \item \texttt{long long}: Tối đa $\approx 9 \times 10^{18}$
+        \end{itemize}
+    \end{alertblock}
+
+    \begin{block}{Tóm tắt các bước}
+        1. Đọc $n$ kiểu \texttt{long long}. \\
+        2. Viết hàm \texttt{isFair(x)}. \\
+        3. Vòng lặp: \texttt{while(!isFair(n)) n++;} \\
+        4. In kết quả $n$.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bạn muốn tiếp tục thế nào?}
+    \begin{enumerate}
+        \item \textbf{Thử thách mới:} Một bài toán khác có tư duy tương tự.
+        \item \textbf{Nâng cấp:} Phân tích bài khó hơn (Quy hoạch động/Tham lam).
+        \item \textbf{Hỗ trợ Code:} Chuyển mã giả thành code C++ hoàn chỉnh.
+    \end{enumerate}
+\end{frame}
+
+\end{document}

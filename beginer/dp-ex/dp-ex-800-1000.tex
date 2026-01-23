@@ -1,0 +1,472 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài trình bày
+\title[DP Codeforces 800-1000]{Tuyển tập 20 Bài tập Quy hoạch động trên Codeforces\\(Rating 800-1000)}
+\subtitle{Phân tích Hệ thống và Hướng giải quyết}
+\author{Biên soạn từ tài liệu}
+\date{\today}
+
+\begin{document}
+
+% Slide tiêu đề
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide Mục lục/Giới thiệu
+\begin{frame}{Giới thiệu chung}
+    \begin{block}{Mục tiêu}
+        Nghiên cứu và áp dụng thuật toán Quy hoạch động (DP) trong phạm vi xếp hạng 800-1000 trên Codeforces. Đây là bước chuyển đổi quan trọng từ tư duy lập trình cơ bản sang tư duy thuật toán chuyên sâu.
+    \end{block}
+
+    \begin{alertblock}{Đặc điểm}
+        Các bài toán thường yêu cầu sự kết hợp giữa kỹ năng triển khai mã nguồn và khả năng nhận diện các cấu trúc con tối ưu.
+        \begin{itemize}
+            \item \textbf{Phương pháp:} Memoization hoặc Tabulation đơn giản.
+            \item \textbf{Dạng bài:} DP một chiều hoặc đếm trạng thái.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% Slide Bảng tổng hợp
+\begin{frame}{Phân loại theo mức xếp hạng}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{c p{4cm} p{4cm}}
+            \toprule
+            \textbf{Rating} & \textbf{Đặc điểm chính} & \textbf{Kỹ năng yêu cầu} \\
+            \midrule
+            800 & Truy hồi đơn giản, đếm trạng thái tuyến tính. & Cấu trúc vòng lặp, mảng một chiều. \\
+            \midrule
+            900 & Tối ưu hóa lựa chọn, mảng cộng dồn. & Tư duy tham lam kết hợp lưu trữ trạng thái. \\
+            \midrule
+            1000 & Bài toán cái túi đơn giản, DP trên chuỗi/số học. & Nhận diện cấu trúc con tối ưu. \\
+            \bottomrule
+        \end{tabular}
+        \caption{Tổng hợp đặc điểm bài toán DP theo Rating}
+    \end{table}
+\end{frame}
+
+% --- Bắt đầu danh sách bài tập ---
+
+% Bài 1
+\begin{frame}{1. The Way to Home (910A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/910/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Một chú ếch ở vị trí 1 muốn đến vị trí $n$. Đường đi có các vị trí '1' (có hoa súng) hoặc '0'. Ếch nhảy tối đa $d$ đơn vị vào nơi có hoa súng. Tìm số bước tối thiểu.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Bài toán tìm đường ngắn nhất trên mảng một chiều.
+        \begin{itemize}
+            \item Gọi $dp[i]$ là số bước tối thiểu đến vị trí $i$.
+            \item Khởi tạo $dp[1] = 0$, còn lại là vô cùng.
+            \item Với mỗi $i$ có hoa súng: $dp[i] = \min(dp[j]) + 1$ với mọi $j$ thỏa mãn $i-d \le j < i$ và $j$ có hoa súng.
+            \item Độ phức tạp $O(N \cdot d)$ hoặc $O(N^2)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 2
+\begin{frame}{2. Subtract or Divide (1451A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1451/A}
+        \item \textbf{Rating:} 900
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Cho số nguyên $n$. Có thể giảm $n$ đi 1 hoặc thay $n$ bằng $n/d$ (với $d$ là ước của $n$). Tìm số bước tối thiểu để đưa $n$ về 1.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Mối quan hệ giữa các số mô tả qua trạng thái $dp[i]$ (số bước tối thiểu biến $i$ thành 1).
+        \begin{itemize}
+            \item Cân nhắc lựa chọn tối ưu giữa trừ 1 và chia.
+            \item Thực tế có thể giải bằng Toán học/Tham lam dựa trên tính chẵn lẻ, nhưng tư duy DP giúp hiểu về chuyển trạng thái.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 3
+\begin{frame}{3. Alex and a Rhombus (1180A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1180/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Tính số ô vuông trong hình thoi bậc $n$ được tạo ra bằng cách thêm các ô vào cạnh hình thoi bậc $n-1$.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Minh họa cấu trúc truy hồi cơ bản:
+        \begin{itemize}
+            \item Gọi $f(n)$ là số ô vuông bậc $n$.
+            \item Công thức truy hồi: $f(n) = f(n-1) + 4(n-1)$.
+            \item Cơ sở: $f(1) = 1$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 4
+\begin{frame}{4. Non-Substring Subsequence (1451B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1451/B}
+        \item \textbf{Rating:} 900
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Cho chuỗi $s$ và truy vấn $(l, r)$. Kiểm tra xem có tồn tại chuỗi con bằng $s[l \dots r]$ nhưng không phải là chuỗi con liên tiếp tại vị trí đó không.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Lưu trữ trạng thái tồn tại của ký tự:
+        \begin{itemize}
+            \item Để chuỗi không liên tiếp, chỉ cần tìm xem có ký tự $s[l]$ nào ở vị trí $< l$ không, hoặc $s[r]$ nào ở vị trí $> r$ không.
+            \item Sử dụng tư duy tiền xử lý (Preprocessing) giống DP để trả lời truy vấn nhanh.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 5
+\begin{frame}{5. Fair Division (1472B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1472/B}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Chia kẹo loại 1g và 2g thành hai phần có tổng trọng lượng bằng nhau.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Biến thể của bài toán Subset Sum (Cái túi):
+        \begin{itemize}
+            \item Gọi $dp[w]$ là trạng thái boolean: có thể tạo ra tổng trọng lượng $w$ hay không.
+            \item Do giá trị nhỏ, có thể kiểm tra tính chẵn lẻ của số lượng kẹo 1g và 2g kết hợp tổng trọng lượng.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 6
+\begin{frame}{6. Beat The Odds (1691A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1691/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Tìm số phần tử tối thiểu cần loại bỏ để tổng mọi cặp liên tiếp là chẵn.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Tổng hai số là chẵn khi cả hai cùng chẵn hoặc cùng lẻ.
+            \item Để mọi cặp có tổng chẵn, dãy còn lại phải toàn số chẵn hoặc toàn số lẻ.
+            \item Đếm số lượng số chẵn ($n_{even}$) và số lẻ ($n_{odd}$).
+            \item Kết quả: $\min(n_{even}, n_{odd})$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 7
+\begin{frame}{7. Even Subset Sum Problem (1323A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1323/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Tìm một tập con (các chỉ số) sao cho tổng các phần tử là số chẵn.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Nếu có phần tử chẵn: Chọn chính nó (tập kích thước 1).
+            \item Nếu không có phần tử chẵn (toàn lẻ): Chọn 2 phần tử lẻ bất kỳ (Tổng: Lẻ + Lẻ = Chẵn).
+            \item Nếu $n=1$ và phần tử đó lẻ: Vô nghiệm.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 8
+\begin{frame}{8. Ordinary Numbers (1520B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1520/B}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Đếm số lượng các số nguyên dương từ 1 đến $n$ có tất cả các chữ số giống nhau.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Tiền đề cho Digit DP:
+        \begin{itemize}
+            \item Liệt kê các số có dạng 1, 2...9, 11, 22...99, 111...
+            \item Đếm trực tiếp các số này thỏa mãn $\le n$.
+            \item Có tổng cộng rất ít số như vậy trong phạm vi bài toán.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 9
+\begin{frame}{9. Squares and Cubes (1619B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1619/B}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Đếm các số từ 1 đến $n$ là số chính phương ($k^2$) hoặc lập phương ($k^3$).
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Sử dụng Set để tránh trùng lặp hoặc Nguyên lý bao hàm-loại trừ:
+        \begin{itemize}
+            \item Số lượng = (Số số $x^2 \le n$) + (Số số $x^3 \le n$) - (Số số $x^6 \le n$).
+            \item $x^6$ là số vừa là chính phương vừa là lập phương.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 10
+\begin{frame}{10. Extremely Round (1766A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1766/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Đếm các số $\le n$ chỉ có đúng một chữ số khác 0 (Ví dụ: 5, 10, 900).
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Dạng Digit DP đơn giản hoặc liệt kê:
+        \begin{itemize}
+            \item Các số có dạng $d \times 10^k$ (với $d \in [1,9]$).
+            \item Duyệt qua độ dài và chữ số đầu tiên để đếm.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 11
+\begin{frame}{11. 2-3 Moves (1716A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1716/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Đứng tại 0, muốn đến $n$. Có thể nhảy $+2, +3, -2, -3$. Tìm số bước tối thiểu.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        DP trạng thái hoặc Tham lam theo modulo:
+        \begin{itemize}
+            \item Nếu $n=1$: Cần 2 bước (+3, -2).
+            \item Nếu $n \% 3 == 0$: $n/3$ bước.
+            \item Nếu $n \% 3 == 1$: $n/3 + 1$ bước (bớt một bước +3, thay bằng hai bước +2).
+            \item Nếu $n \% 3 == 2$: $n/3 + 1$ bước (thêm một bước +2).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 12
+\begin{frame}{12. Maximum GCD (1370A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1370/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Tìm $\gcd(a, b)$ lớn nhất với $1 \le a < b \le n$.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Tìm giá trị tối ưu:
+        \begin{itemize}
+            \item Để GCD lớn nhất là $g$, ta cần ít nhất $g$ và $2g$ nằm trong khoảng $[1, n]$.
+            \item Điều kiện $2g \le n \Rightarrow g \le n/2$.
+            \item Đáp án luôn là $\lfloor n/2 \rfloor$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 13
+\begin{frame}{13. Team Training (73B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/73/B}
+        \item \textbf{Rating:} 800 (Lưu ý: Tên bài có thể là 519C, ID 73B là bài khác, nhưng giải theo logic Team Training)
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Có $n$ lập trình viên kinh nghiệm và $m$ người mới. Mỗi đội cần (1 kinh nghiệm, 2 mới) hoặc (2 kinh nghiệm, 1 mới). Tối đa bao nhiêu đội?
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Bài toán chia tài nguyên có cấu trúc tối ưu:
+        \begin{itemize}
+            \item Số đội tối đa không vượt quá $n$, không vượt quá $m$.
+            \item Tổng số người dùng là $3 \times k$.
+            \item Kết quả: $\min(n, m, (n+m)/3)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 14
+\begin{frame}{14. No Casino in the Mountains (41B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/41/B}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        (Bài toán Martian Dollar) Mua đô la ngày $i$ giá $a_i$ và bán ngày $j > i$ giá $a_j$ để tối đa hóa tiền.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Duyệt qua từng ngày mua $i$.
+            \item Tìm giá bán cao nhất trong các ngày sau $i$ (có thể dùng DP hậu tố max suffix để tối ưu, hoặc duyệt trâu vì $N$ nhỏ).
+            \item Tính lợi nhuận tối đa cho từng phương án.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 15
+\begin{frame}{15. Minimum Varied Number (1714C)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1714/C}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Tìm số nhỏ nhất có các chữ số khác nhau và tổng các chữ số bằng $s$.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Tham lam/Xây dựng từ cuối lên:
+        \begin{itemize}
+            \item Để số nhỏ nhất, số lượng chữ số phải ít nhất (các chữ số ở hàng đơn vị phải lớn nhất có thể).
+            \item Lấy các số 9, 8, 7... lần lượt trừ vào $s$ từ hàng đơn vị lên hàng cao hơn.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 16
+\begin{frame}{16. Tanya and Stairways (1005A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1005/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Đếm số cầu thang và số bậc của mỗi cầu thang dựa trên dãy số đếm bậc (1, 2, 3, 1, 2...).
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Mỗi khi gặp số 1, đó là bắt đầu một cầu thang mới.
+            \item Số bậc của cầu thang trước đó chính là giá trị phần tử ngay trước số 1 mới (hoặc phần tử cuối cùng của dãy).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 17
+\begin{frame}{17. Polycarp's Pockets (1003A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1003/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Có $n$ đồng xu với các mệnh giá. Chia vào các túi sao cho mỗi túi không có 2 đồng cùng mệnh giá. Tìm số túi tối thiểu.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Số túi tối thiểu chính bằng tần suất xuất hiện lớn nhất của một mệnh giá bất kỳ trong mảng.
+            \item Dùng mảng đếm (Frequency Array).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 18
+\begin{frame}{18. Construct the String (1335B)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1335/B}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Xây dựng chuỗi độ dài $n$, mọi chuỗi con độ dài $a$ có đúng $b$ ký tự khác nhau.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Sử dụng tính chất chu kỳ:
+        \begin{itemize}
+            \item Tạo một mẫu chu kỳ gồm $b$ ký tự khác nhau (ví dụ: 'abc...').
+            \item Lặp lại mẫu này cho đến khi đủ độ dài $n$.
+            \item $S[i] = \text{'a'} + (i \pmod b)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Bài 20 (Note: Skipping 19 as per source)
+\begin{frame}{20. Water Buying (1118A)}
+    \begin{itemize}
+        \item \textbf{Link:} \url{https://codeforces.com/problemset/problem/1118/A}
+        \item \textbf{Rating:} 800
+    \end{itemize}
+    \begin{block}{Đề bài}
+        Cần mua $n$ lít nước. Chai 1L giá $a$, chai 2L giá $b$. Tìm chi phí tối thiểu.
+    \end{block}
+    \begin{exampleblock}{Hướng giải quyết}
+        Bài toán Knapsack cơ bản/Tham lam:
+        \begin{itemize}
+            \item So sánh giá mua 2 chai 1L ($2 \times a$) và 1 chai 2L ($b$).
+            \item Nếu $2a \le b$: Mua toàn bộ bằng chai 1L.
+            \item Nếu $2a > b$: Ưu tiên mua chai 2L (với $n/2$ chai), nếu lẻ thì mua thêm 1 chai 1L.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% Slide Phân tích & Lộ trình
+\begin{frame}{Phân tích Sâu và Chiến lược Luyện tập}
+    \begin{block}{Sự hình thành tư duy}
+        Ở mức 800-1000, khái niệm "trạng thái" và "truy hồi" được lồng ghép trong các bài toán triển khai (Implementation). Hiểu sâu về Prefix Sums (DP đơn giản) là bước đệm quan trọng.
+    \end{block}
+
+    \begin{alertblock}{Lộ trình đề xuất}
+        \begin{enumerate}
+            \item \textbf{Mức 800:} Chuyển đổi ý tưởng thành mã nguồn sạch.
+            \item \textbf{Mức 900:} Vẽ cây quyết định hoặc bảng trạng thái trên giấy.
+            \item \textbf{Mức 1000:} Làm quen bài toán con chồng lấn (CP-31 Sheet).
+        \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Tương quan xếp hạng}
+    \begin{table}
+        \centering
+        \small
+        \begin{tabular}{l l l}
+            \toprule
+            \textbf{Codeforces} & \textbf{USACO} & \textbf{Trình độ tương ứng} \\
+            \midrule
+            800 - 1000 & Beginner / Bronze & Newbie / Pupil \\
+            1100 - 1500 & Bronze / Silver & Pupil / Specialist \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    \begin{center}
+        \textit{"Quy hoạch động không phải là rào cản, mà là cánh cửa mở ra những giải pháp thông minh."}
+    \end{center}
+\end{frame}
+
+\end{document}

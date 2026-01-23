@@ -1,0 +1,189 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 1766A]{Huấn luyện viên Tư duy Thuật toán}
+\subtitle{Phân tích bài toán Extremely Round (1766A)}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu}
+  \begin{itemize}
+    \item Chào mừng bạn đến với chương trình huấn luyện tư duy thuật toán.
+    \item Chúng ta sẽ "mổ xẻ" bài toán theo triết lý \textbf{Micro-chunking} để nắm chắc gốc rễ vấn đề.
+  \end{itemize}
+  \begin{block}{Mục tiêu}
+    Giải quyết bài toán đếm số "cực tròn" một cách tối ưu.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+  \begin{block}{Định nghĩa: Số "Extremely Round"}
+    Là số nguyên dương mà trong các chữ số của nó, \textbf{chỉ có duy nhất một chữ số khác 0}.
+  \end{block}
+  
+  \begin{exampleblock}{Ví dụ}
+    \begin{itemize}
+      \item \textbf{Đúng:} 5, 400, 9000.
+      \item \textbf{Sai:} 11, 405, 9100 (có từ 2 chữ số khác 0 trở lên).
+    \end{itemize}
+  \end{exampleblock}
+
+  \begin{alertblock}{Nhiệm vụ}
+    Cho số nguyên $n$, đếm số lượng số "cực tròn" từ 1 đến $n$ ($n \le 999,999$).
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+  Chúng ta sẽ đi qua 3 mảnh kiến thức (Chunks):
+  \vfill
+  \begin{enumerate}
+    \item \textbf{Chunk 1:} Nhận diện quy luật của các số "cực tròn".
+    \item \textbf{Chunk 2:} Cách đếm thông minh không cần duyệt từng số.
+    \item \textbf{Chunk 3:} Xử lý các bẫy logic và rút ra công thức.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Chunk 1: Truy tìm quy luật "Cực tròn"}
+  Hãy tưởng tượng mỗi hàng (đơn vị, chục, trăm...) là một "ngăn tủ":
+  \begin{itemize}
+    \item \textbf{Hàng 1 chữ số:} 1, 2, ..., 9 (9 số).
+    \item \textbf{Hàng 2 chữ số:} 10, 20, ..., 90 (9 số).
+    \item \textbf{Hàng 3 chữ số:} 100, 200, ..., 900 (9 số).
+  \end{itemize}
+  
+  \begin{exampleblock}{Thử thách tư duy}
+    Nếu $n = 35$, có bao nhiêu số cực tròn nhỏ hơn hoặc bằng 35?
+    \pause
+    \begin{itemize}
+      \item Hàng đơn vị: 1, 2, 3, 4, 5, 6, 7, 8, 9 (9 số)
+      \item Hàng chục: 10, 20, 30 (3 số)
+      \item \textbf{Tổng cộng: 12 số.}
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 2: Tổng quát hóa quy luật}
+  Với mỗi "bậc" (chữ số), ta luôn có tối đa \textbf{9 số} cực tròn.
+  Để đếm đến $n$, ta chia làm 2 phần:
+  \begin{enumerate}
+    \item \textbf{Phần nguyên:} Những "bậc" đã đi qua hết hoàn toàn.
+    \item \textbf{Phần dư:} Những số cực tròn ở bậc hiện tại của $n$.
+  \end{enumerate}
+
+  \begin{exampleblock}{Ví dụ với $n = 4567$}
+    \begin{itemize}
+      \item Bậc đơn vị, chục, trăm: $3 \times 9 = 27$ số.
+      \item Bậc nghìn (hiện tại): 1000, 2000, 3000, 4000 (4 số).
+      \item \textbf{Tổng cộng:} $27 + 4 = 31$ số.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 3: Rút ra công thức}
+  Gọi $s$ là số chữ số của $n$, và $d$ là chữ số đầu tiên của $n$.
+  
+  \begin{block}{Mối liên hệ}
+    \begin{itemize}
+      \item Số bậc đầy đủ là $(s - 1)$.
+      \item Mỗi bậc đầy đủ có 9 số cực tròn.
+      \item Bậc cuối cùng có đúng $d$ số.
+    \end{itemize}
+  \end{block}
+
+  \begin{tcolorbox}[colback=blue!5,colframe=blue!75,title=Công thức tổng quát]
+    $$\text{Result} = (s - 1) \times 9 + d$$
+  \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{Thử nghiệm giới hạn}
+  \begin{exampleblock}{Kiểm tra với $n = 999,999$}
+    \begin{itemize}
+      \item Số chữ số $s = 6$.
+      \item Chữ số đầu tiên $d = 9$.
+      \item Áp dụng: $(6 - 1) \times 9 + 9 = 5 \times 9 + 9 = 54$.
+    \end{itemize}
+    \textbf{Giải thích:} Có 6 bậc (từ đơn vị đến trăm nghìn), mỗi bậc đóng góp 9 số.
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Bước 3: Hiện thực hóa thành thuật toán}
+  \begin{block}{Cách lấy $d$ và $s$ bằng toán học}
+    Sử dụng biến tạm \texttt{go\_n} để không làm mất giá trị gốc của $n$.
+  \end{block}
+
+\begin{lstlisting}[language=Python, caption=Mã giả logic xử lý]
+Nhap t (so bo test)
+Lap lai t lan:
+    Nhap n
+    go_n = n
+    s = do_dai_chuoi(n) # Hoac dem trong khi chia 10
+    
+    # Tim chu so dau tien d
+    Trong khi go_n >= 10:
+        go_n = go_n // 10
+    d = go_n
+    
+    In ra (s - 1) * 9 + d
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách thực hành}
+  \begin{alertblock}{Câu hỏi suy luận}
+    Nếu $n = 7$ (số có 1 chữ số):
+    \begin{itemize}
+      \item Vòng lặp \texttt{while (go\_n >= 10)} có chạy không?
+      \item Giá trị $d$ cuối cùng là bao nhiêu?
+      \item Công thức $(s-1) \times 9 + d$ có trả về đúng 7 không?
+    \end{itemize}
+  \end{alertblock}
+  \pause
+  \begin{exampleblock}{Đáp án}
+    \begin{itemize}
+      \item Vòng lặp không chạy. $d = 7$.
+      \item $s = 1 \Rightarrow (1-1) \times 9 + 7 = 7$.
+      \item \textbf{Kết luận:} Thuật toán chạy đúng cho cả số có 1 chữ số!
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\end{document}

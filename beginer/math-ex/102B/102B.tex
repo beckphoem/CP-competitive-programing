@@ -1,0 +1,154 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 102B]{Codeforces 102B - Sum of Digits}
+\subtitle{Coach Tư duy Thuật toán - Phong cách Micro-Chunks}
+\author{Gemini AI}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lộ trình học tập}
+    \begin{block}{Mục tiêu}
+        "Mổ xẻ" bài toán tập trung hoàn toàn vào chiến thuật và logic thay vì chỉ nhìn vào code.
+    \end{block}
+    
+    \textbf{Lộ trình 3 giai đoạn:}
+    \begin{itemize}
+        \item \textbf{Chunk 1:} Xử lý con số "khổng lồ" (Dữ liệu đầu vào).
+        \item \textbf{Chunk 2:} Cơ chế "nén" số (Tính tổng các chữ số).
+        \item \textbf{Chunk 3:} Điều kiện dừng và bộ đếm.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruction)}
+    \begin{itemize}
+        \item \textbf{Input:} Một số nguyên cực lớn $n$. (Có thể có tới $10^5$ chữ số!).
+        \item \textbf{Hành động:} Thay thế số đó bằng \textbf{tổng các chữ số} của nó.
+        \item \textbf{Lặp lại:} Tiếp tục cho đến khi số còn lại chỉ có \textbf{duy nhất 1 chữ số}.
+        \item \textbf{Mục tiêu:} Đếm số lần thực hiện hành động thay thế.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 1: Đối mặt với "Con quái vật" số lớn}
+    \begin{alertblock}{Vấn đề}
+        Số $n$ có thể có $10^5$ chữ số. Kiểu dữ liệu \texttt{int} hay \texttt{long long} chỉ chứa được tối đa khoảng 10 đến 19 chữ số.
+    \end{alertblock}
+
+    \begin{block}{Thử thách tư duy}
+        Để lưu trữ một "đoàn tàu" có $10^5$ toa (chữ số), chúng ta nên dùng kiểu dữ liệu nào?
+        \begin{enumerate}[A.]
+            \item Biến kiểu số thực (Float/Double).
+            \item Chuỗi ký tự (String/Array of Characters).
+            \item Ép kiểu về số nguyên lớn (BigInt).
+        \end{enumerate}
+    \end{block}
+    \pause
+    \textbf{Đáp án: B. Chuỗi ký tự (String)}
+\end{frame}
+
+\begin{frame}{Chunk 2: Cơ chế "nén" số}
+    \begin{exampleblock}{Ví dụ: n = "47"}
+        \begin{itemize}
+            \item \textbf{Lần 1:} $4 + 7 = 11$. (Thực hiện 1 lần).
+            \item \textbf{Lần 2:} $1 + 1 = 2$. (Thực hiện lần 2).
+            \item \textbf{Dừng lại:} Vì số 2 chỉ có 1 chữ số. Kết quả: 2 lần.
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=Lưu ý kỹ thuật]
+        Để lấy giá trị số từ ký tự (ASCII), ta dùng công thức: \texttt{'7' - '0'} = 7.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{Thử thách Chunk 2}
+    \begin{block}{Câu hỏi}
+        Nếu đầu vào là số $n = 991$.
+        \begin{enumerate}
+            \item Lần nén thứ nhất sẽ biến số này thành số bao nhiêu?
+            \item Sau lần đó, đã thỏa mãn điều kiện dừng chưa?
+        \end{enumerate}
+    \end{block}
+    \pause
+    \begin{exampleblock}{Giải đáp}
+        \begin{enumerate}
+            \item $9 + 9 + 1 = 19$.
+            \item Chưa dừng (vì 19 có 2 chữ số).
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 3: Điều kiện dừng và Bộ đếm}
+    Sử dụng vòng lặp \texttt{while} để xử lý khi chưa biết rõ số bước:
+    \begin{itemize}
+        \item \textbf{Điều kiện dừng:} Khi chiều dài chuỗi bằng 1.
+        \item \textbf{Bộ đếm (\texttt{count}):} Tăng lên 1 sau mỗi lần tính tổng thành công.
+    \end{itemize}
+
+    \begin{alertblock}{Cảnh báo bẫy (Edge Case)}
+        Nếu số $n$ ngay từ đầu chỉ có 1 chữ số (ví dụ $n = 5$)?
+        \begin{enumerate}[A.]
+            \item 0 lần.
+            \item 1 lần.
+            \item Không thể thực hiện.
+        \end{enumerate}
+    \end{alertblock}
+    \pause
+    \textbf{Đáp án: A. 0 lần.} (Sử dụng \texttt{while} kiểm tra trước khi làm sẽ tránh được lỗi này).
+\end{frame}
+
+\begin{frame}[fragile]{Tổng kết thuật toán (Pseudocode)}
+    \begin{lstlisting}[language=C++, caption=Bản thiết kế thuật toán]
+1. Doc du lieu n duoi dang @\textbf{string}@.
+2. Khoi tao bien @\texttt{dem = 0}@.
+3. Vong lap @\textbf{while (n.length() > 1)}@:
+   a. Tinh tong cac chu so trong chuoi n.
+   b. Bien doi Tong vua tinh ve lai dang @\textbf{string}@ va gan cho n.
+   c. Tang @\texttt{dem}@ len 1.
+4. In ra @\texttt{dem}@.
+    \end{lstlisting}
+
+    \begin{block}{Bước tiếp theo}
+        Bạn có muốn thử tự viết code dựa trên bản thiết kế này không? Tôi có thể hỗ trợ phần chuyển đổi số thành chuỗi hoặc xử lý vòng lặp!
+    \end{block}
+\end{frame}
+
+\end{document}

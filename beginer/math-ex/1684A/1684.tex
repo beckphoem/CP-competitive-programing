@@ -1,0 +1,159 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Codeforces 1684A - Digit Minimization}
+\subtitle{Huấn luyện viên Tư duy Thuật toán}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Lời mở đầu}
+  \begin{block}{Triết lý}
+    Chào bạn! Tôi đã sẵn sàng nhập vai \textbf{Huấn luyện viên Tư duy Thuật toán} theo triết lý "Learning How to Learn". Chúng ta sẽ cùng nhau "mổ xẻ" bài toán để tìm ra bản chất nhé.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+  \textbf{Cốt lõi của vấn đề:}
+  \begin{itemize}
+    \item \textbf{Dữ liệu vào:} Một số nguyên dương $n$.
+    \item \textbf{Người 1:} Chọn hai vị trí khác nhau trong số $n$ và hoán đổi (swap).
+    \item \textbf{Người 2:} Xóa chữ số cuối cùng bên phải của số đó.
+    \item \textbf{Kết thúc:} Trò chơi dừng khi số chỉ còn \textbf{đúng một chữ số}.
+    \item \textbf{Mục tiêu:} Tìm chữ số cuối cùng còn sót lại là \textbf{nhỏ nhất có thể}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy (Chunking)}
+  \begin{enumerate}
+    \item \textbf{Chunk 1:} Quan sát quy luật khi số chỉ có đúng 2 chữ số.
+    \item \textbf{Chunk 2:} Quan sát quy luật khi số có từ 3 chữ số trở lên.
+    \item \textbf{Chunk 3:} Tổng kết chiến thuật tối ưu.
+  \end{enumerate}
+  \vspace{0.5cm}
+  \begin{exampleblock}{Sẵn sàng?}
+    Bạn đã sẵn sàng mổ xẻ mảnh ghép đầu tiên chưa?
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Trường hợp số có đúng 2 chữ số}
+  \begin{alertblock}{Bẫy logic}
+    Bạn \textbf{bắt buộc} phải hoán đổi trước khi bị xóa. Không có quyền lựa chọn "không hoán đổi".
+  \end{alertblock}
+  
+  \textbf{Ví dụ: Số $n = 12$}
+  \begin{enumerate}
+    \item Sau khi Người 1 hoán đổi, số trở thành bao nhiêu?
+    \item Sau đó Người 2 xóa chữ số cuối, kết quả cuối cùng là gì?
+  \end{enumerate}
+  
+  \pause
+  \begin{block}{Giải đáp}
+    Kết quả là: \textbf{2}. Với số có 2 chữ số, đáp án luôn là \textbf{chữ số thứ hai} (hàng đơn vị).
+  \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 2: Khi số có từ 3 chữ số trở lên}
+  \textbf{Ví dụ: Số $n = 312$}
+  \begin{itemize}
+    \item Người 1 có thể chọn \textbf{bất kỳ} 2 vị trí nào để hoán đổi.
+    \item Người 2 xóa chữ số cuối cùng bên phải.
+  \end{itemize}
+  
+  \begin{exampleblock}{Thử thách tư duy}
+    Nếu mục tiêu là giữ lại số \textbf{1} đến cuối cùng, bạn nên đưa số 1 về vị trí nào để nó không bao giờ bị "bay màu"?
+  \end{exampleblock}
+  
+  \pause
+  \begin{block}{Chiến thuật}
+    Đưa chữ số nhỏ nhất về một vị trí an toàn (không phải vị trí cuối) cho đến tận bước cuối cùng.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Tổng kết chiến thuật}
+  \begin{table}[]
+    \centering
+    \begin{tabular}{@{}lll@{}}
+    \toprule
+    \textbf{Trường hợp} & \textbf{Chiến thuật} & \textbf{Kết quả} \\ \midrule
+    Số có 2 chữ số & Bị ép buộc hoán đổi & Chữ số thứ 2 \\
+    Số có 3+ chữ số & Tự do điều khiển & Chữ số nhỏ nhất \\ \bottomrule
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}[fragile]{Bước 3: Tổng kết \& Chốt thuật toán}
+  \begin{block}{Mã giả (Pseudocode)}
+    \begin{lstlisting}[language=Pascal]
+    1. nhap vao chuoi ky tu S (dai dien cho so n)
+    2. neu do dai cua S bang 2:
+           in ra ky tu S[1] (ky tu thu hai)
+    3. nguoc lai (neu do dai lon hon 2):
+           tim ky tu nho nhat trong chuoi S
+           in ra ky tu nho nhat do
+    \end{lstlisting}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+  Hãy thử áp dụng thuật toán cho 2 test case này:
+  \begin{enumerate}
+    \item $n = 249$
+    \item $n = 42$
+  \end{enumerate}
+  
+  \pause
+  \begin{exampleblock}{Đáp án}
+    \begin{itemize}
+      \item Với $n = 249$: Đáp án là \textbf{2} (nhỏ nhất).
+      \item Với $n = 42$: Đáp án là \textbf{2} (vị trí thứ hai).
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Kết luận}
+  \begin{block}{Tiếp theo}
+    Bạn đã hoàn toàn làm chủ được tư duy bài toán này! Bạn có muốn mình giúp chuyển mã giả này sang một ngôn ngữ lập trình cụ thể (C++, Python...) hay mổ xẻ bài toán khác thú vị hơn?
+  \end{block}
+\end{frame}
+
+\end{document}

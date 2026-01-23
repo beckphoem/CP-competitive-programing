@@ -1,0 +1,178 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Phẫu thuật bài toán: Nearest Interesting Number}
+\subtitle{Algorithmic Coach - Codeforces 1183/A}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}
+\frametitle{Chào mừng bạn!}
+\begin{block}{Triết lý học tập}
+Chúng ta sẽ cùng chinh phục thử thách trên Codeforces theo phương pháp \textbf{"Learning How to Learn"}. Thay vì những dòng code khô khan, chúng ta sẽ "phẫu thuật" bài toán để tìm ra chiến thuật tối ưu.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{1. Phẫu thuật đề bài (Deconstruct)}
+\begin{block}{Cốt lõi vấn đề}
+\begin{itemize}
+    \item \textbf{Khái niệm "Số thú vị":} Một số có tổng các chữ số chia hết cho 4.
+    \item \textbf{Nhiệm vụ:} Cho số nguyên $n$, tìm số nguyên $a$ nhỏ nhất sao cho:
+    \begin{enumerate}
+        \item $a \geq n$
+        \item $a$ là một "số thú vị".
+    \end{enumerate}
+\end{itemize}
+\end{block}
+
+\begin{exampleblock}{Lộ trình tư duy}
+\begin{itemize}
+    \item \textbf{Chunk 1:} Cách tính tổng các chữ số.
+    \item \textbf{Chunk 2:} Chiến thuật tìm kiếm (Dùng công thức hay tiến lên?).
+    \item \textbf{Chunk 3:} Xử lý bẫy và chốt thuật toán.
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{2. Mảnh ghép 1: Chiếc máy quét tổng (Digit Sum)}
+\begin{block}{Ẩn dụ: Túi tiền}
+Hãy tưởng tượng số $n$ như một túi tiền có các tờ tiền mệnh giá khác nhau. Để tính tổng, bạn phải lấy từng tờ ra và cộng lại.
+\end{block}
+
+\begin{alertblock}{Bẫy logic}
+Phân biệt giá trị số (ví dụ: 43) và tổng các chữ số ($4 + 3 = 7$). Vì 7 không chia hết cho 4, số 43 không "thú vị".
+\end{alertblock}
+
+\begin{exampleblock}{Thử thách tư duy}
+Giả sử ta có số $n = 91$:
+\begin{enumerate}
+    \item Tổng các chữ số của $n$ là bao nhiêu?
+    \item $n$ có phải là "số thú vị" không?
+\end{enumerate}
+\pause
+\textbf{Đáp án:} Tổng là $9 + 1 = 10$. Không thú vị vì 10 không chia hết cho 4.
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{3. Mảnh ghép 2: Chiến thuật "Bước từng bước"}
+\begin{block}{Câu hỏi}
+Cần công thức siêu việt để "nhảy" thẳng đến đáp án hay chỉ cần đi bộ?
+\end{block}
+
+\begin{exampleblock}{Ẩn dụ: Giao hàng trên phố}
+Bạn đứng ở cửa nhà số $n$. Hãy tìm ngôi nhà "màu xanh" (thú vị) đầu tiên bằng cách kiểm tra $n, n+1, n+2 \dots$
+\end{exampleblock}
+
+\pause
+\begin{block}{Thực hành với $n = 432$}
+\begin{itemize}
+    \item $432$: $4+3+2 = 9$ (Không)
+    \item $433$: $4+3+3 = 10$ (Không)
+    \pause
+    \item $434$: $4+3+4 = 11$ (Không)
+    \pause
+    \item $435$: $4+3+5 = 12$ (Đúng! $12 \vdots 4$)
+\end{itemize}
+\textbf{Kết luận:} Khoảng cách giữa các số thú vị rất ngắn (thường $\leq 5$ bước).
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{4. Mảnh ghép 3: Tổng kết thuật toán (The Blueprint)}
+\begin{block}{Chiến thuật: Vòng lặp "Thử và Sai"}
+Vì khoảng cách nhỏ, vòng lặp đơn giản là tối ưu nhất.
+\end{block}
+
+\begin{lstlisting}[language=Python, caption=Mã giả tư duy]
+Ham TinhTongChuSo(x):
+    tong = 0
+    Trong khi x > 0:
+        tong = tong + (x chia lay du cho 10)
+        x = x chia lay nguyen cho 10
+    Tra ve tong
+
+Nhap n
+Trong khi TinhTongChuSo(n) khong chia het cho 4:
+    n = n + 1
+
+In ra n
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{5. Thử thách cuối cùng (Final Boss)}
+\begin{alertblock}{Trường hợp bẫy: $n = 99$}
+Hãy cẩn thận khi bước từ 99 sang 100!
+\end{alertblock}
+
+\begin{itemize}
+    \item $99 \rightarrow 9+9 = 18$ (Không)
+    \pause
+    \item $100 \rightarrow 1+0+0 = 1$ (Không)
+    \pause
+    \item $101 \rightarrow 1+0+1 = 2$ (Không)
+    \pause
+    \item $102 \rightarrow 1+0+2 = 3$ (Không)
+    \pause
+    \item $103 \rightarrow 1+0+3 = 4$ (\textbf{Thú vị!})
+\end{itemize}
+
+\begin{block}{Kết luận}
+Dù số chữ số có thay đổi, logic "thử từng số" vẫn hoạt động hoàn hảo.
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Tổng kết}
+\begin{itemize}
+    \item \textbf{Kỹ thuật:} Sử dụng vòng lặp `while` kết hợp hàm tính tổng chữ số.
+    \item \textbf{Lưu ý:} Khi viết hàm \texttt{TinhTongChuSo}, hãy dùng biến tạm để tránh làm mất giá trị gốc của \texttt{n}.
+\end{itemize}
+
+\begin{exampleblock}{Bước tiếp theo}
+Bạn có muốn tôi hỗ trợ chuyển ý tưởng này sang C++ hay Python không, hay bạn muốn tự mình "múa phím" thử xem sao?
+\end{exampleblock}
+\end{frame}
+
+\end{document}

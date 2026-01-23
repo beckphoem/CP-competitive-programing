@@ -1,0 +1,21 @@
+\frametitle{Mã giả (Tư duy lập trình)}
+Chiến thuật "Duyệt danh sách" được thể hiện như sau (Tiếng Việt không dấu):
+
+\begin{lstlisting}[language=Python, caption=Mã giả giải thuật]
+BUOC 1: Tao mot mang (danh sach) chua cac so:
+        4, 7, 44, 47, 74, 77, 444, 447, 474, 477, 744, 747...
+
+BUOC 2: Nhap so nguyen n tu ban phim.
+
+BUOC 3: Tao bien "kiem_tra" va dat la False (chua tim thay).
+
+BUOC 4: Chay vong lap qua tung so "x" trong danh sach o Buoc 1:
+        Neu n chia cho x du 0:
+           Dat "kiem_tra" thanh True.
+           Dung vong lap (break).
+
+BUOC 5: Neu "kiem_tra" la True:
+           In ra "YES".
+        Nguoc lai:
+           In ra "NO".
+\end{lstlisting}

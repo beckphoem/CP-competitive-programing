@@ -1,0 +1,20 @@
+\frametitle{🧩 Chunk 4: Tổng kết \& Mã giả}
+\begin{block}{Lưu đồ thuật toán}
+        \begin{enumerate}
+            \item Đọc số lượng bộ test $n$.
+            \item Lặp $n$ lần:
+            \begin{itemize}
+                \item Đọc $k$ và $x$.
+                \item Áp dụng công thức $x + (k-1) \cdot 9$.
+                \item In kết quả.
+            \end{itemize}
+        \end{enumerate}
+    \end{block}
+
+\begin{lstlisting}[language=Python, caption=Pseudocode]
+Nhap n (so luong bo test)
+Lap n lan:
+    Nhap k, x
+    @\textbf{Ket\_qua = x + (k - 1) * 9}@
+    In Ket_qua
+\end{lstlisting}

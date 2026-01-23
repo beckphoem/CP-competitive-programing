@@ -1,0 +1,16 @@
+\frametitle{6. Div. 7 (CF 1633A)}
+\textbf{Link:} \url{https://codeforces.com/problemset/problem/1633/A}
+
+    \begin{block}{Đề bài}
+    Thay đổi ít nhất chữ số của $n$ để được số mới chia hết cho 7.
+    \end{block}
+
+    \begin{exampleblock}{Hướng giải}
+    \begin{itemize}
+        \item Nếu $n \pmod{7} == 0$, giữ nguyên.
+        \item Nếu không, thử thay đổi chữ số hàng đơn vị.
+        \item Duyệt \texttt{for} từ 0 đến 9 để thay thế chữ số cuối.
+        \item Kiểm tra số mới, nếu chia hết cho 7 thì dừng lại.
+        \item \textbf{Lưu ý:} Đảm bảo số mới không làm thay đổi số lượng chữ số ban đầu.
+    \end{itemize}
+    \end{exampleblock}

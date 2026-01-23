@@ -1,0 +1,20 @@
+\frametitle{Chunk 4: Tổng kết thuật toán (Final Logic)}
+\begin{block}{Mã giả (Pseudocode)}
+        \begin{enumerate}
+            \item Nhập $n$, khởi tạo \texttt{dem = 0}.
+            \item Lặp \texttt{chu\_so} từ $1$ đến $9$:
+            \begin{itemize}
+                \item Khởi tạo \texttt{so\_tao\_ra = chu\_so}.
+                \item Trong khi \texttt{so\_tao\_ra <= n}:
+                \begin{itemize}
+                    \item Tăng \texttt{dem}.
+                    \item \texttt{so\_tao\_ra = so\_tao\_ra * 10 + chu\_so}.
+                \end{itemize}
+            \end{itemize}
+            \item In ra \texttt{dem}.
+        \end{enumerate}
+    \end{block}
+
+    \begin{exampleblock}{Ví dụ tạo số với \texttt{chu\_so = 2}}
+        $2 \rightarrow (2 \times 10 + 2) = 22 \rightarrow (22 \times 10 + 2) = 222 \dots$
+    \end{exampleblock}

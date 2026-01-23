@@ -1,0 +1,18 @@
+\frametitle{5. Mã giả (Pseudocode)}
+Chiến thuật: Luôn in ra hai số $1$ và $x-1$.
+
+\begin{lstlisting}[language=Python, caption=Mã giả giải thuật]
+Nhap vao so luong bo test t
+Lap t lan:
+    Nhap vao so x
+    In ra: 1 va (x - 1)
+\end{lstlisting}
+
+  \begin{alertblock}{Kiểm tra bẫy logic (Edge Case)}
+    Nếu $x = 2$:
+    \begin{itemize}
+      \item Thuật toán in ra: \textbf{1 1}
+      \item $GCD(1, 1) + LCM(1, 1) = 1 + 1 = 2$.
+      \item Thỏa mãn điều kiện nguyên dương $a, b \ge 1$.
+    \end{itemize}
+  \end{alertblock}

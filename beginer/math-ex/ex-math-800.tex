@@ -1,0 +1,178 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Cấu tạo số trong CP]{Phân tích hệ thống bài tập cấu tạo số trong lập trình thi đấu}
+\subtitle{Từ nền tảng cấu trúc điều khiển đến tư duy thuật toán bậc thấp}
+\author{Slide Learning C++}
+\date{Rank 800 - 1000}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Nền tảng lý thuyết}
+    \begin{block}{Biểu diễn số học}
+    Một số nguyên dương $n$ có thể được phân rã thành:
+    $$n = a_k \cdot 10^k + a_{k-1} \cdot 10^{k-1} + \dots + a_1 \cdot 10^1 + a_0 \cdot 10^0$$
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Phép toán trích xuất:} $a_0 = n \pmod{10}$.
+        \item \textbf{Phép toán loại bỏ:} $n = n / 10$.
+        \item \textbf{Cấu trúc:} Sử dụng \texttt{while} để tách chữ số khi chưa biết trước độ dài.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{1. Sum of Round Numbers (CF 1352A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1352/A}
+    
+    \begin{block}{Đề bài}
+    Phân tích $n$ ($n \le 10^4$) thành tổng ít nhất các "số tròn" (dạng $d \cdot 10^k$).
+    \end{block}
+
+    \begin{exampleblock}{Hướng giải}
+    \begin{itemize}
+        \item Sử dụng vòng lặp \texttt{while} để tách từng chữ số.
+        \item Duyệt qua các vị trí $i$ từ hàng đơn vị.
+        \item Nếu chữ số $a_i > 0$, lưu giá trị $a_i \cdot 10^i$ vào mảng kết quả.
+    \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{2. Nearest Interesting Number (CF 1183A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1183/A}
+    
+    \begin{block}{Đề bài}
+    Tìm số thú vị nhỏ nhất $a \ge n$ sao cho tổng các chữ số của nó chia hết cho 4.
+    \end{block}
+
+    \begin{exampleblock}{Hướng giải}
+    \begin{itemize}
+        \item Bắt đầu vòng lặp \texttt{while(true)} từ giá trị $n$.
+        \item \textbf{Bước 1:} Dùng vòng lặp con tính tổng các chữ số của số hiện tại.
+        \item \textbf{Bước 2:} Dùng \texttt{if} để kiểm tra \texttt{sum \% 4 == 0}.
+        \item Nếu thỏa mãn thì dừng và in kết quả.
+    \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{3. Digits Sum (CF 1553A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1553A}
+    
+    \begin{block}{Đề bài}
+    Đếm số nguyên $x \le n$ sao cho tổng chữ số của $x+1$ nhỏ hơn tổng chữ số của $x$.
+    \end{block}
+
+    \begin{alertblock}{Phân tích quy luật}
+    \begin{itemize}
+        \item Quy luật: Tổng chữ số chỉ giảm khi có hiện tượng nhớ (ví dụ từ 9 lên 10).
+        \item Chỉ các số kết thúc bằng chữ số 9 mới thỏa mãn điều kiện này.
+        \item \textbf{Công thức:} $(n + 1) / 10$.
+    \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]{4. Distinct Digits (CF 1228A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1228/A}
+    
+    \begin{block}{Đề bài}
+    Tìm một số $x$ trong đoạn $[l, r]$ có các chữ số đôi một khác nhau.
+    \end{block}
+
+    \begin{exampleblock}{Hướng giải}
+    \begin{itemize}
+        \item Duyệt \texttt{for} từ $l$ đến $r$.
+        \item Với mỗi số, dùng \texttt{while} để tách từng chữ số.
+        \item Sử dụng mảng đánh dấu \texttt{bool \text{appeared}[10]} để kiểm tra xem chữ số đã xuất hiện chưa.
+        \item Nếu tìm thấy số thỏa mãn, in ra và kết thúc chương trình.
+    \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{5. Ordinary Numbers (CF 1520B)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1520/B}
+    
+    \begin{block}{Đề bài}
+    Đếm số lượng số chỉ gồm một loại chữ số (1, 22, 333,...) trong đoạn $[1, n]$.
+    \end{block}
+
+    \begin{exampleblock}{Hướng giải}
+    \begin{itemize}
+        \item Thay vì duyệt đến $10^9$, ta chủ động sinh ra các số này.
+        \item Dùng 2 vòng lặp lồng nhau:
+        \begin{itemize}
+            \item Vòng ngoài cho chữ số từ 1 đến 9.
+            \item Vòng trong tạo số dạng $d, dd, ddd, \dots$
+        \end{itemize}
+        \item Đếm các số sinh ra mà $\le n$.
+    \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{6. Div. 7 (CF 1633A)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1633/A}
+    
+    \begin{block}{Đề bài}
+    Thay đổi ít nhất chữ số của $n$ để được số mới chia hết cho 7.
+    \end{block}
+
+    \begin{exampleblock}{Hướng giải}
+    \begin{itemize}
+        \item Nếu $n \pmod{7} == 0$, giữ nguyên.
+        \item Nếu không, thử thay đổi chữ số hàng đơn vị.
+        \item Duyệt \texttt{for} từ 0 đến 9 để thay thế chữ số cuối.
+        \item Kiểm tra số mới, nếu chia hết cho 7 thì dừng lại.
+        \item \textbf{Lưu ý:} Đảm bảo số mới không làm thay đổi số lượng chữ số ban đầu.
+    \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Tổng kết tư duy}
+    \begin{itemize}
+        \item \textbf{Kỹ năng tách số:} Là xương sống của các bài toán cấu tạo số.
+        \item \textbf{Độ phức tạp:} $O(\log_{10} n)$ cho mỗi lần xử lý chữ số, cực kỳ tối ưu.
+        \item \textbf{Tiếp cận:} 
+        \pause
+        \item Luôn kiểm tra các trường hợp biên (số 0, số có toàn chữ số 9).
+        \pause
+        \item Cân nhắc giữa việc duyệt số và việc sinh số.
+    \end{itemize}
+\end{frame}
+
+\end{document}

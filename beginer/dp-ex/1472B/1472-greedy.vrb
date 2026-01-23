@@ -1,0 +1,18 @@
+\frametitle{Cấu trúc mã giả DP}
+\begin{lstlisting}[language=C++, caption=Thuật toán Dynamic Programming]
+    target = tong_khoi_luong / 2
+    dp[0] = True
+    Cac dp[1...target] = False
+
+    Voi moi vien keo v trong danh sach:
+        Chay i tu target xuong den v:
+            dp[i] = dp[i] HOAC dp[i - v]
+
+    Ket qua: Neu dp[target] la True thi YES, nguoc lai NO
+    \end{lstlisting}
+
+    \begin{alertblock}{Câu hỏi tư duy}
+        Tại sao biến \texttt{i} phải chạy \textbf{ngược} từ \texttt{target} về \texttt{v}?
+    \end{alertblock}
+    \pause
+    \textbf{Gợi ý:} Để đảm bảo mỗi viên kẹo chỉ được sử dụng \textbf{một lần} duy nhất.

@@ -1,0 +1,11 @@
+\frametitle{Bước 3: Tổng kết \& Chốt thuật toán}
+\begin{block}{Mã giả (Pseudocode)}
+    \begin{lstlisting}[language=Pascal]
+    1. nhap vao chuoi ky tu S (dai dien cho so n)
+    2. neu do dai cua S bang 2:
+           in ra ky tu S[1] (ky tu thu hai)
+    3. nguoc lai (neu do dai lon hon 2):
+           tim ky tu nho nhat trong chuoi S
+           in ra ky tu nho nhat do
+    \end{lstlisting}
+  \end{block}

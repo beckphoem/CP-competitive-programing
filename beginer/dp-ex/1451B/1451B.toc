@@ -1,0 +1,7 @@
+\babel@toc {vietnamese}{}\relax 
+\beamer@sectionintoc {1}{Phẫu thuật đề bài}{3}{0}{1}
+\beamer@sectionintoc {2}{Bản chất sự nhảy cóc}{4}{0}{2}
+\beamer@sectionintoc {3}{Điều kiện tối thiểu}{6}{0}{3}
+\beamer@sectionintoc {4}{Thuật toán tối ưu}{8}{0}{4}
+\beamer@sectionintoc {5}{Mã giả}{10}{0}{5}
+\beamer@sectionintoc {6}{Mở rộng về DP}{11}{0}{6}

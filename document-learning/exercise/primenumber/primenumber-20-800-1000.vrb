@@ -1,0 +1,19 @@
+\frametitle{14. Odd Divisor (1475A) - Rating 900}
+\begin{block}{Đề bài}
+        Kiểm tra $n$ có ước lẻ lớn hơn 1 không.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Bitwise Trick}
+        \begin{itemize}
+            \item Số có ước lẻ $>1$ $\Leftrightarrow$ Số đó KHÔNG phải là lũy thừa của 2.
+            \item Nếu $n = 2^k$, ước duy nhất là các $2^j$ (chẵn, trừ số 1).
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{lstlisting}[language=C++]
+// Kiem tra luy thua cua 2
+if ((n & (n - 1)) == 0) cout << "NO";
+else cout << "YES";
+    \end{lstlisting}
+    \textbf{Độ phức tạp:} $O(1)$.

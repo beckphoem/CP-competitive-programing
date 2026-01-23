@@ -1,0 +1,152 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Codeforces 1370A - Maximum GCD}
+\subtitle{Tư duy thuật toán qua Micro-chunking}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Phẫu thuật đề bài (Deconstruct)}
+    \begin{block}{Cốt lõi vấn đề}
+        \begin{itemize}
+            \item \textbf{Dữ liệu cho:} Một số nguyên dương $n$.
+            \item \textbf{Nhiệm vụ:} Tìm hai số nguyên $a$ và $b$ sao cho:
+            \begin{enumerate}
+                \item $1 \le a < b \le n$.
+                \item $GCD(a, b)$ là lớn nhất có thể.
+            \end{enumerate}
+            \item \textbf{Kết quả:} Giá trị GCD lớn nhất đó.
+        \end{itemize}
+    \end{block}
+
+    \begin{itemize}
+        \item Hiểu bản chất GCD qua hình ảnh thực tế.
+        \item Tìm mối quan hệ giữa "khoảng cách" và "ước chung".
+        \item Xác định quy luật tối ưu.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 1: Bản chất của GCD và sự "cộng hưởng"}
+    \begin{block}{Ẩn dụ "Thước đo"}
+        Nếu $GCD(a, b) = g$, nghĩa là cả $a$ và $b$ đều được ghép từ những "viên gạch" độ dài $g$.
+        \begin{itemize}
+            \item $a = x \cdot g$
+            \item $b = y \cdot g$
+        \end{itemize}
+        Vì $a < b$, nên $b$ phải nhiều hơn $a$ ít nhất một "viên gạch" $g$. Tức là khoảng cách giữa $a$ và $b$ ít nhất phải là $g$.
+    \end{block}
+
+    \begin{alertblock}{Bẫy logic}
+        Cố gắng chọn hai số thật lớn gần $n$ nhưng không có chung ước lớn. Ví dụ: $n=100$, chọn 99 và 100 thì $GCD(99, 100) = 1$.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Chunk 1: Thử thách tư duy}
+    \begin{exampleblock}{Thử thách}
+        Giả sử $n=10$. Bạn muốn tìm một "viên gạch" $g$ lớn nhất sao cho có thể xếp được ít nhất hai chồng gạch ($a$ và $b$) mà cả hai không quá $n$.
+    \end{exampleblock}
+
+    \begin{itemize}
+        \item Nếu chọn $g = 5$: Ta có $a = 5$ (1 viên), $b = 10$ (2 viên). Thỏa mãn $\le 10$.
+        \item Nếu chọn $g = 6$: Ta có $a = 6$, số tiếp theo phải là $12$. (Vượt quá $n=10$).
+    \end{itemize}
+    
+    \pause
+    \textbf{Kết luận:} $g$ lớn nhất sao cho $2 \cdot g \le n$.
+\end{frame}
+
+\begin{frame}{Chunk 2: Tìm công thức tổng quát}
+    \begin{itemize}
+        \item Nếu $n=5$: Các cặp có thể là (1,2), (2,4)... GCD lớn nhất là $5/2 = 2$.
+        \item Nếu $n=11$: Cặp tối ưu là (5, 10). GCD lớn nhất là $11/2 = 5$.
+    \end{itemize}
+
+    \begin{block}{Quy luật toán học}
+        Kết quả là $\lfloor n / 2 \rfloor$ (Phần nguyên của $n$ chia 2).
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Tại sao con số này là "vô đối"?}
+        Nếu chọn $g > n/2$, thì số bội tiếp theo là $2g$ chắc chắn sẽ $> n$. Bạn không thể tìm được số thứ hai trong phạm vi cho phép.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 3: Bẫy về số lượng Test Case}
+    \begin{alertblock}{Lưu ý về hiệu năng}
+        Bài toán có $T$ bộ dữ liệu. Nếu dùng vòng lặp thử từng số từ $n$ về 1, độ phức tạp sẽ là $O(T \cdot n)$, dễ dẫn đến \textbf{Time Limit Exceeded}.
+    \end{alertblock}
+
+    \begin{block}{Giải pháp tối ưu}
+        Sử dụng công thức $\lfloor n / 2 \rfloor$, độ phức tạp chỉ là $O(1)$ cho mỗi test case. Cực kỳ nhanh!
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Tổng kết thuật toán (Pseudocode)}
+    \begin{lstlisting}[language=Python, caption=Mô phỏng thuật toán]
+@Nhập số lượng test case@ t
+@Lặp@ t @lần:@
+    @Nhập số nguyên@ n
+    @Kết quả =@ n / 2 @(chia lấy nguyên)@
+    @In kết quả ra màn hình@
+    \end{lstlisting}
+
+    \begin{exampleblock}{Trường hợp biên: $n=1$}
+        $\lfloor 1/2 \rfloor = 0$. Thực tế đề bài thường cho $n \ge 2$ để đảm bảo tồn tại cặp $(a, b)$.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bước cuối: Hiện thực hóa ý tưởng}
+    \begin{block}{Lưu ý trong C++}
+        Toán tử \texttt{/} giữa hai số nguyên sẽ tự động thực hiện phép chia lấy phần nguyên.
+        \begin{itemize}
+            \item \texttt{10 / 2 = 5}
+            \item \texttt{11 / 2 = 5}
+        \end{itemize}
+    \end{block}
+
+    \begin{center}
+        \huge \textbf{Bạn đã sẵn sàng lập trình chưa?}
+    \end{center}
+\end{frame}
+
+\end{document}

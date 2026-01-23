@@ -1,0 +1,150 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[EhAb AnD gCd]{Huấn luyện viên Tư duy Thuật toán}
+\subtitle{Giải mã bài toán Codeforces 1325A - EhAb AnD gCd}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{1. Phẫu thuật đề bài (Deconstruct)}
+  \begin{block}{Yêu cầu bài toán}
+    Cho một số nguyên dương $x$. Tìm hai số nguyên dương $a$ và $b$ sao cho:
+    $$GCD(a, b) + LCM(a, b) = x$$
+  \end{block}
+
+  \begin{exampleblock}{Giải thích ẩn dụ}
+    \begin{itemize}
+      \item \textbf{GCD (Ước chung lớn nhất):} Độ dài của cái "thước đo" dài nhất có thể đo vừa khít cả hai sợi dây $a$ và $b$.
+      \item \textbf{LCM (Bội chung nhỏ nhất):} Quãng đường ngắn nhất để hai vận động viên $a$ và $b$ gặp nhau tại điểm xuất phát.
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2. Lộ trình tư duy (Roadmap)}
+  Chúng ta sẽ đi qua 2 mảnh ghép (Chunks):
+  \vspace{0.5cm}
+  \begin{itemize}
+    \item \textbf{Chunk 1:} Khám phá mối quan hệ giữa các số đặc biệt (Sức mạnh của số 1).
+    \item \textbf{Chunk 2:} Tìm ra "công thức vạn năng" để giải quyết mọi bộ dữ liệu.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{3. Mảnh ghép 1: Sức mạnh của số 1}
+  Trong thế giới của $GCD$ và $LCM$, số 1 rất dễ đoán:
+  \begin{itemize}
+    \item $GCD(1, k) = 1$ (Số 1 là ước của mọi số).
+    \item $LCM(1, k) = k$ (Mọi số đều là bội của 1).
+  \end{itemize}
+
+  \begin{alertblock}{Thử thách tư duy}
+    Giả sử chọn $a = 1$ và $b = 5$. Hãy tính:
+    \begin{enumerate}
+      \item $GCD(1, 5) = ?$ \pause \textbf{1}
+      \item $LCM(1, 5) = ?$ \pause \textbf{5}
+      \item Tổng $GCD + LCM = ?$ \pause \textbf{6}
+    \end{enumerate}
+    \pause
+    \textit{Nhận xét: Tổng đúng bằng $1 + 5 = 6$.}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{4. Tổng quát hóa bài toán}
+  Nếu ta luôn chọn cố định số đầu tiên là $a = 1$:
+  \begin{itemize}
+    \item Ta có phương trình: $GCD(1, b) + LCM(1, b) = x$
+    \item Tương đương: $1 + b = x$
+  \end{itemize}
+  
+  \pause
+  \begin{block}{Chìa khóa vạn năng}
+    Để $1 + b = x$, ta chỉ cần chọn:
+    $$\mathbf{b = x - 1}$$
+  \end{block}
+  
+  \pause
+  \begin{exampleblock}{Ví dụ}
+    Với $x = 100$, chọn $a = 1$ và $b = 99$.
+    \begin{itemize}
+        \item $GCD(1, 99) = 1$
+        \item $LCM(1, 99) = 99$
+        \item $1 + 99 = 100$ (Thỏa mãn!)
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{5. Mã giả (Pseudocode)}
+  Chiến thuật: Luôn in ra hai số $1$ và $x-1$.
+
+\begin{lstlisting}[language=Python, caption=Mã giả giải thuật]
+Nhap vao so luong bo test t
+Lap t lan:
+    Nhap vao so x
+    In ra: 1 va (x - 1)
+\end{lstlisting}
+
+  \begin{alertblock}{Kiểm tra bẫy logic (Edge Case)}
+    Nếu $x = 2$:
+    \begin{itemize}
+      \item Thuật toán in ra: \textbf{1 1}
+      \item $GCD(1, 1) + LCM(1, 1) = 1 + 1 = 2$.
+      \item Thỏa mãn điều kiện nguyên dương $a, b \ge 1$.
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{6. Tổng kết}
+  \begin{block}{Tính chất bất biến}
+    $$GCD(1, x-1) + LCM(1, x-1) = x$$
+    Luôn đúng với mọi số nguyên dương $x \ge 2$.
+  \end{block}
+
+  \vspace{0.5cm}
+  \textbf{Bạn muốn tiếp tục với thử thách nào?}
+  \begin{enumerate}
+    \item Luyện tập thêm bài toán số học tương tự.
+    \item Chuyển sang chủ đề Mảng (Array) hoặc Chuỗi (String).
+    \item Xem mã nguồn C++ hoàn chỉnh.
+  \end{enumerate}
+\end{frame}
+
+\end{document}

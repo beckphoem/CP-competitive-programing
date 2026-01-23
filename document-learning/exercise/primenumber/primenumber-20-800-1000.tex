@@ -1,0 +1,494 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{lmodern} % THÊM GÓI NÀY ĐỂ SỬA LỖI FONT TIẾNG VIỆT
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usetheme{Madrid}
+
+% Định nghĩa màu sắc cho code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Cấu hình hiển thị code
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+% Thông tin bài thuyết trình
+\title[Số học Codeforces 800-1000]{Phân tích Thuật toán Số học và Ứng dụng Sàng Eratosthenes}
+\subtitle{Giải mã 20 bài tập Codeforces Rating 800-1000}
+\author{Slide-Codeforce}
+\date{\today}
+
+\begin{document}
+
+% --- Slide Tiêu đề ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- Mục lục ---
+\begin{frame}{Nội dung chính}
+    \tableofcontents
+\end{frame}
+
+% =================================================================================
+\section{Cơ sở Lý thuyết}
+% =================================================================================
+
+\begin{frame}{Tổng quan về Số học trong CP}
+    \begin{block}{Tầm quan trọng}
+        Số học là kiến thức nền tảng quan trọng nhất để vượt qua rating 800-1000.
+    \end{block}
+    
+    \begin{itemize}
+        \item \textbf{Ứng dụng:} Mã hóa (Hashing), Phân tích thừa số, Lý thuyết trò chơi.
+        \item \textbf{Thách thức:} Giới hạn thời gian (1.0s - 2.0s) và bộ nhớ.
+    \end{itemize}
+
+    \begin{alertblock}{Độ phức tạp cho phép}
+        \begin{itemize}
+            \item $N \le 10^5 \to O(N \log N)$ hoặc $O(N)$.
+            \item $N \le 10^9 \to O(\sqrt{N})$.
+            \item $N \le 10^{18} \to O(\log N)$ hoặc $O(1)$.
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+% QUAN TRỌNG: Thêm [fragile] vào các slide chứa code
+\begin{frame}[fragile]{Kiểm tra Nguyên tố: $O(\sqrt{N})$}
+    \begin{block}{Định lý}
+        Nếu $N$ là hợp số, nó có ít nhất một ước số $\le \sqrt{N}$.
+    \end{block}
+
+    \begin{lstlisting}[language=C++, caption={Hàm kiểm tra nguyên tố tối ưu}]
+bool isPrime(long long n) {
+    if (n <= 1) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false; // Bo so chan > 2
+    // Chi duyet so le
+    for (long long i = 3; i * i <= n; i += 2) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+    \end{lstlisting}
+    \pause
+    \begin{alertblock}{Lưu ý}
+        Dùng \texttt{i * i <= n} thay vì \texttt{sqrt(n)} để tránh sai số. Cẩn thận tràn số nếu $i$ lớn.
+    \end{alertblock}
+\end{frame}
+
+% QUAN TRỌNG: Thêm [fragile]
+\begin{frame}[fragile]{Sàng Eratosthenes (Sieve)}
+    \begin{block}{Nguyên lý}
+        Thay vì kiểm tra từng số, ta loại bỏ tất cả các bội số của các số nguyên tố đã biết.
+    \end{block}
+
+    \begin{lstlisting}[language=C++, caption={Cài đặt Sàng}]
+const int MAXN = 10000005;
+std::vector<bool> is_prime(MAXN, true);
+
+void sieve() {
+    is_prime[0] = is_prime[1] = false;
+    for (int i = 2; i * i < MAXN; i++) {
+        if (is_prime[i]) {
+            // Bat dau tu i*i de toi uu
+            for (int j = i * i; j < MAXN; j += i) {
+                is_prime[j] = false;
+            }
+        }
+    }
+}
+    \end{lstlisting}
+    \textbf{Độ phức tạp:} $O(N \log \log N)$ - Gần như tuyến tính.
+\end{frame}
+
+% =================================================================================
+\section{Giải mã 20 Bài tập (Rating 800)}
+% =================================================================================
+
+\begin{frame}{1. Bachgold Problem (749A) - Rating 800}
+    \begin{block}{Đề bài}
+        Cho số nguyên dương $n$. Biểu diễn $n$ thành tổng của \textbf{nhiều số nguyên tố nhất} có thể.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Phân tích \& Giải thuật}
+        \begin{itemize}
+            \item Để số lượng số hạng là nhiều nhất $\to$ chọn số nguyên tố nhỏ nhất.
+            \item Số nguyên tố nhỏ nhất là 2.
+            \item \textbf{Nếu $n$ chẵn:} $n = 2 + 2 + \dots + 2$. Số lượng là $n/2$.
+            \item \textbf{Nếu $n$ lẻ:} Cần ít nhất một số lẻ để tổng là lẻ. Số lẻ nhỏ nhất là 3.
+            \item $n = 3 + (n-3)$. Phần $(n-3)$ là chẵn $\to$ chia hết cho 2.
+        \end{itemize}
+    \end{exampleblock}
+
+    \textbf{Kết luận:} In $n/2$ nếu chẵn. Nếu lẻ, in một số 3 và $(n-3)/2$ số 2.
+\end{frame}
+
+\begin{frame}{2. Design Tutorial: Learn from Math (472A) - Rating 800}
+    \begin{block}{Đề bài}
+        Cho $n$ ($n \ge 12$). Tìm hai \textbf{hợp số} $x$ và $y$ sao cho $x + y = n$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Phân tích \& Giải thuật}
+        \begin{itemize}
+            \item Hợp số là số có ước khác 1 và chính nó.
+            \item \textbf{Nếu $n$ chẵn:} Chọn $x = 4$ (hợp số nhỏ nhất). Vì $n \ge 12$ chẵn $\to$ $y = n - 4$ là số chẵn lớn hơn 8 $\to$ $y$ là hợp số.
+            \item \textbf{Nếu $n$ lẻ:} Chọn $x = 9$ (hợp số lẻ nhỏ nhất). Vì $n$ lẻ $\to$ $y = n - 9$ là số chẵn. Vì $n \ge 12 \to y \ge 3$, và $y$ chẵn nên $y$ là hợp số.
+        \end{itemize}
+    \end{exampleblock}
+
+    \textbf{Độ phức tạp:} $O(1)$.
+\end{frame}
+
+\begin{frame}{3. Maximum GCD (1370A) - Rating 800}
+    \begin{block}{Đề bài}
+        Cho số nguyên $n$. Tìm giá trị lớn nhất của $\text{gcd}(a, b)$ với $1 \le a < b \le n$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Phân tích \& Giải thuật}
+        \begin{itemize}
+            \item Gọi $g = \text{gcd}(a, b)$. Khi đó $a$ và $b$ đều là bội của $g$.
+            \item Vì $a < b$, cặp bội số nhỏ nhất là $a = g$ và $b = 2g$.
+            \item Để $b \le n$, ta phải có $2g \le n \Rightarrow g \le n/2$.
+        \end{itemize}
+    \end{exampleblock}
+
+    \textbf{Giải pháp:} Giá trị lớn nhất là $\lfloor n/2 \rfloor$. In ra $n/2$.
+\end{frame}
+
+\begin{frame}{4. EhAb AnD gCd (1325A) - Rating 800}
+    \begin{block}{Đề bài}
+        Cho số nguyên $x$. Tìm $a, b$ sao cho $\text{GCD}(a, b) + \text{LCM}(a, b) = x$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Tư duy}
+        \begin{itemize}
+            \item Ta biết $\text{GCD}(1, k) = 1$ và $\text{LCM}(1, k) = k$.
+            \item Chọn $a = 1$. Phương trình trở thành: $1 + \text{LCM}(1, b) = x \Rightarrow 1 + b = x \Rightarrow b = x - 1$.
+        \end{itemize}
+    \end{exampleblock}
+
+    \textbf{Giải pháp:} Luôn in ra cặp $(1, x-1)$. Độ phức tạp $O(1)$.
+\end{frame}
+
+\begin{frame}{5. Subtract or Divide (1451A) - Rating 800}
+    \begin{block}{Đề bài}
+        Biến đổi $n$ thành 1 với số bước ít nhất. Mỗi bước: giảm 1 hoặc chia cho ước số (khác 1, chính nó).
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Chiến lược tham lam}
+        \begin{itemize}
+            \item $n \le 3$: Xử lý thủ công ($n=1 \to 0, n=2 \to 1, n=3 \to 2$).
+            \item $n$ chẵn ($>2$): 1 bước chia cho $n/2$ để về 2, rồi 1 bước về 1. (Tổng: 2 bước).
+            \item $n$ lẻ ($>3$): 1 bước trừ 1 để thành chẵn, sau đó áp dụng quy tắc chẵn. (Tổng: 3 bước).
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{6. Equation (1269A) - Rating 800}
+    \begin{block}{Đề bài}
+        Tìm hai hợp số $a, b$ sao cho $a - b = n$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Phân tích}
+        \begin{itemize}
+            \item Ta biết $9k$ và $8k$ luôn là hợp số với $k \ge 1$.
+            \item Hiệu của chúng: $9k - 8k = k$.
+            \item Đặt $k = n$, ta có cặp số $9n$ và $8n$.
+            \item Vì $n \ge 1 \to 9n > 9$ (chia hết cho 9) và $8n$ chẵn (chia hết cho 2).
+        \end{itemize}
+    \end{exampleblock}
+    \textbf{Kết quả:} In ra $9n$ và $8n$.
+\end{frame}
+
+\begin{frame}{7. GCD Sum (1498A) - Rating 800}
+    \begin{block}{Đề bài}
+        Tìm $y \ge n$ nhỏ nhất sao cho $\text{gcd}(y, \text{sumDigits}(y)) > 1$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Nhận xét}
+        \begin{itemize}
+            \item Cứ mỗi 3 số liên tiếp sẽ có một số chia hết cho 3.
+            \item Nếu số chia hết cho 3 $\to$ tổng chữ số cũng chia hết cho 3 $\to$ GCD ít nhất là 3 ($>1$).
+            \item Khoảng cách từ $n$ đến kết quả rất nhỏ (tối đa là 2).
+        \end{itemize}
+    \end{exampleblock}
+    
+    \textbf{Giải thuật:} Duyệt $i$ từ $n, n+1, \dots$ và kiểm tra bằng vòng lặp. Sẽ tìm thấy đáp án rất nhanh.
+\end{frame}
+
+\begin{frame}{8. Fair Division (1472B) - Rating 800}
+    \begin{block}{Đề bài}
+        Chia kẹo (trọng lượng 1g, 2g) thành 2 phần bằng nhau.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Logic chẵn lẻ}
+        \begin{itemize}
+            \item Tổng trọng lượng $S$ phải chẵn.
+            \item Nếu có kẹo 1g ($cnt_1 > 0$) và $S$ chẵn: Luôn chia được (kẹo 1g bù đắp phần lẻ).
+            \item Nếu không có kẹo 1g ($cnt_1 = 0$): Số kẹo 2g ($cnt_2$) phải chẵn.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{9. Sum of 2050 (1517A) - Rating 800}
+    \begin{block}{Đề bài}
+        Biểu diễn $n$ thành tổng các số dạng $2050 \times 10^k$ với số hạng ít nhất.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Giải thuật}
+        \begin{itemize}
+            \item Nếu $n$ không chia hết cho 2050 $\to$ Không thể (in -1).
+            \item Nếu $n = 2050 \times Q$, bài toán quy về biểu diễn $Q$ thành tổng các $10^k$.
+            \item Số lượng số hạng chính là tổng các chữ số của $Q$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{10. Red and Blue Beans (1519A) - Rating 800}
+    \begin{block}{Đề bài}
+        Chia $r$ hạt đỏ, $b$ hạt xanh vào các gói sao cho chênh lệch mỗi màu không quá $d$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Bất đẳng thức}
+        \begin{itemize}
+            \item Giả sử $r < b$. Để tối ưu, mỗi gói chứa 1 hạt đỏ. Số gói tối đa là $r$.
+            \item Để thỏa mãn điều kiện $d$, mỗi gói tối đa chứa $1+d$ hạt xanh.
+            \item Điều kiện: $b \le r \times (1+d)$.
+        \end{itemize}
+    \end{exampleblock}
+    \textbf{Code:} Kiểm tra $\min(r, b) \times (1+d) \ge \max(r, b)$.
+\end{frame}
+
+% =================================================================================
+\section{Giải mã 20 Bài tập (Rating 900)}
+% =================================================================================
+
+\begin{frame}{11. Almost Prime (26A) - Rating 900}
+    \begin{block}{Đề bài}
+        Đếm số lượng số trong $[1, n]$ có đúng 2 ước nguyên tố phân biệt. ($n \le 3000$).
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Phương pháp Sàng biến thể}
+        \begin{itemize}
+            \item Dùng mảng \texttt{count} khởi tạo 0.
+            \item Duyệt các số nguyên tố $p$ từ 2 đến $n$.
+            \item Với mỗi $p$, tăng \texttt{count[k]} lên 1 cho mọi bội số $k$ của $p$.
+            \item Cuối cùng đếm các số có \texttt{count[i] == 2}.
+        \end{itemize}
+    \end{exampleblock}
+    \textbf{Độ phức tạp:} $O(N \log \log N)$.
+\end{frame}
+
+\begin{frame}{12. Prime Square (1436B) - Rating 900}
+    \begin{block}{Đề bài}
+        Tạo ma trận $n \times n$ gồm các hợp số (hoặc 1), nhưng tổng hàng/cột là số nguyên tố.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Chiến lược xây dựng}
+        \begin{itemize}
+            \item Điền số 1 vào đường chéo chính và đường chéo phụ (lệch 1).
+            \item Mỗi hàng và cột sẽ có đúng hai số 1.
+            \item Tổng hàng/cột = 2 (số nguyên tố). Các ô còn lại là 0.
+            \item Ma trận: $A_{i,i} = 1$ và $A_{i, (i+1)\%n} = 1$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{13. Prime Subtraction (1238A) - Rating 900}
+    \begin{block}{Đề bài}
+        Cho $x, y$ ($x > y$). Có thể biến $x$ thành $y$ bằng cách trừ các số nguyên tố không?
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Nhận định}
+        \begin{itemize}
+            \item Tương đương việc biểu diễn $D = x - y$ thành tổng các số nguyên tố.
+            \item Nếu $D = 1$: Không thể (không có số nguyên tố nào bằng 1).
+            \item Nếu $D > 1$: Luôn có thể (dựa trên việc mọi số $>1$ là tổng của các số 2 và 3).
+        \end{itemize}
+    \end{exampleblock}
+    \textbf{Kết luận:} In "YES" nếu $x - y > 1$, ngược lại "NO".
+\end{frame}
+
+% QUAN TRỌNG: Thêm [fragile]
+\begin{frame}[fragile]{14. Odd Divisor (1475A) - Rating 900}
+    \begin{block}{Đề bài}
+        Kiểm tra $n$ có ước lẻ lớn hơn 1 không.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Bitwise Trick}
+        \begin{itemize}
+            \item Số có ước lẻ $>1$ $\Leftrightarrow$ Số đó KHÔNG phải là lũy thừa của 2.
+            \item Nếu $n = 2^k$, ước duy nhất là các $2^j$ (chẵn, trừ số 1).
+        \end{itemize}
+    \end{exampleblock}
+
+    \begin{lstlisting}[language=C++]
+// Kiem tra luy thua cua 2
+if ((n & (n - 1)) == 0) cout << "NO";
+else cout << "YES";
+    \end{lstlisting}
+    \textbf{Độ phức tạp:} $O(1)$.
+\end{frame}
+
+\begin{frame}{15. New Year's Number (1475B) - Rating 900}
+    \begin{block}{Đề bài}
+        Kiểm tra $n = 2020x + 2021y$ với $x, y \ge 0$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Biến đổi}
+        \begin{itemize}
+            \item $n = 2020(x+y) + y$.
+            \item Đặt $k = x+y$, ta có $n = 2020k + y$.
+            \item Điều này tương ứng với phép chia $n$ cho 2020: thương là $k$, dư là $y$.
+            \item Điều kiện cần: $y \le k$ (vì $x = k - y \ge 0$).
+        \end{itemize}
+    \end{exampleblock}
+    \textbf{Code:} \texttt{div = n / 2020; mod = n \% 2020;} Kiểm tra \texttt{mod <= div}.
+\end{frame}
+
+\begin{frame}{16. Strange Partition (1471A) - Rating 900}
+    \begin{block}{Đề bài}
+        Gộp các phần tử mảng, tìm Min/Max của tổng $\lceil a_i / x \rceil$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Tính chất hàm trần (Ceil)}
+        \begin{itemize}
+            \item Gộp lại luôn làm tổng hàm trần nhỏ đi hoặc bằng.
+            \item \textbf{Max:} Không gộp gì cả. $\sum \lceil a_i / x \rceil$.
+            \item \textbf{Min:} Gộp tất cả. $\lceil (\sum a_i) / x \rceil$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{17. Orac and Factors (1350A) - Rating 900}
+    \begin{block}{Đề bài}
+        Thực hiện $k$ lần: $n \to n + f(n)$ với $f(n)$ là ước nhỏ nhất $>1$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Phân tích}
+        \begin{itemize}
+            \item \textbf{Nếu $n$ chẵn:} $f(n) = 2$. Số mới là $n+2$ (vẫn chẵn). Sau $k$ bước: $n + 2k$.
+            \item \textbf{Nếu $n$ lẻ:} $f(n)$ là số lẻ $p$. Bước đầu: $n \to n+p$ (thành số chẵn). Các bước sau cộng 2.
+            \item Kết quả: $n + p + 2(k-1)$.
+        \end{itemize}
+    \end{exampleblock}
+    \textbf{Lưu ý:} Tìm $p$ bằng vòng lặp $O(\sqrt{N})$.
+\end{frame}
+
+% =================================================================================
+\section{Giải mã 20 Bài tập (Rating 1000)}
+% =================================================================================
+
+\begin{frame}{18. Noldbach Problem (17A) - Rating 1000}
+    \begin{block}{Đề bài}
+        Đếm số nguyên tố trong $[2, n]$ có dạng $1 + p_i + p_{i+1}$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Ứng dụng Sàng}
+        \begin{enumerate}
+            \item Dùng Sàng Eratosthenes tạo list số nguyên tố.
+            \item Duyệt qua list: tính $S = p_i + p_{i+1} + 1$.
+            \item Kiểm tra nếu $S \le n$ và $S$ là số nguyên tố (tra bảng Sàng).
+            \item Đếm và so sánh với $k$.
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{19. Different Divisors (1474B) - Rating 1000}
+    \begin{block}{Đề bài}
+        Tìm số $x$ nhỏ nhất có ít nhất 4 ước, hiệu hai ước bất kỳ $\ge d$.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Cấu trúc ước số}
+        \begin{itemize}
+            \item Các ước số tối thiểu: $1, p, q, pq$.
+            \item $p \ge 1 + d$. Tìm số nguyên tố đầu tiên thỏa mãn.
+            \item $q \ge p + d$. Tìm số nguyên tố tiếp theo.
+            \item Kết quả: $p \times q$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{20. Phoenix and Puzzle (1515B) - Rating 1000}
+    \begin{block}{Đề bài}
+        Ghép $n$ tam giác vuông cân thành hình vuông.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Số chính phương}
+        \begin{itemize}
+            \item Ghép 2 tam giác $\to$ hình vuông nhỏ. Tổng quát: $n = 2 \times k^2$.
+            \item Ghép 4 tam giác $\to$ hình vuông nhỏ. Tổng quát: $n = 4 \times k^2$.
+            \item \textbf{Kiểm tra:} Nếu $n$ chia hết cho 2 và thương là số chính phương, HOẶC $n$ chia hết cho 4 và thương là số chính phương.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+% =================================================================================
+\section{Tổng kết}
+% =================================================================================
+
+\begin{frame}{Sai lầm thường gặp \& Khắc phục} % Đã sửa lỗi & thành \&
+    \begin{alertblock}{Các lỗi phổ biến}
+        \begin{itemize}
+            \item \textbf{TLE:} Dùng $O(\sqrt{N})$ trong vòng lặp test case lớn thay vì Sàng trước.
+            \item \textbf{Overflow:} Tính \texttt{i * i} với $i$ kiểu \texttt{int}.
+            \item \textbf{Trường hợp biên:} Coi 1 là số nguyên tố.
+            \item \textbf{Sai số:} Dùng \texttt{pow}, \texttt{sqrt} không kiểm soát.
+        \end{itemize}
+    \end{alertblock}
+
+    \begin{block}{Lời khuyên}
+        Hãy luyện tập các bài trên để nắm vững tư duy số học trước khi học Modular Arithmetic!
+    \end{block}
+\end{frame}
+
+\end{document}

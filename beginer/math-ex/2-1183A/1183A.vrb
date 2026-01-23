@@ -1,0 +1,19 @@
+\frametitle{4. Mảnh ghép 3: Tổng kết thuật toán (The Blueprint)}
+\begin{block}{Chiến thuật: Vòng lặp "Thử và Sai"}
+Vì khoảng cách nhỏ, vòng lặp đơn giản là tối ưu nhất.
+\end{block}
+
+\begin{lstlisting}[language=Python, caption=Mã giả tư duy]
+Ham TinhTongChuSo(x):
+    tong = 0
+    Trong khi x > 0:
+        tong = tong + (x chia lay du cho 10)
+        x = x chia lay nguyen cho 10
+    Tra ve tong
+
+Nhap n
+Trong khi TinhTongChuSo(n) khong chia het cho 4:
+    n = n + 1
+
+In ra n
+\end{lstlisting}

@@ -1,0 +1,160 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 910A]{Huấn luyện Tư duy Thuật toán}
+\subtitle{Bài 910A - The Way to Home}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Chào mừng!}
+  \begin{block}{Lời chào}
+    Chào bạn! Tôi đã sẵn sàng nhập vai \textbf{Huấn luyện viên Tư duy Thuật toán} của bạn. Chúng ta sẽ cùng nhau "mổ xẻ" bài \textbf{Codeforces 910A - The Way to Home} theo đúng triết lý chia nhỏ kiến thức (Micro-chunking) để bạn nắm vững bản chất nhé.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+  \begin{itemize}
+    \item \textbf{Bối cảnh:} Bạn ở vị trí số 1, mục tiêu là đến vị trí $n$.
+    \item \textbf{Địa hình:} Con đường là chuỗi ký tự '0' và '1'.
+    \begin{itemize}
+      \item \texttt{'1'}: Điểm an toàn (có thể đứng).
+      \item \texttt{'0'}: Điểm nguy hiểm (không được đặt chân vào).
+    \end{itemize}
+    \item \textbf{Khả năng:} Nhảy xa tối đa $d$ đơn vị.
+    \item \textbf{Nhiệm vụ:} Tìm số bước nhảy \textbf{ít nhất} hoặc báo không thể.
+  \end{itemize}
+  
+  \begin{block}{Lộ trình tư duy}
+    1. Chiến thuật nhảy tối ưu.\\
+    2. Xử lý bẫy logic.\\
+    3. Tổng kết thuật toán Tham lam (Greedy).
+  \end{block}
+\end{frame}
+
+\begin{frame}{Mảnh ghép 1: Chiến thuật "Cú nhảy xa nhất"}
+  \begin{exampleblock}{Ẩn dụ}
+    Nếu bạn có thể nhảy tối đa 3 mét, và có các hòn đá ở khoảng cách 1m, 2m, và 3m. Để về đích với ít bước nhất, bạn chọn hòn đá nào?
+  \end{exampleblock}
+  \pause
+  \begin{itemize}
+    \item \textbf{Tham lam (Greedy):} Tại mỗi bước, cố gắng tiến xa nhất có thể trong phạm vi cho phép.
+  \end{itemize}
+  
+  \begin{alertblock}{Bẫy logic}
+    Không chỉ kiểm tra điểm cách đúng $d$ đơn vị. Nếu đó là '0', ta phải "lùi dần" tìm điểm '1' gần nhất với khoảng cách tối đa.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 1}
+  \textbf{Giả sử:}
+  \begin{itemize}
+    \item Vị trí hiện tại: \textbf{1}, $d = 4$
+    \item Con đường: \texttt{101101...} (Vị trí 1 đến 6)
+  \end{itemize}
+  
+  \begin{table}[]
+    \begin{tabular}{lcccccc}
+    \toprule
+    Vị trí & 1 & 2 & 3 & 4 & 5 & 6 \\ \midrule
+    Trạng thái & 1 & 0 & 1 & 1 & 0 & 1 \\ \bottomrule
+    \end{tabular}
+  \end{table}
+
+  \textbf{Câu hỏi:} Từ vị trí 1, bước tiếp theo bạn nhảy đến đâu?
+  \pause
+  \begin{block}{Đáp án}
+    Nhảy đến vị trí \textbf{4}. Vì đó là điểm '1' xa nhất trong tầm với ($4-1=3 \le 4$).
+  \end{block}
+\end{frame}
+
+\begin{frame}{Mảnh ghép 2: Khi nào thì "bó tay"?}
+  \begin{alertblock}{Tình huống xấu nhất}
+    Chuyện gì xảy ra nếu trong tầm nhảy $d$ toàn là số '0'?
+  \end{alertblock}
+
+  \textbf{Thử thách tư duy 2:} 
+  Vị trí hiện tại là 1, $d = 2$, đoạn đường: \texttt{10001}
+  \begin{itemize}
+    \item Vị trí 1: \texttt{1} (Hiện tại)
+    \item Vị trí 2, 3, 4: \texttt{0}
+    \item Vị trí 5: \texttt{1} (Đích)
+  \end{itemize}
+  \pause
+  \begin{block}{Kết quả}
+    Bạn không thể nhảy đi đâu cả! Kết quả bài toán lúc này thường sẽ được yêu cầu trả về \textbf{-1}.
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Mảnh ghép cuối cùng: Mã giả (Pseudocode)}
+  Hãy điền vào logic còn thiếu:
+  \begin{lstlisting}[language=C++, style=mystyle]
+1. @\texttt{vi\_tri\_hien\_tai}@ = 0
+2. @\texttt{so\_buoc}@ = 0
+3. Lap cho den khi @\texttt{vi\_tri\_hien\_tai}@ == @\texttt{dich}@:
+   - @\texttt{xa\_nhat}@ = @\texttt{vi\_tri\_hien\_tai}@ + d
+   - Neu @\texttt{xa\_nhat}@ > @\texttt{dich}@, @\texttt{xa\_nhat}@ = @\texttt{dich}@
+   - Vong lap tim kiem: Tu @\texttt{xa\_nhat}@ lùi dần về @\texttt{vi\_tri\_hien\_tai}@ + 1:
+     + Neu gap '1':
+        * Cap nhat @\texttt{vi\_tri\_hien\_tai}@ = vi tri do
+        * Tang @\texttt{so\_buoc}@ len 1
+        * Thoat vong lap tim kiem
+   - Neu khong tim thay '1' nao:
+     + Tra ve [...] va dung chuong trinh.
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Tổng kết}
+  \begin{block}{Câu hỏi cuối cùng}
+    Theo bạn, ở bước cuối cùng (nếu không tìm thấy số '1' nào), chúng ta nên trả về giá trị bao nhiêu?
+  \end{block}
+  \pause
+  \begin{itemize}
+    \item \textbf{Đáp án:} Trả về \textbf{-1}.
+  \end{itemize}
+
+  \begin{exampleblock}{Tiếp theo}
+    Bạn có muốn tôi hỗ trợ chuyển logic này sang C++ hay Python không, hay bạn muốn tự mình "thử lửa" trước?
+  \end{exampleblock}
+\end{frame}
+
+\end{document}

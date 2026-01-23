@@ -1,0 +1,14 @@
+\frametitle{Lộ trình và Kỹ thuật Tối ưu}
+\begin{alertblock}{Lưu ý kỹ thuật}
+        \begin{itemize}
+            \item \textbf{Kiểu dữ liệu:} Với $n \le 10^{12}$, bắt buộc dùng \texttt{long long}.
+            \item \textbf{Độ phức tạp:} Ưu tiên $O(1)$ hoặc $O(\log n)$. Đếm ước dùng $O(\sqrt{G})$.
+        \end{itemize}
+    \end{alertblock}
+
+    \begin{block}{Lời khuyên luyện tập}
+        \begin{itemize}
+            \item Giải 15-20 bài/tuần để nhạy bén với quy luật.
+            \item Ghi chú lại các lỗi tràn số hoặc sai số \texttt{double}.
+        \end{itemize}
+    \end{block}

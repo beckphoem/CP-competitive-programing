@@ -1,0 +1,166 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Digital Root]{Bài toán 1107/B - Digital Root}
+\subtitle{Algorithmic Coach - Triết lý Learning How to Learn}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{🏥 Bước 1: Tiếp nhận \& Phẫu thuật (Briefing)}
+    \begin{block}{Tóm tắt đề bài "Ngôn ngữ con người"}
+        Digital Root (Căn nguyên số) là kết quả cuối cùng sau khi cộng dồn các chữ số của nó cho đến khi chỉ còn lại một chữ số duy nhất (từ 1 đến 9).
+    \end{block}
+    
+    \begin{exampleblock}{Ví dụ}
+        $5+8=13 \rightarrow 1+3=4$. Vậy Digital Root của 58 là 4.
+    \end{exampleblock}
+
+    \begin{alertblock}{Yêu cầu}
+        Tìm số nguyên dương lớn thứ $k$ theo thứ tự tăng dần có Digital Root bằng đúng giá trị $x$ cho trước.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    Chúng ta sẽ chia bài toán thành 3 khối kiến thức (Chunks):
+    \begin{itemize}
+        \item \textbf{Chunk 1:} Khám phá quy luật của Digital Root.
+        \item \textbf{Chunk 2:} Tìm công thức liên hệ giữa một số và Digital Root.
+        \item \textbf{Chunk 3:} Xây dựng chiến thuật và xử lý kiểu dữ liệu.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{🧩 Chunk 1: Quy luật của những vòng lặp}
+    Hãy tưởng tượng Digital Root giống như một chiếc đồng hồ có 9 số (từ 1 đến 9).
+    
+    \begin{block}{Thử thách tư duy}
+        Hãy tính Digital Root của các số sau:
+        \begin{itemize}
+            \item Số \textbf{10} có Digital Root là: ? \pause \textbf{1}
+            \item Số \textbf{11} có Digital Root là: ? \pause \textbf{2}
+            \item Số \textbf{18} có Digital Root là: ? \pause \textbf{9}
+            \item Số \textbf{19} có Digital Root là: ? \pause \textbf{1}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{🧩 Chunk 1: Quan sát quan trọng}
+    \begin{block}{Kết quả}
+        Cứ sau \textbf{9 đơn vị}, Digital Root lại lặp lại một lần:
+        \begin{itemize}
+            \item Số 1 $\rightarrow$ DR = 1
+            \item Số 10 ($1+9$) $\rightarrow$ DR = 1
+            \item Số 19 ($10+9$) $\rightarrow$ DR = 1
+        \end{itemize}
+    \end{block}
+    
+    \textbf{Nhận xét:} Các số có cùng Digital Root $x$ tạo thành một cấp số cộng với công sai là \textbf{9}. Số đầu tiên nhỏ nhất luôn là $x$.
+\end{frame}
+
+\begin{frame}{🧩 Chunk 2: Tìm công thức tổng quát}
+    Tìm số thứ $k$ trong dãy các số có Digital Root bằng $x$:
+    \begin{enumerate}
+        \item Số thứ 1: $x$
+        \item Số thứ 2: $x + 9$
+        \item Số thứ 3: $x + 18 = x + 2 \cdot 9$
+        \item Số thứ 4: $x + 27 = x + 3 \cdot 9$
+    \end{enumerate}
+
+    \pause
+    \begin{block}{Thử thách tư duy}
+        Dựa vào mối liên hệ giữa số thứ tự $k$ và hệ số nhân với 9, công thức tổng quát là gì?
+        \pause
+        \[ \text{Kết quả} = x + (k - 1) \cdot 9 \]
+    \end{block}
+\end{frame}
+
+\begin{frame}{🧩 Chunk 3: Xử lý bẫy về kiểu dữ liệu}
+    \begin{alertblock}{Giới hạn đề bài}
+        \begin{itemize}
+            \item Số bộ test $n \le 10^3$.
+            \item Thứ tự $k \le 10^{12}$.
+            \item Giá trị $x \in [1, 9]$.
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+    \begin{block}{Phân tích}
+        Nếu $k = 10^{12}$ và $x = 9$, kết quả sẽ xấp xỉ $9 \cdot 10^{12}$.
+        Kiểu \texttt{int} trong C++ chỉ lưu được đến khoảng $2 \cdot 10^9$.
+    \end{block}
+    
+    \pause
+    \textbf{Giải pháp:} Sử dụng kiểu dữ liệu \textbf{\texttt{long long}} để tránh lỗi tràn số (overflow).
+\end{frame}
+
+\begin{frame}[fragile]{🧩 Chunk 4: Tổng kết \& Mã giả}
+    \begin{block}{Lưu đồ thuật toán}
+        \begin{enumerate}
+            \item Đọc số lượng bộ test $n$.
+            \item Lặp $n$ lần:
+            \begin{itemize}
+                \item Đọc $k$ và $x$.
+                \item Áp dụng công thức $x + (k-1) \cdot 9$.
+                \item In kết quả.
+            \end{itemize}
+        \end{enumerate}
+    \end{block}
+
+\begin{lstlisting}[language=Python, caption=Pseudocode]
+Nhap n (so luong bo test)
+Lap n lan:
+    Nhap k, x
+    @\textbf{Ket\_qua = x + (k - 1) * 9}@
+    In Ket_qua
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \Huge Chúc các bạn học tập tốt!
+        
+        \vspace{1cm}
+        \large Bạn có muốn tôi hỗ trợ viết mã nguồn hoàn chỉnh bằng C++ hay Python không?
+    \end{center}
+\end{frame}
+
+\end{document}

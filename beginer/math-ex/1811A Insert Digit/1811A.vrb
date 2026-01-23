@@ -1,0 +1,25 @@
+\frametitle{Bước 5: Hiện thực hóa ý tưởng (Implementation)}
+Vì số $s$ có thể lên tới $2 \cdot 10^5$ chữ số, ta dùng \textbf{String}.
+
+\begin{lstlisting}[language=text]
+Nhap so luong bo test (t)
+Lap t lan:
+    Nhap n, d, xau s
+    Tao mot bien co 'da_chen' = false
+    Duyet i tu 0 den n-1:
+        Neu 'da_chen' == false VA d > (s[i] - '0'):
+            In ra d
+            'da_chen' = true
+        In ra s[i]
+    Neu 'da_chen' van la false:
+        In ra d
+\end{lstlisting}
+
+    \textbf{Câu hỏi chốt hạ:} Tại sao cần \texttt{s[i] - '0'}?
+    \begin{itemize}
+        \item A. Biến ký tự (char) thành giá trị số để so sánh.
+        \item B. Để xóa số 0 ở đầu.
+        \item C. Quy tắc bắt buộc của Codeforces.
+    \end{itemize}
+    \pause
+    \textbf{Đáp án: A}. Bạn có muốn tôi hướng dẫn code C++ hay Python không?

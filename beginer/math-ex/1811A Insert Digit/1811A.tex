@@ -1,0 +1,195 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 1811A]{Coach Tư duy Thuật toán}
+\subtitle{Codeforces 1811A - Insert Digit}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời mở đầu}
+    \begin{block}{Chào bạn!}
+        Tôi đã nắm rõ vai trò là \textbf{Coach Tư duy Thuật toán} của bạn. Chúng ta sẽ cùng nhau "mổ xẻ" các bài toán theo phong cách \textbf{Micro-Chunks}, tập trung hoàn toàn vào tư duy logic và hình ảnh hóa vấn đề trước khi chạm vào code.
+    \end{block}
+    Hãy bắt đầu với bài \textbf{Codeforces 1811A - Insert Digit}.
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    Loại bỏ những yếu tố rườm rà, đây là cốt lõi của vấn đề:
+    \begin{itemize}
+        \item \textbf{Dữ liệu cho sẵn:} Một số nguyên rất lớn ($n$ chữ số) và một chữ số lẻ $d$ (từ 0 đến 9).
+        \item \textbf{Nhiệm vụ:} Chèn chữ số $d$ vào \textbf{bất kỳ vị trí nào} để tạo ra một số mới \textbf{lớn nhất có thể}.
+        \item \textbf{Lộ trình tư duy:}
+        \begin{enumerate}
+            \item Hiểu quy tắc so sánh hai số lớn.
+            \item Xác định thời điểm "vàng" để chèn chữ số $d$.
+            \item Xử lý trường hợp chữ số $d$ "về bét".
+        \end{enumerate}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Bước 2: Mảnh ghép tư duy 1 - Quy tắc "Ai đứng trước là vua"}
+    \begin{block}{Ẩn dụ}
+        Những người đứng ở đầu hàng (bên trái) có quyền lực cao nhất. Bạn có một viên kim cương (chữ số $d$) và muốn đặt nó vào hàng sao cho tổng giá trị là lớn nhất.
+    \end{block}
+    \begin{alertblock}{Bẫy logic}
+        Không phải lúc nào chèn vào cuối hay sau chữ số lớn nhất cũng là tối ưu. Ta cần so sánh trực tiếp $d$ với từng "người" từ trái sang phải.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy 1}
+    Giả sử số ban đầu là $764$ và chữ số cần chèn là $5$.
+    Vị trí nào cho ra kết quả lớn nhất?
+    \begin{itemize}
+        \item A. Chèn vào đầu: 5764
+        \item B. Chèn vào sau số 7: 7564
+        \item C. Chèn vào sau số 6: 7654
+        \item D. Chèn vào cuối: 7645
+    \end{itemize}
+    \pause
+    \begin{exampleblock}{Đáp án: C. 7654}
+        Ở hàng trăm, số $6$ lớn hơn số $5$. Vì vậy, $7645$ và $7654$ sẽ lớn hơn các số bắt đầu bằng $75...$
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Quy luật rút ra}
+    \begin{tcolorbox}[colback=blue!5,colframe=blue!75,title=Chiến thuật]
+        Chúng ta sẽ duyệt từ trái sang phải, nếu thấy chữ số $d$ của mình \textbf{lớn hơn} chữ số đang xét, thì đó chính là "thời điểm vàng" để chèn vào.
+    \end{tcolorbox}
+    
+    \textbf{Thử thách tư duy 2:} Nếu số $445$ và $d = 6$. Bạn chèn vào đâu?
+    \begin{itemize}
+        \item A. Trước số 4 đầu tiên.
+        \item B. Giữa hai số 4.
+        \item C. Sau số 5.
+    \end{itemize}
+    \pause
+    \textbf{Đáp án: A} (Vì $6 > 4$, chèn ngay lập tức để có $6445$).
+\end{frame}
+
+\begin{frame}{Bước 3: Mảnh ghép tư duy 3 - Khi nào thì "Về bét"?}
+    Trường hợp đặc biệt: Duyệt từ đầu đến cuối mà \textbf{không có chữ số nào nhỏ hơn $d$}.
+    
+    \textbf{Ví dụ:} $887$, $d = 3$.
+    \begin{itemize}
+        \item Duyệt $8: 3 > 8$ (Sai)
+        \item Duyệt $8: 3 > 8$ (Sai)
+        \item Duyệt $7: 3 > 7$ (Sai)
+    \end{itemize}
+    
+    \textbf{Thử thách tư duy 3:} Ta nên đặt số $3$ ở đâu?
+    \begin{itemize}
+        \item A. Đặt ở ngay đầu số.
+        \item B. Đặt ở cuối cùng của số.
+        \item C. Không đặt vào nữa.
+    \end{itemize}
+    \pause
+    \textbf{Đáp án: B} (Kết quả: $8873$).
+\end{frame}
+
+\begin{frame}[fragile]{Bước 4: Chốt thuật toán (The Master Plan)}
+    \begin{enumerate}
+        \item \textbf{Duyệt:} Từng chữ số của $s$ từ trái sang phải.
+        \item \textbf{So sánh:} Nếu chữ số $s[i] < d$, chèn $d$ vào trước $s[i]$.
+        \item \textbf{Dừng:} In phần còn lại và kết thúc.
+        \item \textbf{Trường hợp "Về bét":} In $d$ ở cuối cùng.
+    \end{enumerate}
+
+\begin{lstlisting}[language=text, caption=Ma gia thuan Viet]
+Doc vao so luong test case
+Voi moi test case:
+    Doc n va d, xau s
+    Bien 'da_chen' = False
+    Duyet tung ky tu c trong chuoi s:
+        Neu 'da_chen' la False VA d > c:
+            In ra d
+            Bien 'da_chen' = True
+        In ra c
+    Neu 'da_chen' van la False:
+        In ra d
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    Số $543$ và $d = 4$. Kết quả theo thuật toán là gì?
+    \begin{itemize}
+        \item A. 5443
+        \item B. 4543
+        \item C. 5434
+    \end{itemize}
+    \pause
+    \begin{exampleblock}{Giải thích}
+        1. Xét số 5: $4 > 5$ (Sai). \\
+        2. Xét số 4: $4 > 4$ (Sai - lưu ý dấu $>$ chứ không phải $\ge$). \\
+        3. Xét số 3: $4 > 3$ (Đúng). Chèn ngay! $\rightarrow$ \textbf{5443}.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Bước 5: Hiện thực hóa ý tưởng (Implementation)}
+    Vì số $s$ có thể lên tới $2 \cdot 10^5$ chữ số, ta dùng \textbf{String}.
+
+\begin{lstlisting}[language=text]
+Nhap so luong bo test (t)
+Lap t lan:
+    Nhap n, d, xau s
+    Tao mot bien co 'da_chen' = false
+    Duyet i tu 0 den n-1:
+        Neu 'da_chen' == false VA d > (s[i] - '0'):
+            In ra d
+            'da_chen' = true
+        In ra s[i]
+    Neu 'da_chen' van la false:
+        In ra d
+\end{lstlisting}
+
+    \textbf{Câu hỏi chốt hạ:} Tại sao cần \texttt{s[i] - '0'}?
+    \begin{itemize}
+        \item A. Biến ký tự (char) thành giá trị số để so sánh.
+        \item B. Để xóa số 0 ở đầu.
+        \item C. Quy tắc bắt buộc của Codeforces.
+    \end{itemize}
+    \pause
+    \textbf{Đáp án: A}. Bạn có muốn tôi hướng dẫn code C++ hay Python không?
+\end{frame}
+
+\end{document}
+

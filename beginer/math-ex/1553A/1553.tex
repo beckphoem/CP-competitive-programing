@@ -1,0 +1,181 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Huấn luyện viên Tư duy Thuật toán}
+\subtitle{Codeforces 1553A - Digits Sum}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Lời mở đầu}
+    \begin{block}{Tư duy chiến thuật}
+        Chúng ta sẽ không tập trung vào việc gõ code ngay lập tức, mà sẽ cùng nhau "mổ xẻ" bản chất của bài toán để xây dựng chiến thuật giải quyết vấn đề bền vững.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Briefing)}
+    \begin{itemize}
+        \item \textbf{Định nghĩa:} Một số $x$ được gọi là "thú vị" nếu tổng các chữ số của $x+1$ nhỏ hơn tổng các chữ số của $x$.
+        \item \textbf{Ví dụ:} Nếu $x=9$, thì $x+1=10$. 
+        \begin{itemize}
+            \item Tổng chữ số của 9 là \textbf{9}.
+            \item Tổng chữ số của 10 là \textbf{1}.
+            \item Vì $1 < 9$ nên số 9 là số "thú vị".
+        \end{itemize}
+        \item \textbf{Nhiệm vụ:} Cho số nguyên $n$, đếm số lượng số "thú vị" $x$ sao cho $1 \le x \le n$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    \begin{enumerate}
+        \item Hiểu rõ khi nào thì tổng chữ số bị "giảm" đi khi ta cộng thêm 1 đơn vị.
+        \item Tìm ra quy luật xuất hiện của các số này.
+        \item Xây dựng công thức tính toán nhanh gọn.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Mảnh ghép 1: Điều kiện để trở thành "số thú vị"}
+    Hãy quan sát các con số khi cộng thêm 1:
+    \begin{itemize}
+        \item $1 \to 2$ (Tổng: $1 \to 2$) $\implies$ Tăng
+        \item $5 \to 6$ (Tổng: $5 \to 6$) $\implies$ Tăng
+        \item $18 \to 19$ (Tổng: $9 \to 10$) $\implies$ Tăng
+    \end{itemize}
+    \begin{alertblock}{Quan sát quan trọng}
+        $9 \to 10$ (Tổng chữ số: $9 \to 1$) $\implies$ \textbf{Giảm!}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy}
+    Trong các số sau đây, số nào khiến tổng chữ số bị \textbf{giảm} khi cộng thêm 1?
+    \begin{enumerate}
+        \item 14
+        \item 19
+        \item 20
+        \item 99
+    \end{enumerate}
+    \pause
+    \begin{exampleblock}{Giải thích quy luật}
+        Số đó phải kết thúc bằng chữ số \textbf{9}. Khi kết thúc bằng 9, việc cộng thêm 1 gây ra hiện tượng "nhớ" (carry), làm các chữ số 9 biến thành số 0, khiến tổng chữ số sụt giảm.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Áp dụng quy luật}
+    Đếm số lượng $x$ kết thúc bằng 9 sao cho $1 \le x \le n$.
+    
+    \begin{itemize}
+        \item Nếu $n = 20$, các số thú vị là: \textbf{9, 19}. Kết quả: \textbf{2}.
+    \end{itemize}
+
+    \begin{block}{Câu hỏi}
+        Nếu $n = 30$, có bao nhiêu số kết thúc bằng chữ số 9?
+    \end{block}
+    \pause
+    \textbf{Đáp án:} 3 số (9, 19, 29). Kết quả cho $n=30$ là \textbf{3}.
+\end{frame}
+
+\begin{frame}{Tìm kiếm "Công thức chiến thắng"}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{@{}llc@{}}
+            \toprule
+            Giá trị $n$ & Các số thú vị & Số lượng \\ \midrule
+            9           & 9             & 1        \\
+            10          & 9             & 1        \\
+            19          & 9, 19         & 2        \\
+            20          & 9, 19         & 2        \\
+            29          & 9, 19, 29     & 3        \\ \bottomrule
+        \end{tabular}
+    \end{table}
+    \begin{exampleblock}{Gợi ý}
+        Thử lấy $n$ cộng thêm 1 rồi chia cho 10 xem sao?
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Trường hợp biên (Edge Case)}
+    Nếu $n = 155$, áp dụng logic nhìn vào hàng chục, ta có \textbf{15} số.
+    
+    \begin{alertblock}{Bẫy nhỏ}
+        Nếu $n = 19$:
+        \begin{itemize}
+            \item Cách hiểu "hàng chục" đơn thuần có thể cho kết quả là 1.
+            \item Nhưng thực tế có 2 số (9 và 19).
+        \end{itemize}
+    \end{alertblock}
+    
+    \begin{block}{Quy luật chính xác}
+        Số lượng số thú vị là kết quả phép chia nguyên: $\lfloor \frac{n+1}{10} \rfloor$.
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Bước 3: Chốt thuật toán \& Mã giả}
+    \begin{itemize}
+        \item Số thú vị luôn tận cùng bằng \textbf{9}.
+        \item Công thức đếm nhanh: $\text{Kết quả} = (n + 1) / 10$ (chia lấy phần nguyên).
+    \end{itemize}
+
+    \begin{exampleblock}{Mã giả (Pseudocode)}
+    \begin{lstlisting}[language=Pascal]
+Nhap so luong test case t
+Lap t lan:
+    Nhap so n
+    Ket qua = (n + 1) / 10 (lay phan nguyen)
+    In ra Ket qua
+    \end{lstlisting}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Câu hỏi cuối cùng}
+    \begin{block}{Thử thách}
+        Tại sao chúng ta dùng $(n+1)/10$ mà không phải là $n/10$? Nếu dùng $n/10$ cho trường hợp $n=9$ hoặc $n=19$, điều gì sẽ xảy ra?
+    \end{block}
+    \pause
+    \begin{itemize}
+        \item Nếu $n=9$: $9/10 = 0$ (Sai, vì có số 9).
+        \item Nếu $n=19$: $19/10 = 1$ (Sai, vì có 9 và 19).
+    \end{itemize}
+    \vspace{0.5cm}
+    \centering
+    \textbf{Bạn có muốn tôi hỗ trợ viết code hoàn chỉnh bằng C++ hoặc Python không?}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,16 @@
+\frametitle{2. Nearly Lucky Number (110A) - 800}
+\textbf{Link:} \url{https://codeforces.com/problemset/problem/110/A}
+
+    \begin{block}{Đề bài}
+        Số may mắn là số chỉ chứa các chữ số 4 và 7. Cho số $n$, hãy kiểm tra xem số lượng các chữ số may mắn trong $n$ có phải là một số may mắn hay không.
+    \end{block}
+
+    \pause
+    \begin{exampleblock}{Hướng dẫn giải}
+        \begin{itemize}
+            \item Đọc $n$ dưới dạng chuỗi hoặc dùng \texttt{while} để tách số.
+            \item Đếm số lượng chữ số 4 và 7 (gọi là \texttt{cnt}).
+            \item Kiểm tra: Nếu \texttt{cnt == 4} hoặc \texttt{cnt == 7} thì in "YES", ngược lại "NO".
+            \item Lưu ý: Không kiểm tra $n$, mà kiểm tra \texttt{cnt}.
+        \end{itemize}
+    \end{exampleblock}

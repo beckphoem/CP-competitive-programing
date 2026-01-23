@@ -1,0 +1,173 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title[Codeforces 109A]{Giải mã Codeforces 109A - Lucky Sum of Digits}
+\subtitle{Phong cách Learning How to Learn}
+\author{Algorithmic Coach}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Phẫu thuật đề bài (Deconstruct)}
+  \begin{block}{Cốt lõi vấn đề}
+    \begin{itemize}
+      \item \textbf{Dữ kiện:} Cho số nguyên $n$ (tổng các chữ số).
+      \item \textbf{Nhiệm vụ:} Tìm số tạo từ chữ số 4 và 7 sao cho tổng bằng $n$.
+    \end{itemize}
+  \end{block}
+
+  \begin{alertblock}{Điều kiện ràng buộc}
+    \begin{enumerate}
+      \item Ưu tiên số có ít chữ số nhất.
+      \item Nếu cùng độ dài, chọn số có giá trị nhỏ nhất.
+      \item Nếu không có số thỏa mãn, trả về -1.
+    \end{enumerate}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy (Chunking)}
+  \begin{exampleblock}{Các mảnh ghép kiến thức}
+    \begin{itemize}
+      \item \textbf{Chunk 1:} Giải mã ưu tiên (Tại sao lại là 4 và 7? Số nào tốt hơn?).
+      \item \textbf{Chunk 2:} Chiến thuật "vắt kiệt" (Tìm quy luật tối ưu số lượng chữ số).
+      \item \textbf{Chunk 3:} Xử lý bẫy logic (Khi nào thì bế tắc?).
+    \end{itemize}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 1 - Ưu tiên con số nào?}
+  \begin{block}{Tư duy thực tế}
+    Tưởng tượng túi sỏi nặng $n$ kg. Chỉ có loại 4kg và 7kg. Để ít viên sỏi nhất, bạn chọn loại nào?
+  \end{block}
+  
+  \textbf{Giả sử $n = 28$:}
+  \begin{itemize}
+    \item \textbf{Cách A:} Dùng toàn sỏi 4kg $\rightarrow$ 7 viên (4444444).
+    \item \textbf{Cách B:} Dùng toàn sỏi 7kg $\rightarrow$ 4 viên (7777).
+  \end{itemize}
+  
+  \pause
+  \begin{exampleblock}{Quy luật rút ra}
+    Để số ngắn nhất, ta cần "nhồi" càng nhiều số \textbf{7} càng tốt.
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Chunk 2: Chiến thuật "Vắt kiệt"}
+  \begin{block}{Thử thách tư duy: $n = 11$}
+    \begin{itemize}
+      \item Thử lấy tối đa số 7: $11 - 7 = 4$. 
+      \item \textbf{Kiểm tra:} Phần còn lại (4) có chia hết cho 4 không? 
+      \item \textbf{Kết quả:} Có! Vậy ta cần một số 7 và một số 4.
+    \end{itemize}
+  \end{block}
+
+  \pause
+  \begin{alertblock}{Điều chỉnh khi không khớp}
+    Nếu phần còn lại không chia hết cho 4, ta giảm bớt 1 số 7 và thử lại cho đến khi khớp hoàn toàn hoặc không còn số 7 nào.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Trường hợp "Khó nhằn"}
+  \textbf{Giả sử $n = 13$:}
+  \begin{itemize}
+    \item Thử $s7 = 1$: $13 - (1 \times 7) = 6$ (6 không chia hết cho 4)
+    \item Thử $s7 = 0$: $13 - (0 \times 7) = 13$ (13 không chia hết cho 4)
+  \end{itemize}
+  
+  \pause
+  \begin{exampleblock}{Kết luận}
+    Không tìm được cách kết hợp. Trả về \textbf{-1}.
+  \end{exampleblock}
+\end{frame}
+
+
+\begin{frame}[fragile]{Ma gia tu duy }
+\begin{lstlisting}[language=C++]
+1. Nhap so nguyen n.
+2. Khoi tao cac gia tri ban dau:
+   - seven = n / 7 (Gia dinh dung toi da chu so 7)
+   - four = (n % 7) / 4 (Lay phan du cua n cho 7 roi chia cho 4)
+
+3. Vong lap kiem tra dieu kien khop tong: 
+   Chung nao (seven * 7 + four * 4 != n) VA (seven >= 0):
+   a. Giam bot mot chu so 7: seven = seven - 1
+   b. Tinh lai so luong chu so 4 can thiet:
+      - remainder = n - (seven * 7)
+      - four = remainder / 4
+
+4. Ket luan va in ket qua:
+   - Neu seven >= 0 (Tim thay ket qua): 
+     + In ra chu so 4 voi so luong la 'four'.
+     + In ra chu so 7 voi so luong la 'seven'.
+   - Neu seven < 0 (Khong co cach ket hop):
+     + In ra -1.
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{block}{Tại sao cách tiếp cận này hiệu quả?}
+Cách này đi từ số lượng số 7 **lớn nhất** giảm dần. Ngay khi tìm được tổ hợp đầu tiên thỏa mãn, đó chắc chắn là tổ hợp có **tổng số chữ số ít nhất** (vì mỗi số 7 thay thế cho gần hai số 4).
+\end{block}
+\end{frame}
+
+\begin{alertblock}{Lưu ý quan trọng}
+  Tại sao in số 4 trước? Vì đề bài yêu cầu số \textbf{nhỏ nhất}. Ví dụ: $447 < 744$.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Tổng kết & Bước tiếp theo}
+  \begin{block}{Hiện thực hóa}
+    Bạn đã nắm vững logic "vắt kiệt" số 7 và ưu tiên in số 4 trước.
+  \end{block}
+  
+  \textbf{Câu hỏi cho bạn:}
+  \begin{itemize}
+    \item Bạn muốn tự viết code dựa trên mã giả này?
+    \item Hay muốn tôi gợi ý cấu trúc vòng lặp trong ngôn ngữ bạn đang dùng (C++, Python...)?
+  \end{itemize}
+  
+  \begin{exampleblock}{Thử thách nhỏ}
+    Thử chạy tay với $n = 15$ xem kết quả là bao nhiêu nhé!
+  \end{exampleblock}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,177 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Hướng dẫn giải bài 1560A - Dislike of Threes}
+\subtitle{Coach tư duy thuật toán}
+\author{Slide Learning CPP}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu}
+    \begin{block}{Chào bạn!}
+        Rất sẵn lòng đồng hành cùng bạn chinh phục bài \textbf{1560A - Dislike of Threes} trên Codeforces theo phong cách "Coach tư duy thuật toán".
+    \end{block}
+    Chúng ta sẽ không vội động vào code. Hãy cùng "phẫu thuật" đề bài này để xem bản chất của nó là gì nhé.
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Briefing)}
+    \begin{itemize}
+        \item Petya cực kỳ ghét số 3.
+        \item Anh ấy tạo ra dãy số nguyên dương ($1, 2, 4, 5, 7, 8, 10, 11, 14, \dots$) nhưng \textbf{loại bỏ} 2 loại:
+        \begin{enumerate}
+            \item Số đó \textbf{chia hết cho 3}.
+            \item Số đó có \textbf{chữ số tận cùng là 3} (ví dụ: 13, 23, 33...).
+        \end{enumerate}
+    \end{itemize}
+    \begin{exampleblock}{Nhiệm vụ}
+        Tìm số đứng ở vị trí thứ $k$ trong dãy số "thân thiện" mà Petya đã giữ lại.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Lộ trình tư duy}
+    \begin{itemize}
+        \item \textbf{Mảnh ghép 1:} Nhận diện kẻ thù (Số nào bị loại?).
+        \item \textbf{Mảnh ghép 2:} Cách "đếm" mà không bị nhầm lẫn.
+        \item \textbf{Mảnh ghép 3:} Tổng kết và xử lý với nhiều câu hỏi ($t$ bộ dữ liệu).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Chunk 1: Nhận diện "Kẻ thù" của Petya}
+    Petya đưa cho bạn 2 cái kính lúp để soi:
+    \begin{itemize}
+        \item \textbf{Kính lúp 1:} Kiểm tra xem số đó có chia hết cho 3 không (phép chia dư \texttt{i \% 3 == 0}).
+        \item \textbf{Kính lúp 2:} Kiểm tra xem số đó có kết thúc bằng số 3 không (phép chia dư \texttt{i \% 10 == 3}).
+    \end{itemize}
+    \begin{alertblock}{Bẫy tư duy}
+        Đừng nhầm lẫn giữa "số có chứa chữ số 3" (như 31, 32) và "số tận cùng là 3". Petya chỉ ghét số \textbf{kết thúc bằng 3} và số \textbf{chia hết cho 3}.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy số 1}
+    Trong các số sau đây: \textbf{12, 13, 14, 15}. Số nào sẽ được giữ lại?
+    \pause
+    \begin{itemize}
+        \item \textbf{12}: Bị loại vì $12 \pmod 3 = 0$.
+        \item \textbf{13}: Bị loại vì tận cùng là số 3.
+        \item \textbf{14}: \textbf{Được giữ lại} (Không vi phạm cả 2 điều kiện).
+        \item \textbf{15}: Bị loại vì $15 \pmod 3 = 0$.
+    \end{itemize}
+    \textbf{Kết quả:} Sau số 11 sẽ đến thẳng số 14.
+\end{frame}
+
+\begin{frame}{Chunk 2: Cách "đếm" để tìm số thứ $k$}
+    Tưởng tượng chúng ta có một \textbf{"Máy đếm số thân thiện"}:
+    \begin{enumerate}
+        \item Bắt đầu thử từ số dương nhỏ nhất là $i = 1$.
+        \item Mỗi lần thử, dùng 2 kính lúp để kiểm tra.
+        \item Nếu số đó \textbf{đạt chuẩn}, ta tăng \textbf{biến đếm} (\texttt{count}) lên 1.
+        \item Lặp lại cho đến khi \textbf{biến đếm} đúng bằng $k$.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Thử thách tư duy số 2}
+    Giả sử Petya muốn tìm số thứ $k = 4$:
+    \begin{itemize}
+        \item Số 1: Đạt chuẩn (\texttt{count} = 1)
+        \item Số 2: Đạt chuẩn (\texttt{count} = 2)
+        \item Số 3: Loại (\texttt{count} vẫn là 2)
+        \item Số 4: Đạt chuẩn (\texttt{count} = 3)
+        \item Số 5: Đạt chuẩn (\texttt{count} = 4) $\rightarrow$ \textbf{Dừng lại!}
+    \end{itemize}
+    \textbf{Kết quả:} Số thứ 4 là số \textbf{5}.
+\end{frame}
+
+\begin{frame}{Thử thách tư duy số 3}
+    Nếu Petya muốn tìm số thứ $k = 6$, theo bạn số đó sẽ là số mấy?
+    \pause
+    \begin{itemize}
+        \item Tiếp tục từ số 5:
+        \item Số \textbf{6}: Loại (Vì $6 \pmod 3 = 0$).
+        \item Số \textbf{7}: \textbf{Đạt chuẩn}. (\texttt{count} = 5).
+        \item Số \textbf{8}: \textbf{Đạt chuẩn}. (\texttt{count} = 6).
+    \end{itemize}
+    \begin{block}{Chính xác!}
+        Số thứ 6 trong dãy của Petya là số \textbf{8}.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Chunk 3: Xử lý nhiều câu hỏi}
+    \begin{itemize}
+        \item \textbf{Cách 1 (Chậm):} Mỗi lần nhận $k$, đếm lại từ đầu.
+        \item \textbf{Cách 2 (Nhanh):} Tạo sẵn một mảng chứa 1000 số đạt chuẩn ngay từ đầu. Khi hỏi chỉ cần truy xuất.
+    \end{itemize}
+    \begin{exampleblock}{Tại sao chọn Cách 2?}
+        Vì $k \le 1000$ là con số rất nhỏ đối với máy tính, việc chuẩn bị trước giúp chương trình chạy cực nhanh.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Mã giả (Pseudocode) tư duy}
+\begin{lstlisting}[language=Python]
+Tao mot danh sach rong (Goi la "KetQua")
+So dang xet i = 1
+Trong khi danh sach "KetQua" chua du 1000 so:
+    Neu (i % 3 != 0) VA (i % 10 != 3):
+        Cho i vao danh sach "KetQua"
+    i = i + 1
+
+Doc so luong cau hoi t
+Voi moi cau hoi k:
+    In ra so o vi tri thu k trong danh sach "KetQua"
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Thử thách cuối cùng}
+    Theo bạn, nếu dùng "kính lúp" soi số \textbf{33}, nó bị loại vì lý do nào?
+    \vspace{0.5cm}
+    \begin{itemize}
+        \item A. Chỉ vì nó chia hết cho 3.
+        \item B. Chỉ vì nó có tận cùng là 3.
+        \item C. Vì cả hai lý do trên.
+    \end{itemize}
+    \pause
+    \begin{block}{Đáp án đúng}
+        \textbf{C. Vì cả hai lý do trên.} ($33 \pmod 3 = 0$ và $33 \pmod{10} = 3$).
+    \end{block}
+    Bạn đã sẵn sàng để viết code chưa?
+\end{frame}
+
+\end{document}

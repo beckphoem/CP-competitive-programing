@@ -1,0 +1,13 @@
+\frametitle{1. The Way to Home (910A)}
+\textbf{Link:} \url{https://codeforces.com/problemset/problem/910/A} \\
+  \textbf{Xếp hạng:} 800
+  \begin{block}{Đề bài}
+    Ếch ở vị trí 1, muốn đến $n$. Chỉ nhảy vào vị trí có hoa súng ('1'). Mỗi bước nhảy tối đa $d$ đơn vị. Tìm số bước nhảy tối thiểu.
+  \end{block}
+  \begin{exampleblock}{Hướng giải quyết (DP)}
+    \begin{itemize}
+      \item Gọi \texttt{dp[i]} là số bước tối thiểu đến vị trí $i$.
+      \item Công thức: \texttt{dp[i] = min(dp[j]) + 1} với $i-d \le j < i$.
+      \item Độ phức tạp: $O(n \cdot d)$.
+    \end{itemize}
+  \end{exampleblock}

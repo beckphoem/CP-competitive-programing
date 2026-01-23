@@ -1,0 +1,20 @@
+\frametitle{📝 MÃ GIẢ (PSEUDOCODE)}
+\begin{lstlisting}[language=Python]
+Nhap n
+Neu n khong chia het cho 2050:
+    In ra -1
+Nguoc lai:
+    Gan q = n / 2050
+    Gan tong_chu_so = 0
+
+    Trong khi q > 0:
+        tong_chu_so = tong_chu_so + (q chia lay du cho 10)
+        q = q chia lay nguyen cho 10
+
+    In ra tong_chu_so
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{q \% 10} lấy số ở hàng đơn vị.
+    \item \texttt{q / 10} vứt bỏ hàng đơn vị để tiếp tục vòng lặp.
+\end{itemize}

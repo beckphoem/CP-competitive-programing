@@ -1,0 +1,231 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Chiến lược Phát triển Tư duy Số học}
+\subtitle{Hệ thống Bài tập Codeforces Rating 800-1000}
+\author{Slide Learning C++}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu chung}
+    \begin{block}{Tầm quan trọng}
+        Nắm vững lý thuyết số cơ bản là cột mốc quan trọng đối với lập trình viên thi đấu.
+    \end{block}
+    \begin{itemize}
+        \item Rating 800-1000 yêu cầu phân tích toán học sơ cấp.
+        \item Nhận diện quy luật và tối ưu hóa thuật toán.
+        \item Thay thế tư duy lập trình thuần túy bằng tư duy tối ưu hóa.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{1. 1328A - Divisibility Problem (Rating 800)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1328/A}
+    \begin{block}{Đề bài}
+        Cho hai số nguyên dương $a$ và $b$. Tìm số bước tối thiểu để $a$ trở thành một số chia hết cho $b$, mỗi bước bạn có thể tăng $a$ thêm 1 đơn vị.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Sử dụng phép chia dư để tránh TLE:
+        \begin{itemize}
+            \item Nếu $a \pmod b == 0$, kết quả là 0.
+            \item Ngược lại, số bước là $b - (a \pmod b)$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{2. 1370A - Maximum GCD (Rating 800)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1370/A}
+    \begin{block}{Đề bài}
+        Cho số nguyên $n$. Tìm giá trị lớn nhất của $GCD(a, b)$ với $1 \le a < b \le n$.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Để $GCD(a, b) = g$, thì $a$ và $b$ phải là bội của $g$.
+        \begin{itemize}
+            \item Cặp bội nhỏ nhất là $g$ và $2g$.
+            \item Điều kiện $2g \le n \Rightarrow g \le n/2$.
+            \item Đáp án tối ưu: $\lfloor n/2 \rfloor$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{3. 1325A - EhAb AnD gCd (Rating 800)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1325/A}
+    \begin{block}{Đề bài}
+        Cho số nguyên dương $x$. Tìm bất kỳ cặp số $(a, b)$ sao cho $GCD(a, b) + LCM(a, b) = x$.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Sử dụng tính chất của số 1:
+        \begin{itemize}
+            \item $GCD(1, x-1) = 1$.
+            \item $LCM(1, x-1) = x-1$.
+            \item Với $x$, ta luôn có cặp $(1, x-1)$ thỏa mãn phương trình $1 + (x-1) = x$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{4. 1374A - Required Remainder (Rating 800)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1374/A}
+    \begin{block}{Đề bài}
+        Cho $x, y, n$. Tìm số $k$ lớn nhất sao cho $0 \le k \le n$ và $k \pmod x = y$.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Sử dụng công thức trực tiếp:
+        \begin{itemize}
+            \item $k = \lfloor (n-y)/x \rfloor \cdot x + y$.
+            \item Công thức này đảm bảo tìm được bội số của $x$ phù hợp nhất mà khi cộng thêm $y$ vẫn không vượt quá $n$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{5. 1633A - Div. 7 (Rating 800)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1633/A}
+    \begin{block}{Đề bài}
+        Thay đổi ít nhất các chữ số của $n$ để số mới chia hết cho 7 và không có số 0 ở đầu.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Kiểm tra nếu $n \pmod 7 == 0$.
+            \item Nếu chưa, thử thay đổi chữ số hàng đơn vị của $n$ từ $0$ đến $9$.
+            \item Trong dải 10 số liên tiếp, luôn có ít nhất một số chia hết cho 7.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{6. 1088A - Ehab and another construction problem (Rating 800)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1088/A}
+    \begin{block}{Đề bài}
+        Tìm $a, b$ sao cho $1 \le a, b \le x$, $a$ chia hết cho $b$, $a \cdot b > x$, và $a/b < x$.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Với $x=1$, không có đáp án (in -1).
+            \item Với $x > 1$, có thể chọn đơn giản $a = x$ (nếu $x$ chẵn) và $b = 2$ hoặc chọn $a = x, b = x$.
+            \item Một lựa chọn an toàn khác là cặp $(x, x)$ cho hầu hết các trường hợp $x > 1$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{7. 1343A - Candies (Rating 900)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1343/A}
+    \begin{block}{Đề bài}
+        Tổng kẹo mua trong $k$ ngày ($k > 1$) là $n$. Ngày 1 mua $x$, ngày sau gấp đôi ngày trước. Tìm $x$ nguyên dương.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Tổng kẹo: $x(2^0 + 2^1 + \dots + 2^{k-1}) = x(2^k - 1) = n$.
+        \begin{itemize}
+            \item Duyệt $k$ từ $2$ đến $30$.
+            \item Nếu $n \pmod{(2^k - 1)} == 0$ thì $x = n/(2^k - 1)$ là đáp án.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{8. 1475B - New Year's Number (Rating 900)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1475/B}
+    \begin{block}{Đề bài}
+        Kiểm tra $n$ có thể biểu diễn thành tổng của các số 2020 và 2021 không.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Giải phương trình $2020x + 2021y = n$.
+        \begin{itemize}
+            \item Đặt $q = n / 2020$ và $r = n \pmod{2020}$.
+            \item Ta có $n = 2020q + r$.
+            \item Để biểu diễn dưới dạng $2020x + 2021y$, ta cần $y = r$ và $x = q - r$.
+            \item Điều kiện: $r \le q$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{9. 1474B - Different Divisors (Rating 1000)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1474/B}
+    \begin{block}{Đề bài}
+        Tìm số $n$ nhỏ nhất có ít nhất 4 ước sao cho khoảng cách giữa 2 ước bất kỳ ít nhất là $d$.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        Ước đầu tiên là 1.
+        \begin{itemize}
+            \item Ước thứ hai $p$ là số nguyên tố nhỏ nhất $\ge 1 + d$.
+            \item Ước thứ ba $q$ là số nguyên tố nhỏ nhất $\ge p + d$.
+            \item Số $n$ nhỏ nhất sẽ là $p \cdot q$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{10. 1203C - Common Divisors (Rating 1000)}
+    \textbf{Link:} \url{https://codeforces.com/problemset/problem/1203/C}
+    \begin{block}{Đề bài}
+        Tìm số lượng ước chung của tất cả các phần tử trong mảng $a$.
+    \end{block}
+    \pause
+    \begin{exampleblock}{Hướng giải quyết}
+        \begin{itemize}
+            \item Tìm $G = GCD(a_1, a_2, \dots, a_n)$.
+            \item Số lượng ước chung của mảng chính là số lượng ước của $G$.
+            \item Đếm ước của $G$ bằng cách duyệt từ $1$ đến $\sqrt{G}$.
+        \end{itemize}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Lộ trình và Kỹ thuật Tối ưu}
+    \begin{alertblock}{Lưu ý kỹ thuật}
+        \begin{itemize}
+            \item \textbf{Kiểu dữ liệu:} Với $n \le 10^{12}$, bắt buộc dùng \texttt{long long}.
+            \item \textbf{Độ phức tạp:} Ưu tiên $O(1)$ hoặc $O(\log n)$. Đếm ước dùng $O(\sqrt{G})$.
+        \end{itemize}
+    \end{alertblock}
+    
+    \begin{block}{Lời khuyên luyện tập}
+        \begin{itemize}
+            \item Giải 15-20 bài/tuần để nhạy bén với quy luật.
+            \item Ghi chú lại các lỗi tràn số hoặc sai số \texttt{double}.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\end{document}

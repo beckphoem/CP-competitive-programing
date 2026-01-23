@@ -1,0 +1,12 @@
+\frametitle{Tổng kết thuật toán (Pseudocode)}
+\begin{lstlisting}[language=Python, caption=Mô phỏng thuật toán]
+@Nhập số lượng test case@ t
+@Lặp@ t @lần:@
+    @Nhập số nguyên@ n
+    @Kết quả =@ n / 2 @(chia lấy nguyên)@
+    @In kết quả ra màn hình@
+    \end{lstlisting}
+
+    \begin{exampleblock}{Trường hợp biên: $n=1$}
+        $\lfloor 1/2 \rfloor = 0$. Thực tế đề bài thường cho $n \ge 2$ để đảm bảo tồn tại cặp $(a, b)$.
+    \end{exampleblock}

@@ -1,0 +1,18 @@
+\frametitle{Bước 3: Tổng kết Thuật toán (Mã giả)}
+\begin{lstlisting}[language=Python, caption=Thuật toán DP cho Fair Division]
+Tong = tong tat ca vien kẹo
+Neu Tong % 2 != 0:
+    In ra "NO"
+Target = Tong / 2
+dp[0] = true, tat ca dp[1...Target] = false
+
+Voi moi vien kẹo nang 'w':
+   Duyet j tu Target nguoc ve w:
+      Neu dp[j-w] == true:
+         dp[j] = true
+
+Neu dp[Target] == true:
+    In ra "YES"
+Con lai:
+    In ra "NO"
+    \end{lstlisting}

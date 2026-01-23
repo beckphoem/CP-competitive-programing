@@ -1,0 +1,18 @@
+\frametitle{Từ Tư duy sang Ngôn ngữ (Pseudocode)}
+\begin{lstlisting}[language=Python, caption=Mã giả Tiếng Việt]
+Doc vao so luong bo test (t)
+Lap lai t lan:
+    Doc vao so n
+    Tao mot mang de chua cac so tron
+    Bien he_so = 1
+
+    Trong khi n > 0:
+        chu_so = n % 10
+        Neu chu_so != 0:
+            Luu (chu_so * he_so) vao mang
+        n = n / 10
+        he_so = he_so * 10
+
+    In ra kich thuoc cua mang
+    In ra cac phan tu trong mang
+\end{lstlisting}

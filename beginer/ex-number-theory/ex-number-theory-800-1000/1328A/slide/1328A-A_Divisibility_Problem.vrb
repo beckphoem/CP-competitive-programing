@@ -1,0 +1,21 @@
+\frametitle{Bước cuối: Chốt thuật toán}
+\begin{block}{Mã giả (Pseudo-code)}
+\begin{lstlisting}[language=C++]
+@\textbf{Nhap}@ t (so luong test case)
+@\textbf{Lap}@ t lan:
+    @\textbf{Nhap}@ a, b
+    @\textbf{Ket qua}@ = (b - (a % b)) % b
+    @\textbf{In ra}@ @\textbf{Ket qua}@
+\end{lstlisting}
+  \end{block}
+
+  \begin{alertblock}{Lưu ý Edge Case}
+    \begin{itemize}
+      \item $a, b \le 10^9$: Sử dụng kiểu dữ liệu \texttt{int} là đủ.
+      \item Luôn chú ý trường hợp $a < b$: Công thức vẫn hoạt động đúng.
+    \end{itemize}
+  \end{alertblock}
+
+  \begin{center}
+    \textbf{Bạn đã sẵn sàng để tự viết Code chưa? 🚀}
+  \end{center}

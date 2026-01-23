@@ -1,0 +1,15 @@
+\frametitle{Bước 3: Chốt thuật toán \& Mã giả}
+\begin{itemize}
+        \item Số thú vị luôn tận cùng bằng \textbf{9}.
+        \item Công thức đếm nhanh: $\text{Kết quả} = (n + 1) / 10$ (chia lấy phần nguyên).
+    \end{itemize}
+
+    \begin{exampleblock}{Mã giả (Pseudocode)}
+    \begin{lstlisting}[language=Pascal]
+Nhap so luong test case t
+Lap t lan:
+    Nhap so n
+    Ket qua = (n + 1) / 10 (lay phan nguyen)
+    In ra Ket qua
+    \end{lstlisting}
+    \end{exampleblock}

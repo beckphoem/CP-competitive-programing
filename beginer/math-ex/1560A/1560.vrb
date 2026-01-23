@@ -1,0 +1,13 @@
+\frametitle{Mã giả (Pseudocode) tư duy}
+\begin{lstlisting}[language=Python]
+Tao mot danh sach rong (Goi la "KetQua")
+So dang xet i = 1
+Trong khi danh sach "KetQua" chua du 1000 so:
+    Neu (i % 3 != 0) VA (i % 10 != 3):
+        Cho i vao danh sach "KetQua"
+    i = i + 1
+
+Doc so luong cau hoi t
+Voi moi cau hoi k:
+    In ra so o vi tri thu k trong danh sach "KetQua"
+\end{lstlisting}

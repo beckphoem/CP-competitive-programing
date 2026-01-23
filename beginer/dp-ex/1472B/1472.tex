@@ -1,0 +1,162 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc} % Bắt buộc để hiển thị tiếng Việt
+\usepackage[vietnamese]{babel}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usetheme{Madrid}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=4pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=@
+}
+
+\lstset{style=mystyle}
+
+\title{Chinh phục bài toán 1472B - Fair Division}
+\subtitle{Tiếp cận theo hướng Quy hoạch động (DP)}
+\author{Coach "Slide Learning CPP"}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Giới thiệu}
+    \begin{block}{Lời chào}
+        Chào bạn! Rất vui được đồng hành cùng bạn chinh phục bài toán \textbf{1472B - Fair Division} trên Codeforces.
+    \end{block}
+    
+    \begin{itemize}
+        \item Phương pháp: Quy hoạch động (Dynamic Programming - DP).
+        \item Bản chất DP: "Xây dựng kết quả lớn từ những kết quả nhỏ đã biết".
+        \item Lộ trình: Chia nhỏ vấn đề thành các Micro-chunks logic.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Bước 1: Phẫu thuật đề bài (Deconstruct)}
+    \begin{block}{Cốt lõi bài toán}
+        \begin{itemize}
+            \item Bạn có $n$ viên kẹo.
+            \item Cân nặng mỗi viên: \textbf{1 unit} hoặc \textbf{2 units}.
+            \item \textbf{Mục tiêu:} Chia toàn bộ kẹo thành 2 phần có tổng cân nặng bằng nhau.
+        \end{itemize}
+    \end{block}
+
+    \begin{exampleblock}{Lộ trình tư duy}
+        \begin{enumerate}
+            \item Xác định tổng trọng lượng cần đạt được cho mỗi người.
+            \item Dùng DP để kiểm tra khả năng tạo ra phần quà đó.
+        \end{enumerate}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bước 2: Mảnh ghép 1 - Mục tiêu của phép chia}
+    Giả sử tổng cân nặng của tất cả viên kẹo là $S$. Để chia đều, mỗi người phải nhận chính xác $S/2$.
+
+    \begin{alertblock}{Bẫy logic (Trap)}
+        Nếu $S$ là một số lẻ (ví dụ $S=5$), liệu chúng ta có bao giờ chia đều được không?
+    \end{alertblock}
+
+    \begin{block}{Thử thách tư duy}
+        Nếu tôi có: 1 viên kẹo nặng 2 unit và 1 viên kẹo nặng 1 unit $\rightarrow S=3$.
+        Theo bạn, chúng ta có cần dùng DP để kiểm tra trường hợp này không, hay có thể kết luận ngay là "NO"? Tại sao?
+    \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Mảnh ghép 2 - Cập nhật trạng thái DP}
+    Khi ta nhặt thêm một viên kẹo nặng $w=2$, các trạng thái mới của mảng \texttt{dp} sẽ được cập nhật.
+
+    \begin{alertblock}{Cảnh báo: Bẫy Knapsack}
+        Nếu duyệt từ đầu đến cuối (từ 0 đến $S$), bạn có thể vô tình dùng một viên kẹo nhiều lần!
+    \end{alertblock}
+
+    \begin{block}{Thử thách tư duy}
+        Để tránh việc một viên kẹo vừa làm \texttt{dp[j]} thành \texttt{true} lại tiếp tục được dùng để cập nhật \texttt{dp[j+w]}, chúng ta nên:
+        \begin{itemize}
+            \item \textbf{A.} Duyệt từ $S$ ngược về 0.
+            \item \textbf{B.} Duyệt từ 0 tiến lên $S$.
+        \end{itemize}
+    \end{block}
+    \pause
+    \textbf{Đáp án: A.} Duyệt ngược là chìa khóa để mỗi vật phẩm chỉ được dùng đúng một lần.
+\end{frame}
+
+\begin{frame}[fragile]{Bước 3: Tổng kết Thuật toán (Mã giả)}
+    \begin{lstlisting}[language=Python, caption=Thuật toán DP cho Fair Division]
+Tong = tong tat ca vien kẹo
+Neu Tong % 2 != 0: 
+    In ra "NO"
+Target = Tong / 2
+dp[0] = true, tat ca dp[1...Target] = false
+
+Voi moi vien kẹo nang 'w':
+   Duyet j tu Target nguoc ve w:
+      Neu dp[j-w] == true:
+         dp[j] = true
+
+Neu dp[Target] == true: 
+    In ra "YES"
+Con lai: 
+    In ra "NO"
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Mảnh ghép cuối: Tối ưu hóa logic}
+    \begin{block}{Kiểm tra trường hợp đặc biệt}
+        Giả sử có 3 viên kẹo nặng 2 ($n=3$, $S=6$, $Target=3$).
+    \end{block}
+
+    \begin{itemize}
+        \item \texttt{dp[0] = true}
+        \item Viên 1 ($w=2$): \texttt{dp[2] = true}
+        \item Viên 2 ($w=2$): \texttt{dp[4]} (vượt Target 3 nên bỏ qua)
+        \item Kết quả: \texttt{dp[3]} vẫn là \texttt{false}.
+    \end{itemize}
+
+    \begin{exampleblock}{Kết luận}
+        Thuật toán DP trả về \textbf{NO} là chính xác, vì không thể tạo ra mức 3 từ các viên kẹo nặng 2. DP kiểm tra được cả "nguyên liệu" có phù hợp hay không.
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Bước 4: Chốt hạ kiến thức}
+    \begin{enumerate}
+        \item \textbf{Loại trừ:} Tổng lẻ luôn là "NO".
+        \item \textbf{Xây dựng:} Dùng mảng \texttt{dp} kiểm tra khả năng tạo mức $Target$.
+        \item \textbf{Duyệt ngược:} Đảm bảo tính chất của bài toán Knapsack 0/1.
+    \end{enumerate}
+
+    \begin{block}{Bạn muốn làm gì tiếp theo?}
+        \begin{enumerate}
+            \item \textbf{Thử thách Code:} Tự viết mã C++ hoặc Python.
+            \item \textbf{Tối ưu hóa:} Khám phá cách giải bằng Toán học (Greedy).
+            \item \textbf{Sang bài mới:} Luyện tập bài DP khác trên Codeforces.
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,14 @@
+\frametitle{Tổng kết thuật toán (Pseudocode)}
+\begin{lstlisting}[language=C++, caption=Bản thiết kế thuật toán]
+1. Doc du lieu n duoi dang @\textbf{string}@.
+2. Khoi tao bien @\texttt{dem = 0}@.
+3. Vong lap @\textbf{while (n.length() > 1)}@:
+   a. Tinh tong cac chu so trong chuoi n.
+   b. Bien doi Tong vua tinh ve lai dang @\textbf{string}@ va gan cho n.
+   c. Tang @\texttt{dem}@ len 1.
+4. In ra @\texttt{dem}@.
+    \end{lstlisting}
+
+    \begin{block}{Bước tiếp theo}
+        Bạn có muốn thử tự viết code dựa trên bản thiết kế này không? Tôi có thể hỗ trợ phần chuyển đổi số thành chuỗi hoặc xử lý vòng lặp!
+    \end{block}

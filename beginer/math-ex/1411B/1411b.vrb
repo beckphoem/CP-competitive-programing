@@ -1,0 +1,21 @@
+\frametitle{Chunk 3: Tổng kết thuật toán \& Mã giả}
+\begin{block}{Thuật toán}
+        \begin{enumerate}
+            \item Đọc số $n$.
+            \item Chừng nào $n$ chưa phải số công bằng, tăng $n$ lên 1.
+        \end{enumerate}
+    \end{block}
+
+    \begin{lstlisting}[language=C++, caption=Mã giả kiểm tra số công bằng]
+bool kiem_tra_cong_bang(long long x) {
+    long long temp = x;
+    while (temp > 0) {
+        int d = temp % 10;
+        if (d != 0 && x % d != 0) {
+            return false;
+        }
+        temp /= 10;
+    }
+    return true;
+}
+    \end{lstlisting}
